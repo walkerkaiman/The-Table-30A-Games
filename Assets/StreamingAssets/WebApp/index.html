@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Party Game</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- ─── Reconnecting ─── -->
+  <div id="screen-reconnecting" class="screen">
+    <div class="card">
+      <h1>Reconnecting...</h1>
+      <div class="spinner"></div>
+      <p class="subtle-text">Trying to rejoin your game</p>
+    </div>
+  </div>
+
+  <!-- ─── Join / Game Browser ─── -->
+  <div id="screen-join" class="screen active">
+    <div class="card">
+      <h1>Join Game</h1>
+      <input type="text" id="input-name" placeholder="Your Name" maxlength="20" autocomplete="off" />
+      <p class="subtle-text" id="game-list-status">Searching for games...</p>
+      <div id="game-list" class="game-list"></div>
+      <p id="join-error" class="error-text"></p>
+    </div>
+  </div>
+
+  <!-- ─── Lobby ─── -->
+  <div id="screen-lobby" class="screen">
+    <div class="card">
+      <h1>Lobby</h1>
+      <p id="lobby-status" class="subtle-text">Waiting for the host to start...</p>
+      <div id="lobby-players" class="player-list"></div>
+      <div id="host-lobby-controls" class="host-controls" style="display:none;">
+        <button id="btn-start-game" class="btn-primary btn-host">Start Game</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Game Selection / Voting ─── -->
+  <div id="screen-gameselect" class="screen">
+    <div class="card">
+      <h1>Pick a Game!</h1>
+      <div id="gameselect-timer" class="timer"></div>
+      <p class="subtle-text">Tap to vote</p>
+      <div id="gameselect-list" class="game-select-list"></div>
+      <div id="host-gameselect-controls" class="host-controls" style="display:none;">
+        <button id="btn-skip-vote" class="btn-secondary btn-host">Skip Vote</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Quiplash: Prompt ─── -->
+  <div id="screen-prompt" class="screen">
+    <div class="card">
+      <p class="round-info" id="prompt-round"></p>
+      <h2 id="prompt-text" class="prompt-display"></h2>
+      <p class="subtle-text">Get ready to answer...</p>
+    </div>
+  </div>
+
+  <!-- ─── Quiplash: Answer ─── -->
+  <div id="screen-answer" class="screen">
+    <div class="card">
+      <p class="round-info" id="answer-round"></p>
+      <h2 id="answer-prompt" class="prompt-display"></h2>
+      <div id="answer-timer" class="timer"></div>
+      <textarea id="input-answer" placeholder="Type your answer..." maxlength="200" rows="3"></textarea>
+      <button id="btn-answer" class="btn-primary">Submit</button>
+    </div>
+  </div>
+
+  <!-- ─── Quiplash: Answer Wait ─── -->
+  <div id="screen-answer-wait" class="screen">
+    <div class="card">
+      <h2>Answer Submitted!</h2>
+      <p class="subtle-text">Waiting for other players...</p>
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+  <!-- ─── Quiplash: Voting ─── -->
+  <div id="screen-voting" class="screen">
+    <div class="card">
+      <p class="round-info" id="vote-round"></p>
+      <h2 id="vote-prompt" class="prompt-display"></h2>
+      <div id="vote-timer" class="timer"></div>
+      <p class="subtle-text">Pick your favorite answer:</p>
+      <div id="vote-answers" class="answers-list"></div>
+    </div>
+  </div>
+
+  <!-- ─── Quiplash: Vote Wait ─── -->
+  <div id="screen-vote-wait" class="screen">
+    <div class="card">
+      <h2>Vote Cast!</h2>
+      <p class="subtle-text">Waiting for results...</p>
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+  <!-- ─── Quiplash: Round Results ─── -->
+  <div id="screen-results" class="screen">
+    <div class="card">
+      <h1>Results</h1>
+      <div id="results-list" class="results-list"></div>
+    </div>
+  </div>
+
+  <!-- ─── Quiplash: Game Over ─── -->
+  <div id="screen-gameover" class="screen">
+    <div class="card">
+      <h1>Game Over!</h1>
+      <div id="final-standings" class="results-list"></div>
+    </div>
+  </div>
+
+  <!-- ─── Pong: Countdown ─── -->
+  <div id="screen-pong-countdown" class="screen">
+    <div class="card">
+      <h1>Pong Arena</h1>
+      <div id="pong-countdown-timer" class="timer pong-big-timer"></div>
+      <p class="subtle-text">Get ready!</p>
+    </div>
+  </div>
+
+  <!-- ─── Pong: Playing (touch controller) ─── -->
+  <div id="screen-pong-playing" class="screen pong-controller">
+    <div class="pong-hud">
+      <div id="pong-lives" class="pong-lives"></div>
+      <div id="pong-status" class="pong-status">Drag to move paddle</div>
+    </div>
+    <div id="pong-touch-area" class="pong-touch-area">
+      <div id="pong-paddle-indicator" class="pong-paddle-indicator"></div>
+    </div>
+  </div>
+
+  <!-- ─── Pong: Eliminated ─── -->
+  <div id="screen-pong-eliminated" class="screen">
+    <div class="card">
+      <h1>You're Out!</h1>
+      <p class="subtle-text">Watching the rest of the game...</p>
+    </div>
+  </div>
+
+  <!-- ─── Pong: Game Over ─── -->
+  <div id="screen-pong-gameover" class="screen">
+    <div class="card">
+      <h1 id="pong-winner-text">Game Over!</h1>
+      <div id="pong-standings" class="results-list"></div>
+    </div>
+  </div>
+
+  <!-- ─── Disconnected ─── -->
+  <div id="screen-disconnected" class="screen">
+    <div class="card">
+      <h1>Disconnected</h1>
+      <p class="subtle-text">Lost connection to the game server.</p>
+      <button id="btn-reconnect" class="btn-primary">Find Games</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="games/quiplash.js"></script>
+  <script src="games/pong.js"></script>
+</body>
+</html>

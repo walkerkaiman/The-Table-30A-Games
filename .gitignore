@@ -1,0 +1,143 @@
+# ═══════════════════════════════════════════
+#  Unity
+# ═══════════════════════════════════════════
+
+# Generated folders
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+
+# MemoryCaptures
+/[Mm]emoryCaptures/
+
+# Recordings
+/[Rr]ecordings/
+
+# Asset Store tools
+/[Aa]sset[Ss]tore[Tt]ools/
+
+# Auto-generated VS/Rider solution files
+*.csproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Unity3D generated meta files (only when outside Assets)
+!/[Aa]ssets/**/*.meta
+
+# Gradle (Android builds)
+ExportedObj/
+*.unitypackage
+*.apk
+*.aab
+
+# Crashlytics
+crashlytics-build.properties
+sysinfo.txt
+
+# Builds
+*.exe
+*.dll
+*.so
+*.dylib
+
+# ═══════════════════════════════════════════
+#  Large media assets
+# ═══════════════════════════════════════════
+
+# Video
+*.mp4
+*.mov
+*.avi
+*.wmv
+*.mkv
+*.flv
+*.webm
+*.m4v
+*.mpg
+*.mpeg
+
+# Audio
+*.mp3
+*.wav
+*.ogg
+*.aiff
+*.aif
+*.flac
+*.wma
+*.m4a
+*.aac
+
+# Large textures / images (uncommon source formats)
+*.psd
+*.tga
+*.tif
+*.tiff
+*.exr
+*.hdr
+
+# 3D model source files (large)
+*.fbx
+*.blend
+*.blend1
+*.obj
+*.max
+*.ma
+*.mb
+*.3ds
+*.c4d
+*.ztl
+
+# Font source files
+*.otf
+*.ttf
+
+# Compressed archives
+*.zip
+*.7z
+*.rar
+*.tar
+*.gz
+
+# ═══════════════════════════════════════════
+#  OS / Editor junk
+# ═══════════════════════════════════════════
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# JetBrains Rider
+.idea/
+*.iml
+
+# Visual Studio Code
+.vscode/
+
+# Visual Studio
+.vs/
+
+# Cursor
+.cursor/

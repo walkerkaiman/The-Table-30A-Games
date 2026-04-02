@@ -1,0 +1,29 @@
+{
+  "prompts": [
+    { "id": "prompt_001", "text": "The worst thing to say when meeting your partner's parents", "category": "social" },
+    { "id": "prompt_002", "text": "A terrible name for a children's toy", "category": "product" },
+    { "id": "prompt_003", "text": "Something you should never yell in a library", "category": "social" },
+    { "id": "prompt_004", "text": "The worst superpower to have on a first date", "category": "hypothetical" },
+    { "id": "prompt_005", "text": "A rejected slogan for a fast food restaurant", "category": "product" },
+    { "id": "prompt_006", "text": "The real reason the dinosaurs went extinct", "category": "hypothetical" },
+    { "id": "prompt_007", "text": "The worst thing to put on a business card", "category": "workplace" },
+    { "id": "prompt_008", "text": "Something a doctor should never say during surgery", "category": "social" },
+    { "id": "prompt_009", "text": "A terrible name for a rock band", "category": "product" },
+    { "id": "prompt_010", "text": "The worst fortune cookie message", "category": "general" },
+    { "id": "prompt_011", "text": "Something you'd find in a haunted Walmart", "category": "hypothetical" },
+    { "id": "prompt_012", "text": "The worst advice to give a new driver", "category": "general" },
+    { "id": "prompt_013", "text": "A terrible theme for a wedding", "category": "social" },
+    { "id": "prompt_014", "text": "The worst thing to whisper to a stranger on an elevator", "category": "social" },
+    { "id": "prompt_015", "text": "A rejected name for a breakfast cereal", "category": "product" },
+    { "id": "prompt_016", "text": "Something a pilot should never announce mid-flight", "category": "social" },
+    { "id": "prompt_017", "text": "The worst title for a self-help book", "category": "product" },
+    { "id": "prompt_018", "text": "_____ is the reason I got fired", "category": "fill_in_blank" },
+    { "id": "prompt_019", "text": "A suspicious thing to have 1,000 of in your house", "category": "hypothetical" },
+    { "id": "prompt_020", "text": "The worst thing to engrave on a trophy", "category": "general" },
+    { "id": "prompt_021", "text": "A terrible motto for a country", "category": "product" },
+    { "id": "prompt_022", "text": "The worst flavor of ice cream", "category": "product" },
+    { "id": "prompt_023", "text": "Something that would make a bad password hint", "category": "general" },
+    { "id": "prompt_024", "text": "The most useless thing to bring to a deserted island", "category": "hypothetical" },
+    { "id": "prompt_025", "text": "A terrible thing to say at a funeral", "category": "social" }
+  ]
+}
