@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5366c9c3049219e4d9f7491ae94216dc, type: 3}
   m_Name: Price is Close
   m_EditorClassIdentifier: 
-  id: priceisclose
+  id: price_is_close
   displayName: Price is Close
   description: Enter a guess for each bizzarre prompt
   sceneName: Price is Close

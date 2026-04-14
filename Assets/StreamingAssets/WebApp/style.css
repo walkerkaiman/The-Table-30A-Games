@@ -8,6 +8,7 @@
 html {
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
+  overscroll-behavior: none;
 }
 
 body {
@@ -19,6 +20,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 1rem;
+  overscroll-behavior: none;
 }
 
 /* ─── Screen Management ─── */
@@ -640,17 +642,74 @@ textarea {
 }
 
 /* ═══════════════════════════════════════════
-   SPEED DRAW
+   TELEPHONE DRAW (full-viewport, like Pong)
    ═══════════════════════════════════════════ */
 
-.sd-draw-card {
-  padding: 1rem;
+.tel-draw-screen {
+  max-width: 100%;
+  height: 100dvh;
+  flex-direction: column;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-.sd-canvas {
+.screen.tel-draw-screen.active {
+  display: flex;
+}
+
+.tel-draw-hud {
+  background: #16213e;
+  padding: 0.6rem 1rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.tel-draw-hud .prompt-display {
+  font-size: 1.1rem;
+  margin-bottom: 0.3rem;
+}
+
+.tel-draw-hud .timer {
+  font-size: 1.5rem;
+  margin-bottom: 0;
+}
+
+.tel-draw-hud .round-info {
+  margin-bottom: 0.25rem;
+}
+
+.tel-draw-canvas-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.tel-draw-canvas {
+  background: #0a192f;
+  border: 2px solid #233554;
+  border-radius: 10px;
+  touch-action: none;
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  aspect-ratio: 1;
+}
+
+.tel-draw-footer {
+  padding: 0.5rem 1rem 0.75rem;
+  flex-shrink: 0;
+}
+
+/* Shared canvas for describe / reveal (read-only) */
+.tel-canvas-readonly {
   width: 100%;
-  max-width: 300px;
-  height: 300px;
+  max-width: 400px;
+  aspect-ratio: 1;
   background: #0a192f;
   border: 2px solid #233554;
   border-radius: 10px;
@@ -786,4 +845,35 @@ textarea {
   font-size: 0.8rem;
   color: #8892b0;
   margin-top: 0.15rem;
+}
+
+/* ─── Telephone Ad-Lib ─── */
+.tel-adlib { margin: 0.8rem 0; }
+.tel-adlib-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.tel-adlib-field {
+  flex: 1;
+  min-width: 0;
+}
+.tel-random-btn {
+  width: auto;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.tel-preview {
+  color: #64ffda;
+  font-size: 1.1rem;
+  font-weight: 600;
+  min-height: 1.6em;
+  margin: 0.5rem 0;
+}
+.tel-or-text {
+  margin-top: 0.8rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.85rem;
 }

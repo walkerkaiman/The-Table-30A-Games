@@ -49,14 +49,15 @@ A trivia-meets-deception game where knowing the truth is only half the battle.
 
 **Tips:** The best bluffs sound just plausible enough. Match the tone and specificity of how a real fact would sound.
 
-### Speed Draw
-A collaborative drawing game where everyone draws together in just 3 seconds.
+### Telephone
+A Gartic Phone-style chain game where meaning hilariously degrades through a sequence of writing and drawing.
 
-1. The table shows a drawing prompt (e.g., "A cat wearing sunglasses")
-2. Players get 10 seconds to plan
-3. Everyone has exactly 3 seconds to draw on a shared canvas from their phones simultaneously
-4. After drawing, 3 labels are shown (the real prompt + 2 decoys) and everyone guesses which was the actual prompt
-5. Scoring: everyone who picks correctly earns team points, plus a bonus for players who actually contributed strokes
+1. Every player writes a funny prompt
+2. Each prompt is passed to the next player, who draws it
+3. That drawing is passed to the next player, who describes it in words
+4. Steps 2-3 repeat until every player has contributed to every chain
+5. The big reveal shows each chain from start to finish — watch how the original prompt mutated!
+6. No scoring — the fun is in the reveal
 
 ### Hot Potato
 A fast-paced passing game. Players are arranged in a circle on the table.
@@ -161,12 +162,12 @@ Player prefabs spawned by the `PlayerInputRelay` are automatically offset to the
 3. Select the **Main Camera** and add the `MirroredTableCamera` component
 4. Prompts are loaded from `Assets/StreamingAssets/GameContent/fibbage/prompts.json`
 
-### 7. Create the Speed Draw Scene
+### 7. Create the Telephone Scene
 
-1. **File → New Scene**, save as `Assets/Scenes/SpeedDraw.unity`
-2. Create a **SpeedDrawManager** GameObject and attach `SpeedDrawManager.cs`
+1. **File → New Scene**, save as `Assets/Scenes/Telephone.unity`
+2. Create a **TelephoneManager** GameObject and attach `TelephoneManager.cs`
 3. Select the **Main Camera** and add the `MirroredTableCamera` component
-4. Prompts are loaded from `Assets/StreamingAssets/GameContent/speed_draw/prompts.json`
+4. No content files needed — players write their own prompts
 
 ### 8. Create the Hot Potato Scene
 
@@ -197,7 +198,7 @@ For each new game, create a **Game Entry** asset via `Create → Party Game → 
 | Game | id | Display Name | Scene Name | Min Players | Max Players |
 |------|----|-------------|------------|-------------|-------------|
 | Fibbage | `fibbage` | Fibbage | Fibbage | 3 | 8 |
-| Speed Draw | `speed_draw` | Speed Draw | SpeedDraw | 2 | 8 |
+| Telephone | `telephone` | Telephone | Telephone | 3 | 8 |
 | Hot Potato | `hot_potato` | Hot Potato | HotPotato | 3 | 10 |
 | Caption Contest | `caption_contest` | Caption Contest | CaptionContest | 3 | 8 |
 | Price is Close | `price_is_close` | Price is Close | PriceIsClose | 2 | 10 |
@@ -214,7 +215,7 @@ Drag all new entries into the `GameRegistry` asset's `Entries` list.
 | Quiplash | 1 |
 | Pong | 2 |
 | Fibbage | 3 |
-| SpeedDraw | 4 |
+| Telephone | 4 |
 | HotPotato | 5 |
 | CaptionContest | 6 |
 | PriceIsClose | 7 |
@@ -315,17 +316,16 @@ The first time you run, Windows may prompt you to allow Unity through the firewa
 | Fooled Points | 500 | Points per player fooled by your bluff |
 | Best Bluff Bonus | 250 | Bonus if nobody found truth and your bluff won |
 
-### SpeedDrawManager (on the SpeedDraw scene)
+### TelephoneManager (on the Telephone scene)
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| Max Rounds | 5 | Rounds per game |
-| Plan Seconds | 10 | Thinking time before drawing |
-| Draw Seconds | 3 | Drawing time |
-| Guess Seconds | 15 | Time to guess which label matches |
-| All Correct Points | 300 | Points if everyone guesses right |
-| Majority Correct Points | 200 | Points if majority guesses right |
-| Contribution Bonus | 50 | Bonus for players who drew enough strokes |
+| Write Seconds | 30 | Time to write the initial prompt |
+| Draw Seconds | 30 | Time to draw the assigned text |
+| Describe Seconds | 20 | Time to describe a drawing in words |
+| Reveal Step Seconds | 4 | How long each chain entry shows during the reveal |
+| Reveal Chain Pause Seconds | 2 | Pause between chains during the reveal |
+| Done Display Seconds | 5 | How long the final screen shows before returning |
 
 ### HotPotatoManager (on the HotPotato scene)
 
@@ -422,22 +422,9 @@ File: `Assets/StreamingAssets/GameContent/fibbage/prompts.json`
 }
 ```
 
-### Speed Draw Prompts
+### Telephone
 
-File: `Assets/StreamingAssets/GameContent/speed_draw/prompts.json`
-
-```json
-{
-  "prompts": [
-    {
-      "id": "sd_001",
-      "text": "A cat wearing sunglasses",
-      "decoyA": "A dog in a top hat",
-      "decoyB": "A bird with headphones"
-    }
-  ]
-}
-```
+Telephone does not use content files. Players write their own prompts at the start of each game.
 
 ### Caption Contest Items
 
@@ -517,8 +504,8 @@ Assets/
         PongGoalZone.cs          Trigger-based goal detection
       Fibbage/
         FibbageManager.cs        Fibbage bluffing game session
-      SpeedDraw/
-        SpeedDrawManager.cs      Speed Draw collaborative drawing game session
+      Telephone/
+        TelephoneManager.cs      Telephone chain drawing game session
       HotPotato/
         HotPotatoManager.cs      Hot Potato passing game session
       CaptionContest/
@@ -531,7 +518,6 @@ Assets/
     prompts.json                 Quiplash prompts
     GameContent/
       fibbage/prompts.json       Fibbage prompts with truth answers
-      speed_draw/prompts.json    Speed Draw prompts with decoys
       caption_contest/items.json Caption Contest image index
       price_is_close/items.json  Price is Close item index
     WebApp/
@@ -542,7 +528,7 @@ Assets/
         quiplash.js              Quiplash phone UI module
         pong.js                  Pong paddle controller module
         fibbage.js               Fibbage bluffing phone UI module
-        speed_draw.js            Speed Draw drawing + guessing module
+        telephone.js             Telephone chain drawing game module
         hot_potato.js            Hot Potato passing + swipe module
         caption_contest.js       Caption Contest phone UI module
         price_is_close.js        Price is Close guessing module
@@ -554,7 +540,7 @@ Assets/
     Quiplash.unity               Quiplash game scene
     Pong.unity                   Pong game scene
     Fibbage.unity                Fibbage game scene
-    SpeedDraw.unity              Speed Draw game scene
+    Telephone.unity              Telephone chain drawing game scene
     HotPotato.unity              Hot Potato game scene
     CaptionContest.unity         Caption Contest game scene
     PriceIsClose.unity           Price is Close game scene

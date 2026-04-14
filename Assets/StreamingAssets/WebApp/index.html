@@ -237,62 +237,83 @@
     </div>
   </div>
 
-  <!-- ═══ SPEED DRAW ═══ -->
+  <!-- ═══ TELEPHONE ═══ -->
 
-  <div id="screen-sd-prompt" class="screen">
+  <div id="screen-tel-write" class="screen">
     <div class="card">
-      <p class="round-info" id="sd-prompt-round"></p>
-      <h2 id="sd-prompt-text" class="prompt-display"></h2>
-      <p class="subtle-text">Everyone will draw this together!</p>
+      <h1>Telephone</h1>
+      <p class="round-info" id="tel-write-step"></p>
+      <div id="tel-write-timer" class="timer"></div>
+      <p class="subtle-text">Build a prompt for someone to draw!</p>
+      <div class="tel-adlib">
+        <div class="tel-adlib-row">
+          <input type="text" id="tel-noun-input" placeholder="A noun..." maxlength="40" autocomplete="off" class="tel-adlib-field" />
+          <button id="tel-noun-random" class="btn-secondary tel-random-btn" type="button">Random</button>
+        </div>
+        <div class="tel-adlib-row">
+          <input type="text" id="tel-action-input" placeholder="Doing what..." maxlength="60" autocomplete="off" class="tel-adlib-field" />
+          <button id="tel-action-random" class="btn-secondary tel-random-btn" type="button">Random</button>
+        </div>
+        <p class="tel-preview" id="tel-preview"></p>
+      </div>
+      <input type="hidden" id="tel-write-input" />
+      <button id="tel-write-btn" class="btn-primary">Submit</button>
+      <p class="subtle-text tel-or-text">or type your own:</p>
+      <input type="text" id="tel-freeform-input" placeholder="Write anything..." maxlength="120" autocomplete="off" />
     </div>
   </div>
 
-  <div id="screen-sd-plan" class="screen">
-    <div class="card">
-      <p class="round-info" id="sd-plan-round"></p>
-      <h2 id="sd-plan-prompt" class="prompt-display"></h2>
-      <div id="sd-plan-timer" class="timer"></div>
-      <p class="subtle-text">Plan your part of the drawing...</p>
+  <div id="screen-tel-draw" class="screen tel-draw-screen">
+    <div class="tel-draw-hud">
+      <p class="round-info" id="tel-draw-step"></p>
+      <h2 id="tel-draw-prompt" class="prompt-display"></h2>
+      <div id="tel-draw-timer" class="timer"></div>
+    </div>
+    <div class="tel-draw-canvas-wrap">
+      <canvas id="tel-draw-canvas" class="tel-draw-canvas" width="400" height="400"></canvas>
+    </div>
+    <div class="tel-draw-footer">
+      <button id="tel-draw-btn" class="btn-primary">Done</button>
     </div>
   </div>
 
-  <div id="screen-sd-draw" class="screen">
-    <div class="card sd-draw-card">
-      <div id="sd-draw-timer" class="timer urgent">3s</div>
-      <canvas id="sd-canvas" class="sd-canvas" width="300" height="300"></canvas>
-      <p class="subtle-text">DRAW NOW!</p>
+  <div id="screen-tel-describe" class="screen">
+    <div class="card">
+      <p class="round-info" id="tel-desc-step"></p>
+      <div id="tel-desc-timer" class="timer"></div>
+      <p class="subtle-text">What do you think this is?</p>
+      <canvas id="tel-desc-canvas" class="tel-canvas-readonly" width="400" height="400" style="pointer-events:none;"></canvas>
+      <input type="text" id="tel-desc-input" placeholder="Describe the drawing..." maxlength="120" autocomplete="off" />
+      <button id="tel-desc-btn" class="btn-primary">Submit</button>
     </div>
   </div>
 
-  <div id="screen-sd-guess" class="screen">
+  <div id="screen-tel-wait" class="screen">
     <div class="card">
-      <p class="round-info" id="sd-guess-round"></p>
-      <div id="sd-guess-timer" class="timer"></div>
-      <p class="subtle-text">What was the prompt?</p>
-      <div id="sd-guess-choices" class="answers-list"></div>
-    </div>
-  </div>
-
-  <div id="screen-sd-guess-wait" class="screen">
-    <div class="card">
-      <h2>Guess Submitted!</h2>
-      <p class="subtle-text">Waiting for results...</p>
+      <h2>Submitted!</h2>
+      <p class="subtle-text">Waiting for other players...</p>
       <div class="spinner"></div>
     </div>
   </div>
 
-  <div id="screen-sd-results" class="screen">
+  <div id="screen-tel-reveal" class="screen">
     <div class="card">
-      <h1>Results</h1>
-      <p id="sd-correct-label" class="round-info"></p>
-      <div id="sd-results-list" class="results-list"></div>
+      <h1>The Big Reveal</h1>
+      <p class="round-info" id="tel-reveal-progress"></p>
+      <p class="subtle-text" id="tel-reveal-author"></p>
+      <div id="tel-reveal-text-block">
+        <h2 id="tel-reveal-text-content" class="prompt-display"></h2>
+      </div>
+      <div id="tel-reveal-drawing-block" style="display:none;">
+        <canvas id="tel-reveal-canvas" class="tel-canvas-readonly" width="400" height="400" style="pointer-events:none;"></canvas>
+      </div>
     </div>
   </div>
 
-  <div id="screen-sd-gameover" class="screen">
+  <div id="screen-tel-done" class="screen">
     <div class="card">
-      <h1>Game Over!</h1>
-      <div id="sd-standings" class="results-list"></div>
+      <h1>Thanks for playing!</h1>
+      <p class="subtle-text">That was Telephone</p>
     </div>
   </div>
 
@@ -455,7 +476,7 @@
   <script src="games/quiplash.js"></script>
   <script src="games/pong.js"></script>
   <script src="games/fibbage.js"></script>
-  <script src="games/speed_draw.js"></script>
+  <script src="games/telephone.js"></script>
   <script src="games/hot_potato.js"></script>
   <script src="games/caption_contest.js"></script>
   <script src="games/price_is_close.js"></script>

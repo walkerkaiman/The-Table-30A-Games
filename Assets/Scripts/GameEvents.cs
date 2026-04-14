@@ -46,6 +46,15 @@ public static class GameEvents
     public static event Action PlayerListChanged;
 
     // ─────────────────────────────────────────────
+    //  TABLE DISPLAY
+    //  Fired on every phase transition so the table-side display
+    //  can show phase name, timer, etc. without parsing broadcast JSON.
+    //  Args: gameType, phase, timer (seconds remaining)
+    // ─────────────────────────────────────────────
+
+    public static event Action<string, string, int> DisplayStateChanged;
+
+    // ─────────────────────────────────────────────
     //  FIRE HELPERS
     // ─────────────────────────────────────────────
 
@@ -82,6 +91,9 @@ public static class GameEvents
     public static void FirePlayerListChanged()
         => PlayerListChanged?.Invoke();
 
+    public static void FireDisplayState(string gameType, string phase, int timer)
+        => DisplayStateChanged?.Invoke(gameType, phase, timer);
+
     public static void ClearAll()
     {
         JoinRequested = null;
@@ -95,5 +107,6 @@ public static class GameEvents
         BroadcastMessage = null;
         SendToPlayer = null;
         PlayerListChanged = null;
+        DisplayStateChanged = null;
     }
 }

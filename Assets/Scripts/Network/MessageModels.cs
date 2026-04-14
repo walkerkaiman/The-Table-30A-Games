@@ -34,8 +34,12 @@ public static class MessageTypes
     public const string FibbageVoteReceived = "fibbage_vote_received";
 
     public const string DrawStroke = "draw_stroke";
-    public const string DrawGuess = "draw_guess";
-    public const string GuessReceived = "guess_received";
+    public const string SubmitPrompt = "submit_prompt";
+    public const string SubmitDescription = "submit_description";
+    public const string SubmitDrawing = "submit_drawing";
+    public const string PromptReceived = "prompt_received";
+    public const string DescriptionReceived = "description_received";
+    public const string DrawingReceived = "drawing_received";
 
     public const string PotatoPass = "potato_pass";
     public const string PotatoEvent = "potato_event";
@@ -46,6 +50,7 @@ public static class MessageTypes
     public const string CaptionVoteReceived = "caption_vote_received";
 
     public const string SubmitGuess = "submit_guess";
+    public const string GuessReceived = "guess_received";
 }
 
 // ──────────────────────────────────────────────
@@ -342,7 +347,7 @@ public class FibbageResultEntry
 }
 
 // ──────────────────────────────────────────────
-//  Speed Draw (client → server)
+//  Telephone (client → server)
 // ──────────────────────────────────────────────
 
 [Serializable]
@@ -354,30 +359,56 @@ public class DrawStrokeMessage
 }
 
 [Serializable]
-public class DrawGuessMessage
+public class SubmitPromptMessage
 {
     public string type;
-    public int choiceIndex;
+    public string text;
+}
+
+[Serializable]
+public class SubmitDescriptionMessage
+{
+    public string type;
+    public string text;
 }
 
 // ──────────────────────────────────────────────
-//  Speed Draw (server → client)
+//  Telephone (server → client)
 // ──────────────────────────────────────────────
 
 [Serializable]
-public class DrawStrokeBroadcast
+public class TelephoneStroke
 {
-    public string type = MessageTypes.DrawStroke;
-    public string playerId;
     public float[] points;
     public string color;
 }
 
 [Serializable]
-public class SpeedDrawLabelInfo
+public class TelephoneRevealEntry
 {
-    public string text;
-    public bool isCorrect;
+    public string playerName;
+    public string entryType;
+    public string content;
+    public TelephoneStroke[] strokes;
+}
+
+[Serializable]
+public class TelephoneStateMessage
+{
+    public string type = MessageTypes.GameState;
+    public string gameType = "telephone";
+    public string state;
+    public int timer;
+    public int step;
+    public int totalSteps;
+    public PlayerInfo[] players;
+    public string assignment;
+    public TelephoneStroke[] strokes;
+    public int chainIndex;
+    public int totalChains;
+    public int entryIndex;
+    public int chainLength;
+    public TelephoneRevealEntry entry;
 }
 
 // ──────────────────────────────────────────────
@@ -512,19 +543,6 @@ public class FibbageStateMessage
     public PlayerInfo[] players;
 }
 
-[Serializable]
-public class SpeedDrawStateMessage
-{
-    public string type = MessageTypes.GameState;
-    public string gameType = "speed_draw";
-    public string state;
-    public int timer;
-    public int round;
-    public int totalRounds;
-    public string prompt;
-    public SpeedDrawLabelInfo[] labels;
-    public PlayerInfo[] players;
-}
 
 [Serializable]
 public class CaptionContestStateMessage

@@ -120,6 +120,7 @@ public abstract class RoundBasedGameSession<TState> : MonoBehaviour, IGameSessio
         _state = newState;
         GameLog.State($"{GameType} → {newState}");
         BroadcastState();
+        GameEvents.FireDisplayState(GameType, CurrentState, TimerCeil);
     }
 
     /// <summary>
