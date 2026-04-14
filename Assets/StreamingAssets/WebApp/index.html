@@ -27,6 +27,27 @@
     </div>
   </div>
 
+  <!-- ─── Table Side Selection ─── -->
+  <div id="screen-tableside" class="screen">
+    <div class="card">
+      <h1>Which side of the table?</h1>
+      <p class="subtle-text">Tap the side you're sitting on</p>
+      <div class="tableside-picker">
+        <button id="btn-side-far" class="tableside-btn side-far">
+          <span class="tableside-label">That Side</span>
+          <span class="tableside-arrow">&uarr;</span>
+        </button>
+        <div class="tableside-divider">
+          <span class="tableside-divider-text">TABLE</span>
+        </div>
+        <button id="btn-side-near" class="tableside-btn side-near">
+          <span class="tableside-arrow">&darr;</span>
+          <span class="tableside-label">This Side</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ─── Lobby ─── -->
   <div id="screen-lobby" class="screen">
     <div class="card">
@@ -42,12 +63,14 @@
   <!-- ─── Game Selection / Voting ─── -->
   <div id="screen-gameselect" class="screen">
     <div class="card">
+      <div id="gameselect-scoreboard" class="scoreboard"></div>
       <h1>Pick a Game!</h1>
       <div id="gameselect-timer" class="timer"></div>
       <p class="subtle-text">Tap to vote</p>
       <div id="gameselect-list" class="game-select-list"></div>
       <div id="host-gameselect-controls" class="host-controls" style="display:none;">
         <button id="btn-skip-vote" class="btn-secondary btn-host">Skip Vote</button>
+        <button id="btn-registration" class="btn-secondary btn-host" style="margin-top:0.6rem;">Registration</button>
       </div>
     </div>
   </div>
@@ -153,6 +176,271 @@
     </div>
   </div>
 
+  <!-- ═══ FIBBAGE ═══ -->
+
+  <div id="screen-fib-prompt" class="screen">
+    <div class="card">
+      <p class="round-info" id="fib-prompt-round"></p>
+      <h2 id="fib-prompt-text" class="prompt-display"></h2>
+      <p class="subtle-text">Think of a believable bluff...</p>
+    </div>
+  </div>
+
+  <div id="screen-fib-bluff" class="screen">
+    <div class="card">
+      <p class="round-info" id="fib-bluff-round"></p>
+      <h2 id="fib-bluff-prompt" class="prompt-display"></h2>
+      <div id="fib-bluff-timer" class="timer"></div>
+      <input type="text" id="input-bluff" placeholder="Write a believable lie..." maxlength="120" autocomplete="off" />
+      <button id="btn-bluff" class="btn-primary">Submit Bluff</button>
+    </div>
+  </div>
+
+  <div id="screen-fib-bluff-wait" class="screen">
+    <div class="card">
+      <h2>Bluff Submitted!</h2>
+      <p class="subtle-text">Waiting for other players...</p>
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+  <div id="screen-fib-vote" class="screen">
+    <div class="card">
+      <p class="round-info" id="fib-vote-round"></p>
+      <h2 id="fib-vote-prompt" class="prompt-display"></h2>
+      <div id="fib-vote-timer" class="timer"></div>
+      <p class="subtle-text">Which answer is the TRUTH?</p>
+      <div id="fib-vote-choices" class="answers-list"></div>
+    </div>
+  </div>
+
+  <div id="screen-fib-vote-wait" class="screen">
+    <div class="card">
+      <h2>Vote Cast!</h2>
+      <p class="subtle-text">Waiting for results...</p>
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+  <div id="screen-fib-results" class="screen">
+    <div class="card">
+      <h1>Results</h1>
+      <p id="fib-truth-reveal" class="fib-truth-reveal"></p>
+      <div id="fib-results-list" class="results-list"></div>
+    </div>
+  </div>
+
+  <div id="screen-fib-gameover" class="screen">
+    <div class="card">
+      <h1>Game Over!</h1>
+      <div id="fib-standings" class="results-list"></div>
+    </div>
+  </div>
+
+  <!-- ═══ SPEED DRAW ═══ -->
+
+  <div id="screen-sd-prompt" class="screen">
+    <div class="card">
+      <p class="round-info" id="sd-prompt-round"></p>
+      <h2 id="sd-prompt-text" class="prompt-display"></h2>
+      <p class="subtle-text">Everyone will draw this together!</p>
+    </div>
+  </div>
+
+  <div id="screen-sd-plan" class="screen">
+    <div class="card">
+      <p class="round-info" id="sd-plan-round"></p>
+      <h2 id="sd-plan-prompt" class="prompt-display"></h2>
+      <div id="sd-plan-timer" class="timer"></div>
+      <p class="subtle-text">Plan your part of the drawing...</p>
+    </div>
+  </div>
+
+  <div id="screen-sd-draw" class="screen">
+    <div class="card sd-draw-card">
+      <div id="sd-draw-timer" class="timer urgent">3s</div>
+      <canvas id="sd-canvas" class="sd-canvas" width="300" height="300"></canvas>
+      <p class="subtle-text">DRAW NOW!</p>
+    </div>
+  </div>
+
+  <div id="screen-sd-guess" class="screen">
+    <div class="card">
+      <p class="round-info" id="sd-guess-round"></p>
+      <div id="sd-guess-timer" class="timer"></div>
+      <p class="subtle-text">What was the prompt?</p>
+      <div id="sd-guess-choices" class="answers-list"></div>
+    </div>
+  </div>
+
+  <div id="screen-sd-guess-wait" class="screen">
+    <div class="card">
+      <h2>Guess Submitted!</h2>
+      <p class="subtle-text">Waiting for results...</p>
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+  <div id="screen-sd-results" class="screen">
+    <div class="card">
+      <h1>Results</h1>
+      <p id="sd-correct-label" class="round-info"></p>
+      <div id="sd-results-list" class="results-list"></div>
+    </div>
+  </div>
+
+  <div id="screen-sd-gameover" class="screen">
+    <div class="card">
+      <h1>Game Over!</h1>
+      <div id="sd-standings" class="results-list"></div>
+    </div>
+  </div>
+
+  <!-- ═══ HOT POTATO ═══ -->
+
+  <div id="screen-hp-preround" class="screen">
+    <div class="card">
+      <h1>Hot Potato!</h1>
+      <p class="round-info" id="hp-round-info"></p>
+      <p class="subtle-text">Get ready...</p>
+      <div id="hp-strikes" class="hp-strikes"></div>
+    </div>
+  </div>
+
+  <div id="screen-hp-playing" class="screen">
+    <div class="card hp-playing-card">
+      <div id="hp-timer" class="timer"></div>
+      <div id="hp-ring" class="hp-ring"></div>
+      <div id="hp-controls" class="hp-controls" style="display:none;">
+        <button id="btn-pass-left" class="btn-secondary hp-btn">&#8592; Left</button>
+        <button id="btn-pass-across" class="btn-primary hp-btn">Throw!</button>
+        <button id="btn-pass-right" class="btn-secondary hp-btn">Right &#8594;</button>
+      </div>
+      <p id="hp-status" class="subtle-text">Waiting for potato...</p>
+    </div>
+  </div>
+
+  <div id="screen-hp-exploded" class="screen">
+    <div class="card">
+      <h1 id="hp-boom-text">BOOM!</h1>
+      <p id="hp-boom-detail" class="subtle-text"></p>
+    </div>
+  </div>
+
+  <div id="screen-hp-gameover" class="screen">
+    <div class="card">
+      <h1>Game Over!</h1>
+      <div id="hp-standings" class="results-list"></div>
+    </div>
+  </div>
+
+  <!-- ═══ CAPTION CONTEST ═══ -->
+
+  <div id="screen-cc-image" class="screen">
+    <div class="card">
+      <p class="round-info" id="cc-image-round"></p>
+      <img id="cc-image-display" class="cc-image" alt="Caption this!" />
+      <p class="subtle-text">Get ready to write a caption...</p>
+    </div>
+  </div>
+
+  <div id="screen-cc-caption" class="screen">
+    <div class="card">
+      <p class="round-info" id="cc-caption-round"></p>
+      <img id="cc-caption-image" class="cc-image-small" alt="" />
+      <div id="cc-caption-timer" class="timer"></div>
+      <textarea id="input-caption" placeholder="Write a funny caption..." maxlength="200" rows="2"></textarea>
+      <button id="btn-caption" class="btn-primary">Submit Caption</button>
+    </div>
+  </div>
+
+  <div id="screen-cc-caption-wait" class="screen">
+    <div class="card">
+      <h2>Caption Submitted!</h2>
+      <p class="subtle-text">Waiting for other players...</p>
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+  <div id="screen-cc-vote" class="screen">
+    <div class="card">
+      <p class="round-info" id="cc-vote-round"></p>
+      <img id="cc-vote-image" class="cc-image-small" alt="" />
+      <div id="cc-vote-timer" class="timer"></div>
+      <p class="subtle-text">Pick the best caption:</p>
+      <div id="cc-vote-captions" class="answers-list"></div>
+    </div>
+  </div>
+
+  <div id="screen-cc-vote-wait" class="screen">
+    <div class="card">
+      <h2>Vote Cast!</h2>
+      <p class="subtle-text">Waiting for results...</p>
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+  <div id="screen-cc-results" class="screen">
+    <div class="card">
+      <h1>Results</h1>
+      <div id="cc-results-list" class="results-list"></div>
+    </div>
+  </div>
+
+  <div id="screen-cc-gameover" class="screen">
+    <div class="card">
+      <h1>Game Over!</h1>
+      <div id="cc-standings" class="results-list"></div>
+    </div>
+  </div>
+
+  <!-- ═══ PRICE IS CLOSE ═══ -->
+
+  <div id="screen-pic-item" class="screen">
+    <div class="card">
+      <p class="round-info" id="pic-item-round"></p>
+      <h2 id="pic-item-title"></h2>
+      <p id="pic-item-desc" class="subtle-text"></p>
+      <img id="pic-item-image" class="cc-image" alt="" />
+      <video id="pic-item-video" class="cc-image" autoplay loop muted playsinline style="display:none;"></video>
+      <p id="pic-item-unit" class="round-info"></p>
+    </div>
+  </div>
+
+  <div id="screen-pic-guess" class="screen">
+    <div class="card">
+      <p class="round-info" id="pic-guess-round"></p>
+      <h2 id="pic-guess-title"></h2>
+      <div id="pic-guess-timer" class="timer"></div>
+      <p id="pic-guess-unit" class="subtle-text"></p>
+      <input type="number" id="input-guess" placeholder="Your guess..." step="any" autocomplete="off" class="pic-guess-input" />
+      <button id="btn-guess" class="btn-primary">Submit Guess</button>
+    </div>
+  </div>
+
+  <div id="screen-pic-guess-wait" class="screen">
+    <div class="card">
+      <h2>Guess Submitted!</h2>
+      <p class="subtle-text">Waiting for other players...</p>
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+  <div id="screen-pic-reveal" class="screen">
+    <div class="card">
+      <h1>The Answer</h1>
+      <h2 id="pic-reveal-price" class="pic-reveal-price"></h2>
+      <div id="pic-reveal-list" class="results-list"></div>
+    </div>
+  </div>
+
+  <div id="screen-pic-gameover" class="screen">
+    <div class="card">
+      <h1>Game Over!</h1>
+      <div id="pic-standings" class="results-list"></div>
+    </div>
+  </div>
+
   <!-- ─── Disconnected ─── -->
   <div id="screen-disconnected" class="screen">
     <div class="card">
@@ -163,7 +451,13 @@
   </div>
 
   <script src="app.js"></script>
+  <script src="games/common.js"></script>
   <script src="games/quiplash.js"></script>
   <script src="games/pong.js"></script>
+  <script src="games/fibbage.js"></script>
+  <script src="games/speed_draw.js"></script>
+  <script src="games/hot_potato.js"></script>
+  <script src="games/caption_contest.js"></script>
+  <script src="games/price_is_close.js"></script>
 </body>
 </html>

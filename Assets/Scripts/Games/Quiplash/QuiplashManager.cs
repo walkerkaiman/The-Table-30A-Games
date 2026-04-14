@@ -1,93 +1,44 @@
-using System;
 using UnityEngine;
 
-/// <summary>
-/// Quiplash game session. Implements IGameSession so GameCoordinator can manage it.
-/// Owns the round flow: ShowPrompt → Answer → Voting → RoundResults → ... → GameOver.
-///
-/// Lives in its own scene. On Start(), registers with GameCoordinator.
-/// Receives player messages through OnGameMessage() — no direct event subscriptions.
-/// </summary>
-public class QuiplashManager : MonoBehaviour, IGameSession
+public class QuiplashManager : RoundBasedGameSession<QuiplashManager.QuiplashState>
 {
-    [Header("Game Settings")]
-    [SerializeField] private int maxRounds = 5;
+    [Header("Phase Timers")]
     [SerializeField] private float promptDisplayTime = 5f;
-    [SerializeField] private float answerTimerSeconds = 60f;
-    [SerializeField] private float voteTimerSeconds = 30f;
+    [SerializeField] private float answerTimerSeconds = 15f;
+    [SerializeField] private float voteTimerSeconds = 10f;
     [SerializeField] private float resultsDisplayTime = 10f;
-    [SerializeField] private float gameOverDisplayTime = 12f;
+
+    [Header("Scoring")]
     [SerializeField] private int pointsPerVote = 100;
 
     public enum QuiplashState { ShowPrompt, Answer, Voting, RoundResults, GameOver }
 
-    // IGameSession
-    public string GameType => "quiplash";
-    public string CurrentState => _currentState.ToString();
+    public override string GameType => "quiplash";
+    protected override QuiplashState GameOverState => QuiplashState.GameOver;
 
-    private QuiplashState _currentState;
-    private int _currentRound;
-    private float _timer;
-    private bool _timerActive;
     private ResultInfo[] _currentResults;
-
-    // ── Unity Lifecycle ──────────────────────────
 
     private void Start()
     {
         GameCoordinator.Instance.RegisterSession(this);
     }
 
-    private void Update()
+    public override void OnSessionStart(string[] playerIds)
     {
-        if (_timerActive)
-        {
-            _timer -= Time.deltaTime;
-            if (_timer <= 0f)
-            {
-                _timerActive = false;
-                OnTimerExpired();
-            }
-        }
-    }
-
-    // ════════════════════════════════════════════
-    //  IGameSession
-    // ════════════════════════════════════════════
-
-    public void OnSessionStart(string[] playerIds)
-    {
-        GameLog.Divider();
-        GameLog.Game($"QUIPLASH — {playerIds.Length} players, {maxRounds} rounds");
-        GameLog.Divider();
-
-        _currentRound = 0;
         _currentResults = null;
         PlayerManager.Instance.ResetScores();
         PromptDatabase.Instance.ResetShuffle();
-        BeginNextRound();
+        base.OnSessionStart(playerIds);
     }
 
-    public void OnSessionEnd()
-    {
-        _timerActive = false;
-    }
-
-    public void OnPlayerRejoined(string playerId)
-    {
-        BroadcastFullState();
-    }
-
-    public void OnPlayerDisconnected(string playerId)
+    public override void OnPlayerDisconnected(string playerId)
     {
         string name = PlayerManager.Instance.GetPlayerName(playerId);
-        PlayerManager.Instance.DisconnectPlayer(playerId);
+        base.OnPlayerDisconnected(playerId);
         GameLog.Player($"\"{name}\" DISCONNECTED mid-game [{PlayerManager.Instance.ActivePlayerCount} active]");
-        GameEvents.FirePlayerListChanged();
-        CheckAutoAdvance();
     }
 
-    public void OnGameMessage(string playerId, string messageType, string json)
+    public override void OnGameMessage(string playerId, string messageType, string json)
     {
         switch (messageType)
         {
@@ -101,12 +52,12 @@ public class QuiplashManager : MonoBehaviour, IGameSession
     }
 
     // ════════════════════════════════════════════
-    //  GAME LOGIC
+    //  Game Logic
     // ════════════════════════════════════════════
 
     private void HandleAnswer(string playerId, string answer)
     {
-        if (_currentState != QuiplashState.Answer) return;
+        if (_state != QuiplashState.Answer) return;
 
         if (RoundManager.Instance.SubmitAnswer(playerId, answer))
         {
@@ -116,16 +67,16 @@ public class QuiplashManager : MonoBehaviour, IGameSession
             GameLog.Round($"Answer from \"{name}\"  ({have}/{need})");
 
             GameEvents.FireSendToPlayer(playerId,
-                JsonUtility.ToJson(new ConfirmationMessage { type = "answer_received" }));
+                JsonUtility.ToJson(new ConfirmationMessage { type = MessageTypes.AnswerReceived }));
 
             if (have >= need) GameLog.Round("All answers received!");
         }
-        CheckAutoAdvance();
+        TryAutoAdvance();
     }
 
     private void HandleVote(string voterId, string answerId)
     {
-        if (_currentState != QuiplashState.Voting) return;
+        if (_state != QuiplashState.Voting) return;
 
         if (RoundManager.Instance.SubmitVote(voterId, answerId))
         {
@@ -135,41 +86,32 @@ public class QuiplashManager : MonoBehaviour, IGameSession
             GameLog.Round($"Vote from \"{name}\"  ({have}/{need})");
 
             GameEvents.FireSendToPlayer(voterId,
-                JsonUtility.ToJson(new ConfirmationMessage { type = "vote_received" }));
+                JsonUtility.ToJson(new ConfirmationMessage { type = MessageTypes.VoteReceived }));
 
             if (have >= need) GameLog.Round("All votes received!");
         }
-        CheckAutoAdvance();
+        TryAutoAdvance();
     }
 
     // ════════════════════════════════════════════
-    //  ROUND FLOW
+    //  Base Class Hooks
     // ════════════════════════════════════════════
 
-    private void BeginNextRound()
+    protected override void OnRoundStart(int round)
     {
-        _currentRound++;
-        if (_currentRound > maxRounds)
-        {
-            EndGame();
-            return;
-        }
-
         _currentResults = null;
         string prompt = PromptDatabase.Instance.GetNextPrompt();
         RoundManager.Instance.StartNewRound(prompt);
 
-        GameLog.Divider();
-        GameLog.Round($"══ ROUND {_currentRound} / {maxRounds} ══");
         GameLog.Round($"Prompt: \"{prompt}\"");
 
         StartTimer(promptDisplayTime);
         TransitionTo(QuiplashState.ShowPrompt);
     }
 
-    private void OnTimerExpired()
+    protected override void OnTimerExpired()
     {
-        switch (_currentState)
+        switch (_state)
         {
             case QuiplashState.ShowPrompt:
                 GameLog.State($"Prompt displayed — opening answers ({answerTimerSeconds}s)");
@@ -193,10 +135,34 @@ public class QuiplashManager : MonoBehaviour, IGameSession
                 break;
 
             case QuiplashState.GameOver:
-                GameCoordinator.Instance.OnGameEnded();
+                CompleteSession();
                 break;
         }
     }
+
+    protected override void TryAutoAdvance()
+    {
+        int count = PlayerManager.Instance.ActivePlayerCount;
+        if (count == 0) return;
+
+        if (_state == QuiplashState.Answer && RoundManager.Instance.AllAnswered(count))
+        {
+            StopTimer();
+            GameLog.State("All answers in — auto-advancing to voting");
+            StartTimer(voteTimerSeconds);
+            TransitionTo(QuiplashState.Voting);
+        }
+        else if (_state == QuiplashState.Voting && RoundManager.Instance.AllVoted(count))
+        {
+            StopTimer();
+            GameLog.State("All votes in — auto-advancing to results");
+            TallyAndShowResults();
+        }
+    }
+
+    // ════════════════════════════════════════════
+    //  Scoring & Results
+    // ════════════════════════════════════════════
 
     private void TallyAndShowResults()
     {
@@ -208,92 +174,51 @@ public class QuiplashManager : MonoBehaviour, IGameSession
             var r = _currentResults[i];
             int earned = r.votes * pointsPerVote;
             PlayerManager.Instance.AddScore(r.id, earned);
-            GameLog.Round($"  {OrdinalOf(i + 1)}: \"{r.name}\" — \"{r.answer}\" — {r.votes} vote(s) (+{earned} pts)");
+            GameLog.Round($"  {Leaderboard.OrdinalOf(i + 1)}: \"{r.name}\" — \"{r.answer}\" — {r.votes} vote(s) (+{earned} pts)");
         }
 
         StartTimer(resultsDisplayTime);
         TransitionTo(QuiplashState.RoundResults);
     }
 
-    private void EndGame()
+    protected override void EndGame()
     {
-        var standings = PlayerManager.Instance.GetAllPlayerInfos();
-        Array.Sort(standings, (a, b) => b.score.CompareTo(a.score));
-
-        GameLog.Divider();
-        GameLog.Game("══ QUIPLASH GAME OVER ══");
-        for (int i = 0; i < standings.Length; i++)
-        {
-            string marker = i == 0 ? "  <<< WINNER" : "";
-            GameLog.Game($"  {OrdinalOf(i + 1)}: \"{standings[i].name}\" — {standings[i].score} pts{marker}");
-        }
-        GameLog.Divider();
+        var standings = Leaderboard.GetSorted();
+        Leaderboard.LogStandings("QUIPLASH", standings);
 
         _currentResults = BuildFinalResults(standings);
         StartTimer(gameOverDisplayTime);
         TransitionTo(QuiplashState.GameOver);
     }
 
-    private void CheckAutoAdvance()
-    {
-        int count = PlayerManager.Instance.ActivePlayerCount;
-        if (count == 0) return;
-
-        if (_currentState == QuiplashState.Answer && RoundManager.Instance.AllAnswered(count))
-        {
-            _timerActive = false;
-            GameLog.State("All answers in — auto-advancing to voting");
-            StartTimer(voteTimerSeconds);
-            TransitionTo(QuiplashState.Voting);
-        }
-        else if (_currentState == QuiplashState.Voting && RoundManager.Instance.AllVoted(count))
-        {
-            _timerActive = false;
-            GameLog.State("All votes in — auto-advancing to results");
-            TallyAndShowResults();
-        }
-    }
-
     // ════════════════════════════════════════════
-    //  STATE / BROADCAST
+    //  Broadcast
     // ════════════════════════════════════════════
 
-    private void TransitionTo(QuiplashState newState)
+    protected override void BroadcastState()
     {
-        _currentState = newState;
-        GameLog.State($"Quiplash → {newState}");
-        BroadcastFullState();
-    }
-
-    private void BroadcastFullState()
-    {
+        var h = BuildHeader();
         var msg = new GameStateMessage
         {
-            gameType = "quiplash",
-            state = _currentState.ToString(),
-            round = _currentRound,
-            totalRounds = maxRounds,
-            timer = Mathf.CeilToInt(_timer),
-            prompt = RoundManager.Instance != null ? RoundManager.Instance.CurrentPrompt : "",
-            players = PlayerManager.Instance.GetAllPlayerInfos()
+            gameType = h.gameType,
+            state = h.state,
+            round = h.round,
+            totalRounds = h.totalRounds,
+            timer = h.timer,
+            players = h.players,
+            prompt = RoundManager.Instance != null ? RoundManager.Instance.CurrentPrompt : ""
         };
 
-        if (_currentState == QuiplashState.Voting)
+        if (_state == QuiplashState.Voting)
             msg.answers = RoundManager.Instance.GetAnswersForVoting();
 
-        if (_currentState == QuiplashState.RoundResults || _currentState == QuiplashState.GameOver)
+        if (_state == QuiplashState.RoundResults || _state == QuiplashState.GameOver)
             msg.results = _currentResults ?? RoundManager.Instance.TallyVotes();
 
         GameEvents.FireBroadcast(JsonUtility.ToJson(msg));
     }
 
     // ── Helpers ──────────────────────────────────
-
-    private void StartTimer(float seconds)
-    {
-        _timer = seconds;
-        _timerActive = true;
-    }
 
     private static ResultInfo[] BuildFinalResults(PlayerInfo[] standings)
     {
@@ -308,10 +233,5 @@ public class QuiplashManager : MonoBehaviour, IGameSession
             };
         }
         return results;
-    }
-
-    private static string OrdinalOf(int n)
-    {
-        return n switch { 1 => "1st", 2 => "2nd", 3 => "3rd", _ => $"{n}th" };
     }
 }

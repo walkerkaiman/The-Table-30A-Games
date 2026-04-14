@@ -216,6 +216,10 @@ public class GameServer
             case ".gif":  return "image/gif";
             case ".svg":  return "image/svg+xml";
             case ".ico":  return "image/x-icon";
+            case ".mp4":  return "video/mp4";
+            case ".webm": return "video/webm";
+            case ".mov":  return "video/quicktime";
+            case ".webp": return "image/webp";
             default:      return "application/octet-stream";
         }
     }

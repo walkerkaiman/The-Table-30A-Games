@@ -109,19 +109,7 @@ public class PromptDatabase : MonoBehaviour
         GameLog.Prompt($"Loaded {_prompts.Count} fallback prompts");
     }
 
-    // ── Shuffle (Fisher-Yates) ───────────────────
-
-    private void Shuffle()
-    {
-        var rng = new System.Random();
-        for (int i = _prompts.Count - 1; i > 0; i--)
-        {
-            int j = rng.Next(i + 1);
-            var temp = _prompts[i];
-            _prompts[i] = _prompts[j];
-            _prompts[j] = temp;
-        }
-    }
+    private void Shuffle() => _prompts.Shuffle();
 }
 
 [Serializable]

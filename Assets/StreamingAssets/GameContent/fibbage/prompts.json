@@ -1,0 +1,64 @@
+{
+  "prompts": [
+    {
+      "id": "fib_001",
+      "text": "In 2014, a Florida man was arrested for throwing ___ at his neighbor.",
+      "truth": "a live alligator",
+      "category": "florida"
+    },
+    {
+      "id": "fib_002",
+      "text": "The world record for longest ___ is 58 hours.",
+      "truth": "karaoke marathon",
+      "category": "records"
+    },
+    {
+      "id": "fib_003",
+      "text": "In Japan, there is a festival that celebrates ___.",
+      "truth": "crying babies",
+      "category": "culture"
+    },
+    {
+      "id": "fib_004",
+      "text": "NASA once accidentally ___ during a live broadcast.",
+      "truth": "lost the original Moon landing tapes",
+      "category": "space"
+    },
+    {
+      "id": "fib_005",
+      "text": "The original name for Google was ___.",
+      "truth": "Backrub",
+      "category": "tech"
+    },
+    {
+      "id": "fib_006",
+      "text": "A group of flamingos is called a ___.",
+      "truth": "flamboyance",
+      "category": "animals"
+    },
+    {
+      "id": "fib_007",
+      "text": "In Switzerland, it's illegal to ___.",
+      "truth": "own just one guinea pig",
+      "category": "laws"
+    },
+    {
+      "id": "fib_008",
+      "text": "The inventor of the Pringles can is ___.",
+      "truth": "buried in one",
+      "category": "food"
+    },
+    {
+      "id": "fib_009",
+      "text": "Oxford University is older than ___.",
+      "truth": "the Aztec Empire",
+      "category": "history"
+    },
+    {
+      "id": "fib_010",
+      "text": "The shortest war in history lasted ___.",
+      "truth": "38 minutes",
+      "category": "history"
+    }
+  ]
+}

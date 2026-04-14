@@ -7,6 +7,7 @@
     playerName: "",
     serverHost: "",
     roomCode: "",
+    tableSide: 0,
     currentScreen: "join",
     currentGameType: null,
     timerInterval: null,
@@ -41,9 +42,13 @@
     btnStartGame: $("#btn-start-game"),
     gameselectTimer: $("#gameselect-timer"),
     gameselectList: $("#gameselect-list"),
+    gameselectScoreboard: $("#gameselect-scoreboard"),
     hostGameselectControls: $("#host-gameselect-controls"),
     btnSkipVote: $("#btn-skip-vote"),
+    btnRegistration: $("#btn-registration"),
     btnReconnect: $("#btn-reconnect"),
+    btnSideNear: $("#btn-side-near"),
+    btnSideFar: $("#btn-side-far"),
   };
 
   // ─── Public API for game modules ──────────
@@ -116,6 +121,7 @@
         playerId: state.playerId,
         playerName: state.playerName,
         serverHost: state.serverHost,
+        tableSide: state.tableSide,
       }));
     } catch (e) {}
   }
@@ -191,8 +197,20 @@
     state.reconnectAttempts = 0;
     els.joinError.textContent = "";
     stopDiscovery();
-    connectWs(host, function () {
-      GameApp.sendMessage({ type: "join", name: state.playerName, roomCode: state.roomCode });
+    showScreen("tableside");
+  }
+
+  function completeJoin(tableSide) {
+    state.tableSide = tableSide;
+    connectWs(state.serverHost, function () {
+      var msg = {
+        type: "join",
+        name: state.playerName,
+        roomCode: state.roomCode,
+        tableSide: state.tableSide,
+      };
+      if (state.playerId) msg.playerId = state.playerId;
+      GameApp.sendMessage(msg);
     });
   }
 
@@ -200,6 +218,7 @@
     state.playerId = session.playerId;
     state.playerName = session.playerName;
     state.serverHost = session.serverHost;
+    state.tableSide = session.tableSide || 0;
     state.isRejoining = true;
     state.reconnectAttempts = 0;
     showScreen("reconnecting");
@@ -340,8 +359,9 @@
     els.lobbyPlayers.innerHTML = "";
     var hostId = PlayerManager_cache_hostId;
     players.forEach(function (p) {
+      var sideClass = p.tableSide === 1 ? " side-far" : " side-near";
       var chip = document.createElement("span");
-      chip.className = "player-chip" + (p.id === hostId ? " host" : "");
+      chip.className = "player-chip" + (p.id === hostId ? " host" : "") + sideClass;
       chip.textContent = p.name + (p.id === hostId ? " \u2605" : "");
       els.lobbyPlayers.appendChild(chip);
     });
@@ -356,8 +376,32 @@
       GameApp.startTimer(msg.timer, els.gameselectTimer);
     }
 
+    renderScoreboard(msg.players || []);
     renderGameSelectList(msg.games || [], msg.voteCounts || []);
     updateHostControls();
+  }
+
+  function renderScoreboard(players) {
+    if (!els.gameselectScoreboard) return;
+    var hasScores = players.some(function (p) { return p.score > 0; });
+    if (!hasScores) {
+      els.gameselectScoreboard.innerHTML = "";
+      return;
+    }
+
+    var sorted = players.slice().sort(function (a, b) { return b.score - a.score; });
+    var html = '<div class="scoreboard-title">Scores</div>';
+    sorted.forEach(function (p, i) {
+      var rankClass = "rank-" + (i + 1);
+      var isMe = p.id === state.playerId ? " scoreboard-me" : "";
+      html +=
+        '<div class="scoreboard-row ' + rankClass + isMe + '">' +
+          '<span class="rank-number">' + (i + 1) + '</span>' +
+          '<span class="scoreboard-name">' + GameApp.escapeHtml(p.name) + '</span>' +
+          '<span class="scoreboard-score">' + p.score + '</span>' +
+        '</div>';
+    });
+    els.gameselectScoreboard.innerHTML = html;
   }
 
   function renderGameSelectList(games, voteCounts) {
@@ -474,6 +518,19 @@
     });
   }
 
+  if (els.btnRegistration) {
+    els.btnRegistration.addEventListener("click", function () {
+      GameApp.sendMessage({ type: "open_registration" });
+    });
+  }
+
+  if (els.btnSideNear) {
+    els.btnSideNear.addEventListener("click", function () { completeJoin(0); });
+  }
+  if (els.btnSideFar) {
+    els.btnSideFar.addEventListener("click", function () { completeJoin(1); });
+  }
+
   els.btnReconnect.addEventListener("click", function () {
     state.reconnectAttempts = 0;
     clearSession();
@@ -488,7 +545,15 @@
   // ─── Init ─────────────────────────────────
   (function init() {
     var session = loadSession();
-    if (session) attemptRejoin(session);
-    else showJoinScreen();
+    if (session) {
+      state.playerId = session.playerId;
+      state.playerName = session.playerName;
+      state.serverHost = session.serverHost;
+      state.tableSide = session.tableSide || 0;
+      els.inputName.value = session.playerName;
+      showJoinScreen();
+    } else {
+      showJoinScreen();
+    }
   })();
 })();

@@ -3,12 +3,24 @@ using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// N-player Pong game session. Implements IGameSession.
-/// Manages the game loop, lives, elimination, paddle input, and state broadcasts.
-/// Lives in its own scene; registers with GameCoordinator on Start().
+/// N-player Pong session orchestrator. Implements IGameSession.
+/// Manages the game loop, ball lifecycle (spawn/move/respawn via your prefab),
+/// lives, elimination, scoring, and state broadcasts.
+/// Paddle visuals and movement are handled by the PlayerInputRelay.
+/// Collision/bouncing is handled by Unity colliders you set up in the scene.
+/// Goal detection is handled by your trigger scripts calling ScoreGoal().
 /// </summary>
 public class PongManager : MonoBehaviour, IGameSession
 {
+    public static PongManager Instance { get; private set; }
+
+    [Header("Ball")]
+    [Tooltip("Your ball prefab. Add Rigidbody2D + Collider2D for physics bouncing, or leave physics-free for manual control.")]
+    [SerializeField] private GameObject ballPrefab;
+    [SerializeField] private float ballSpeed = 5f;
+    [SerializeField] private float ballSpeedIncrement = 0.3f;
+    [SerializeField] private float ballMaxSpeed = 15f;
+
     [Header("Game Settings")]
     [SerializeField] private int startLives = 3;
     [SerializeField] private float countdownSeconds = 3f;
@@ -22,37 +34,45 @@ public class PongManager : MonoBehaviour, IGameSession
     public string GameType => "pong";
     public string CurrentState => _state.ToString();
 
+    public GameObject BallInstance => _ballInstance;
+
     private PongState _state = PongState.Countdown;
-    private PongArena _arena;
-    private PongBall _ball;
+    private PlayerInputRelay _inputRelay;
 
     private string[] _playerIds;
     private readonly Dictionary<string, int> _playerLives = new Dictionary<string, int>();
-    private readonly Dictionary<string, float> _paddleInput = new Dictionary<string, float>();
     private readonly HashSet<string> _eliminatedPlayers = new HashSet<string>();
 
     private float _timer;
     private int _fixedFrameCount;
     private string _lastScoredOnId;
 
+    private GameObject _ballInstance;
+    private Vector2 _ballVelocity;
+    private float _currentBallSpeed;
+    private Rigidbody2D _ballRb;
+
     // ── Unity Lifecycle ──────────────────────────
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
 
     private void Start()
     {
-        _arena = GetComponentInChildren<PongArena>();
-        _ball = GetComponentInChildren<PongBall>();
+        _inputRelay = GetComponentInChildren<PlayerInputRelay>();
 
-        if (_arena == null)
+        if (_inputRelay == null)
         {
-            var arenaGO = new GameObject("PongArena");
-            arenaGO.transform.SetParent(transform);
-            _arena = arenaGO.AddComponent<PongArena>();
-        }
-        if (_ball == null)
-        {
-            var ballGO = new GameObject("PongBall");
-            ballGO.transform.SetParent(transform);
-            _ball = ballGO.AddComponent<PongBall>();
+            var relayGO = new GameObject("PlayerInputRelay");
+            relayGO.transform.SetParent(transform);
+            _inputRelay = relayGO.AddComponent<PlayerInputRelay>();
         }
 
         GameCoordinator.Instance.RegisterSession(this);
@@ -62,11 +82,7 @@ public class PongManager : MonoBehaviour, IGameSession
     {
         if (_state == PongState.Playing)
         {
-            ApplyPaddleInput();
-            _ball.Tick(Time.fixedDeltaTime);
-
-            if (_ball.HitOccurred && !_ball.HitPaddle)
-                HandleGoal(_ball.HitSideIndex);
+            MoveBall();
 
             _fixedFrameCount++;
             if (_fixedFrameCount % broadcastEveryNFrames == 0)
@@ -84,6 +100,11 @@ public class PongManager : MonoBehaviour, IGameSession
         }
     }
 
+    private void OnDestroy()
+    {
+        if (Instance == this) Instance = null;
+    }
+
     // ════════════════════════════════════════════
     //  IGameSession
     // ════════════════════════════════════════════
@@ -97,18 +118,15 @@ public class PongManager : MonoBehaviour, IGameSession
         GameLog.Divider();
 
         _playerLives.Clear();
-        _paddleInput.Clear();
         _eliminatedPlayers.Clear();
 
         foreach (string id in playerIds)
-        {
             _playerLives[id] = startLives;
-            _paddleInput[id] = 0.5f;
-        }
 
-        _arena.Build(playerIds);
-        _ball.Init(_arena);
-        _ball.ResetBall();
+        _inputRelay.Initialize(playerIds);
+        AssignGoalZones(playerIds);
+
+        _currentBallSpeed = ballSpeed;
 
         _state = PongState.Countdown;
         _timer = countdownSeconds;
@@ -119,6 +137,8 @@ public class PongManager : MonoBehaviour, IGameSession
     public void OnSessionEnd()
     {
         _state = PongState.GameOver;
+        DestroyBall();
+        _inputRelay.Teardown();
     }
 
     public void OnPlayerRejoined(string playerId)
@@ -135,49 +155,146 @@ public class PongManager : MonoBehaviour, IGameSession
 
     public void OnGameMessage(string playerId, string messageType, string json)
     {
-        if (messageType == "paddle_move")
+        // Paddle input handled by PlayerInputRelay via GameEvents.
+    }
+
+    // ════════════════════════════════════════════
+    //  GOAL ZONE ASSIGNMENT
+    // ════════════════════════════════════════════
+
+    private void AssignGoalZones(string[] playerIds)
+    {
+        var goals = FindObjectsOfType<PongGoalZone>();
+        if (goals.Length == 0)
         {
-            var msg = JsonUtility.FromJson<PaddleMoveMessage>(json);
-            _paddleInput[playerId] = Mathf.Clamp01(msg.position);
+            GameLog.Game("WARNING: No PongGoalZone objects found in scene — goals won't register!");
+            return;
+        }
+
+        foreach (var goal in goals)
+            goal.assignedPlayerId = null;
+
+        var unassignedPlayers = new List<string>();
+
+        foreach (string id in playerIds)
+        {
+            int side = PlayerManager.Instance.GetTableSide(id);
+            bool assigned = false;
+            foreach (var goal in goals)
+            {
+                if (goal.tableSide == side && string.IsNullOrEmpty(goal.assignedPlayerId))
+                {
+                    goal.assignedPlayerId = id;
+                    string name = PlayerManager.Instance.GetPlayerName(id);
+                    GameLog.Game($"Goal zone \"{goal.gameObject.name}\" → \"{name}\" (side {side})");
+                    assigned = true;
+                    break;
+                }
+            }
+            if (!assigned)
+                unassignedPlayers.Add(id);
+        }
+
+        foreach (string id in unassignedPlayers)
+        {
+            foreach (var goal in goals)
+            {
+                if (string.IsNullOrEmpty(goal.assignedPlayerId))
+                {
+                    goal.assignedPlayerId = id;
+                    string name = PlayerManager.Instance.GetPlayerName(id);
+                    GameLog.Game($"Goal zone \"{goal.gameObject.name}\" → \"{name}\" (fallback — no side match)");
+                    break;
+                }
+            }
         }
     }
 
     // ════════════════════════════════════════════
-    //  GAME LOGIC
+    //  BALL LIFECYCLE
     // ════════════════════════════════════════════
 
-    private void ApplyPaddleInput()
+    private void SpawnBall()
     {
-        foreach (var kvp in _paddleInput)
+        DestroyBall();
+
+        if (ballPrefab == null)
         {
-            int side = _arena.GetSideForPlayerId(kvp.Key);
-            if (side >= 0)
-                _arena.SetPaddlePosition(side, kvp.Value);
+            GameLog.Game("WARNING: ballPrefab is not assigned on PongManager!");
+            return;
+        }
+
+        _ballInstance = Instantiate(ballPrefab, Vector3.zero, Quaternion.identity);
+        _ballInstance.name = "PongBall";
+
+        float angle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
+        _ballVelocity = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * _currentBallSpeed;
+
+        _ballRb = _ballInstance.GetComponent<Rigidbody2D>();
+        if (_ballRb != null)
+        {
+            _ballRb.gravityScale = 0f;
+            _ballRb.velocity = _ballVelocity;
+        }
+        GameLog.Game($"Ball spawned — speed {_currentBallSpeed:F1}");
+    }
+
+    private void DestroyBall()
+    {
+        if (_ballInstance != null)
+        {
+            Destroy(_ballInstance);
+            _ballInstance = null;
+            _ballRb = null;
         }
     }
 
-    private void HandleGoal(int sideIndex)
+    private void MoveBall()
     {
-        string scoredOnId = _arena.GetPlayerIdForSide(sideIndex);
-        if (scoredOnId == null) return;
+        if (_ballInstance == null) return;
+        if (_ballRb != null) return; // Rigidbody2D handles movement
+        _ballInstance.transform.position += (Vector3)_ballVelocity * Time.fixedDeltaTime;
+    }
 
-        if (!_playerLives.ContainsKey(scoredOnId) || _eliminatedPlayers.Contains(scoredOnId)) return;
+    /// <summary>
+    /// Destroy and re-instantiate the ball at center with a new random direction.
+    /// Useful if the ball gets stuck or you need a manual reset.
+    /// </summary>
+    public void RespawnBall()
+    {
+        SpawnBall();
+    }
 
-        _playerLives[scoredOnId]--;
-        _lastScoredOnId = scoredOnId;
-        string name = PlayerManager.Instance.GetPlayerName(scoredOnId);
-        int livesLeft = _playerLives[scoredOnId];
+    // ════════════════════════════════════════════
+    //  PUBLIC SCORING API
+    // ════════════════════════════════════════════
+
+    /// <summary>
+    /// Call this from your goal-zone trigger scripts when the ball enters a
+    /// player's goal area. The manager handles lives, elimination, speed
+    /// increase, state transitions, and broadcasts.
+    /// </summary>
+    public void ScoreGoal(string scoredOnPlayerId)
+    {
+        if (_state != PongState.Playing) return;
+        if (string.IsNullOrEmpty(scoredOnPlayerId)) return;
+        if (!_playerLives.ContainsKey(scoredOnPlayerId)) return;
+        if (_eliminatedPlayers.Contains(scoredOnPlayerId)) return;
+
+        _playerLives[scoredOnPlayerId]--;
+        _lastScoredOnId = scoredOnPlayerId;
+        string name = PlayerManager.Instance.GetPlayerName(scoredOnPlayerId);
+        int livesLeft = _playerLives[scoredOnPlayerId];
 
         GameLog.Game($"GOAL on \"{name}\" — {livesLeft} lives left");
 
-        BroadcastPongEvent("goal", null, scoredOnId, livesLeft);
+        BroadcastPongEvent("goal", null, scoredOnPlayerId, livesLeft);
 
         if (livesLeft <= 0)
         {
-            _eliminatedPlayers.Add(scoredOnId);
-            _arena.EliminateSide(sideIndex);
+            _eliminatedPlayers.Add(scoredOnPlayerId);
             GameLog.Game($"\"{name}\" ELIMINATED");
-            BroadcastPongEvent("eliminated", scoredOnId, null, 0);
+            BroadcastPongEvent("eliminated", scoredOnPlayerId, null, 0);
 
             int alive = _playerIds.Count(id => !_eliminatedPlayers.Contains(id));
             if (alive <= 1)
@@ -188,11 +305,18 @@ public class PongManager : MonoBehaviour, IGameSession
             }
         }
 
+        DestroyBall();
+
+        _currentBallSpeed = Mathf.Min(_currentBallSpeed + ballSpeedIncrement, ballMaxSpeed);
+
         _state = PongState.GoalScored;
         _timer = goalPauseSeconds;
-        _ball.IncreaseSpeed();
         BroadcastFullState();
     }
+
+    // ════════════════════════════════════════════
+    //  GAME LOGIC
+    // ════════════════════════════════════════════
 
     private void HandleWinner(string winnerId)
     {
@@ -204,6 +328,7 @@ public class PongManager : MonoBehaviour, IGameSession
         if (winnerId != null)
             PlayerManager.Instance.AddScore(winnerId, 1000);
 
+        DestroyBall();
         BroadcastPongEvent("winner", winnerId, null, 0);
 
         _state = PongState.GameOver;
@@ -218,12 +343,13 @@ public class PongManager : MonoBehaviour, IGameSession
             case PongState.Countdown:
                 _state = PongState.Playing;
                 _fixedFrameCount = 0;
+                SpawnBall();
                 GameLog.Game("PONG — GO!");
                 BroadcastFullState();
                 break;
 
             case PongState.GoalScored:
-                _ball.ResetBall();
+                SpawnBall();
                 _state = PongState.Playing;
                 _fixedFrameCount = 0;
                 BroadcastFullState();
@@ -256,22 +382,24 @@ public class PongManager : MonoBehaviour, IGameSession
     private void BroadcastPongFrame()
     {
         var paddles = new List<PongPaddleState>();
-        foreach (string id in _playerIds)
+        for (int i = 0; i < _playerIds.Length; i++)
         {
-            int side = _arena.GetSideForPlayerId(id);
+            string id = _playerIds[i];
             paddles.Add(new PongPaddleState
             {
                 id = id,
-                position = _paddleInput.ContainsKey(id) ? _paddleInput[id] : 0.5f,
-                side = side,
+                position = _inputRelay.GetRawInput(id),
+                side = i,
                 lives = _playerLives.ContainsKey(id) ? _playerLives[id] : 0
             });
         }
 
+        Vector3 ballPos = _ballInstance != null ? _ballInstance.transform.position : Vector3.zero;
+
         var frame = new PongFrameMessage
         {
-            bx = _ball.Position.x,
-            by = _ball.Position.y,
+            bx = ballPos.x,
+            by = ballPos.y,
             paddles = paddles.ToArray()
         };
         GameEvents.FireBroadcast(JsonUtility.ToJson(frame));

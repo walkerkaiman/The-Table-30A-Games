@@ -151,14 +151,14 @@ public class NetworkManager : MonoBehaviour
 
         switch (baseMsg.type)
         {
-            case "join":
+            case MessageTypes.Join:
                 var joinMsg = JsonUtility.FromJson<JoinMessage>(json);
-                GameLog.Net($"Join request: \"{joinMsg.name}\" room={joinMsg.roomCode} (conn: {conn.Id})");
+                GameLog.Net($"Join request: \"{joinMsg.name}\" room={joinMsg.roomCode} side={joinMsg.tableSide} playerId={joinMsg.playerId ?? ""} (conn: {conn.Id})");
                 _pendingConns[conn.Id] = conn;
-                GameEvents.FireJoinRequested(conn.Id, joinMsg.name, joinMsg.roomCode);
+                GameEvents.FireJoinRequested(conn.Id, joinMsg.name, joinMsg.roomCode, joinMsg.tableSide, joinMsg.playerId ?? "");
                 break;
 
-            case "rejoin":
+            case MessageTypes.Rejoin:
                 var rejoinMsg = JsonUtility.FromJson<RejoinMessage>(json);
                 GameLog.Net($"Rejoin request: \"{rejoinMsg.name}\" playerId={rejoinMsg.playerId} (conn: {conn.Id})");
                 _pendingConns[conn.Id] = conn;
@@ -182,6 +182,8 @@ public class NetworkManager : MonoBehaviour
     private void HandleJoinAccepted(string connId, string playerId, string playerName, string roomCode)
     {
         if (!_pendingConns.TryRemove(connId, out WebSocketConnection conn)) return;
+        if (_playerToConn.TryRemove(playerId, out string oldConnId))
+            _connToPlayer.TryRemove(oldConnId, out _);
         _connToPlayer[connId] = playerId;
         _playerToConn[playerId] = connId;
         conn.Send(JsonUtility.ToJson(new WelcomeMessage { playerId = playerId, roomCode = roomCode }));

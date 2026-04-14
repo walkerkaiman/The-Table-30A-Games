@@ -23,47 +23,36 @@
     finalStandings: $("#final-standings"),
   };
 
-  // ─── Submit answer button ─────────────────
-  if (els.btnAnswer) {
-    els.btnAnswer.addEventListener("click", function () {
+  var answerSubmit = GameApp.wireSubmit(
+    els.inputAnswer, els.btnAnswer,
+    function () {
       var answer = els.inputAnswer.value.trim();
-      if (!answer) return;
-      els.btnAnswer.disabled = true;
-      GameApp.sendMessage({ type: "submit_answer", answer: answer });
-    });
-  }
+      return answer ? { type: "submit_answer", answer: answer } : null;
+    },
+    "answer_received", "answer-wait"
+  );
 
-  if (els.inputAnswer) {
-    els.inputAnswer.addEventListener("keydown", function (e) {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        els.btnAnswer.click();
-      }
-    });
-  }
-
-  // ─── Module ───────────────────────────────
   GameApp.registerGameModule("quiplash", {
     handleGameState: function (msg) {
-      var roundLabel = "Round " + msg.round + " of " + msg.totalRounds;
+      var roundLabel = GameApp.renderRoundLabel(msg);
 
       switch (msg.state) {
         case "ShowPrompt":
           hasAnswered = false;
           hasVoted = false;
+          answerSubmit.reset();
           els.promptRound.textContent = roundLabel;
           els.promptText.textContent = msg.prompt;
           GameApp.showScreen("prompt");
           break;
 
         case "Answer":
-          if (hasAnswered) {
+          if (answerSubmit.isSubmitted()) {
             GameApp.showScreen("answer-wait");
           } else {
             els.answerRound.textContent = roundLabel;
             els.answerPrompt.textContent = msg.prompt;
-            els.inputAnswer.value = "";
-            els.btnAnswer.disabled = false;
+            answerSubmit.reset();
             GameApp.showScreen("answer");
             GameApp.startTimer(msg.timer, els.answerTimer);
             els.inputAnswer.focus();
@@ -76,102 +65,62 @@
           } else {
             els.voteRound.textContent = roundLabel;
             els.votePrompt.textContent = msg.prompt;
-            renderVotingAnswers(msg.answers || []);
+            GameApp.renderChoiceList(els.voteAnswers, msg.answers || [], {
+              getLabel: function (a) { return a.text; },
+              isOwn: function (a) { return a.id === state.playerId; },
+              onSelect: function (a) {
+                hasVoted = true;
+                GameApp.sendMessage({ type: "vote", answerId: a.id });
+              },
+            });
             GameApp.showScreen("voting");
             GameApp.startTimer(msg.timer, els.voteTimer);
           }
           break;
 
         case "RoundResults":
-          renderResults(msg.results || [], msg.players || [], false);
+          renderRoundResults(msg.results || []);
           GameApp.showScreen("results");
           break;
 
         case "GameOver":
-          renderResults(msg.results || [], msg.players || [], true);
+          GameApp.renderStandings(els.finalStandings, msg.players || []);
           GameApp.showScreen("gameover");
           break;
       }
     },
 
     handleMessage: function (msg) {
-      switch (msg.type) {
-        case "answer_received":
-          hasAnswered = true;
-          GameApp.showScreen("answer-wait");
-          break;
-        case "vote_received":
-          hasVoted = true;
-          GameApp.showScreen("vote-wait");
-          break;
+      if (answerSubmit.handleAck(msg.type)) { hasAnswered = true; return; }
+      if (msg.type === "vote_received") {
+        hasVoted = true;
+        GameApp.showScreen("vote-wait");
       }
     },
 
     cleanup: function () {
       hasAnswered = false;
       hasVoted = false;
+      answerSubmit.reset();
       GameApp.stopTimer();
     },
   });
 
-  // ─── Rendering ────────────────────────────
-  function renderVotingAnswers(answers) {
-    els.voteAnswers.innerHTML = "";
-    answers.forEach(function (a) {
-      var card = document.createElement("div");
-      card.className = "answer-card";
-      card.textContent = a.text;
-      card.dataset.answerId = a.id;
-
-      if (a.id === state.playerId) {
-        card.classList.add("own-answer");
-        card.textContent += " (yours)";
-      } else {
-        card.addEventListener("click", function () {
-          if (hasVoted) return;
-          els.voteAnswers.querySelectorAll(".answer-card").forEach(function (c) {
-            c.classList.remove("selected");
-          });
-          card.classList.add("selected");
-          hasVoted = true;
-          GameApp.sendMessage({ type: "vote", answerId: a.id });
-        });
-      }
-      els.voteAnswers.appendChild(card);
+  function renderRoundResults(results) {
+    els.resultsList.innerHTML = "";
+    results.forEach(function (r, idx) {
+      var row = document.createElement("div");
+      row.className = "result-row";
+      if (idx === 0 && r.votes > 0) row.classList.add("winner");
+      row.innerHTML =
+        "<div>" +
+          '<div class="result-name">' + GameApp.escapeHtml(r.name) + "</div>" +
+          '<div class="result-answer">"' + GameApp.escapeHtml(r.answer) + '"</div>' +
+        "</div><div>" +
+          '<div class="result-score">+' + r.score + "</div>" +
+          '<div class="result-votes">' + r.votes + (r.votes === 1 ? " vote" : " votes") + "</div>" +
+        "</div>";
+      els.resultsList.appendChild(row);
     });
-  }
-
-  function renderResults(results, players, isFinal) {
-    var container = isFinal ? els.finalStandings : els.resultsList;
-    container.innerHTML = "";
-
-    if (isFinal) {
-      var sorted = (players || []).slice().sort(function (a, b) { return b.score - a.score; });
-      sorted.forEach(function (p, idx) {
-        var row = document.createElement("div");
-        row.className = "result-row rank-" + (idx + 1);
-        if (idx === 0) row.classList.add("winner");
-        row.innerHTML =
-          '<div><span class="rank-number">#' + (idx + 1) + "</span>" +
-          '<span class="result-name">' + GameApp.escapeHtml(p.name) + "</span></div>" +
-          '<div class="result-score">' + p.score + " pts</div>";
-        container.appendChild(row);
-      });
-    } else {
-      results.forEach(function (r, idx) {
-        var row = document.createElement("div");
-        row.className = "result-row";
-        if (idx === 0 && r.votes > 0) row.classList.add("winner");
-        row.innerHTML =
-          "<div>" +
-            '<div class="result-name">' + GameApp.escapeHtml(r.name) + "</div>" +
-            '<div class="result-answer">"' + GameApp.escapeHtml(r.answer) + '"</div>' +
-          "</div><div>" +
-            '<div class="result-score">+' + r.score + "</div>" +
-            '<div class="result-votes">' + r.votes + (r.votes === 1 ? " vote" : " votes") + "</div>" +
-          "</div>";
-        container.appendChild(row);
-      });
-    }
   }
 })();

@@ -1,0 +1,6 @@
+{
+  "items": [
+    { "id": "pic_001", "title": "Vintage Typewriter", "description": "A fully restored 1960s Olivetti typewriter.", "correctPrice": 350, "unit": "$", "imageUrl": "/media/price_is_close/sample1.jpg" },
+    { "id": "pic_002", "title": "Gold-Plated Headphones", "description": "Wireless noise-cancelling headphones with 24k gold accents.", "correctPrice": 899, "unit": "$", "imageUrl": "/media/price_is_close/sample2.jpg" }
+  ]
+}

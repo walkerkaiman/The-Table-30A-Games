@@ -13,7 +13,7 @@ public static class GameEvents
     //  JOIN / REJOIN HANDSHAKE
     // ─────────────────────────────────────────────
 
-    public static event Action<string, string, string> JoinRequested;
+    public static event Action<string, string, string, int, string> JoinRequested;
     public static event Action<string, string, string, string> JoinAccepted;
     public static event Action<string, string> JoinRejected;
 
@@ -49,8 +49,8 @@ public static class GameEvents
     //  FIRE HELPERS
     // ─────────────────────────────────────────────
 
-    public static void FireJoinRequested(string connId, string name, string roomCode)
-        => JoinRequested?.Invoke(connId, name, roomCode);
+    public static void FireJoinRequested(string connId, string name, string roomCode, int tableSide = 0, string existingPlayerId = "")
+        => JoinRequested?.Invoke(connId, name, roomCode, tableSide, existingPlayerId);
 
     public static void FireJoinAccepted(string connId, string playerId, string name, string roomCode)
         => JoinAccepted?.Invoke(connId, playerId, name, roomCode);

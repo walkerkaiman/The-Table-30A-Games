@@ -1,0 +1,14 @@
+{
+  "prompts": [
+    { "id": "sd_001", "text": "A cat wearing sunglasses", "decoyA": "A dog in a top hat", "decoyB": "A bird with headphones" },
+    { "id": "sd_002", "text": "A house on fire", "decoyA": "A castle in the clouds", "decoyB": "A boat in a storm" },
+    { "id": "sd_003", "text": "A pizza delivery guy", "decoyA": "A mailman on a bicycle", "decoyB": "A chef cooking pasta" },
+    { "id": "sd_004", "text": "An astronaut dancing", "decoyA": "A robot playing guitar", "decoyB": "A cowboy on the moon" },
+    { "id": "sd_005", "text": "A shark riding a surfboard", "decoyA": "A whale jumping rope", "decoyB": "A dolphin driving a car" },
+    { "id": "sd_006", "text": "A snowman in the desert", "decoyA": "An igloo on the beach", "decoyB": "A penguin in a volcano" },
+    { "id": "sd_007", "text": "Two people arm wrestling", "decoyA": "Two robots playing chess", "decoyB": "Two cats having tea" },
+    { "id": "sd_008", "text": "A giant eating a tiny sandwich", "decoyA": "A mouse carrying a huge cheese", "decoyB": "An ant lifting a car" },
+    { "id": "sd_009", "text": "A dragon blowing birthday candles", "decoyA": "A unicorn opening presents", "decoyB": "A wizard making a cake" },
+    { "id": "sd_010", "text": "A frog on a lily pad with a crown", "decoyA": "A toad in a bathtub with a hat", "decoyB": "A fish in a bowl with a cape" }
+  ]
+}

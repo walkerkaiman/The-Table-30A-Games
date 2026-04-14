@@ -1,0 +1,6 @@
+{
+  "items": [
+    { "id": "cc_001", "imageUrl": "/media/caption_contest/sample1.jpg", "category": "funny" },
+    { "id": "cc_002", "imageUrl": "/media/caption_contest/sample2.jpg", "category": "animals" }
+  ]
+}

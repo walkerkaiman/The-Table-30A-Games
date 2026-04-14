@@ -24,7 +24,19 @@ public class GameCoordinator : MonoBehaviour
     [SerializeField] private int minPlayersToStart = 2;
     [SerializeField] private float voteTimerSeconds = 15f;
 
-    public CoordinatorState CurrentState { get; private set; } = CoordinatorState.Lobby;
+    public static event System.Action<CoordinatorState> StateChanged;
+
+    private CoordinatorState _currentState = CoordinatorState.Lobby;
+    public CoordinatorState CurrentState
+    {
+        get => _currentState;
+        private set
+        {
+            if (_currentState == value) return;
+            _currentState = value;
+            StateChanged?.Invoke(_currentState);
+        }
+    }
     public string RoomCode { get; private set; }
 
     private IGameSession _activeSession;
@@ -104,7 +116,7 @@ public class GameCoordinator : MonoBehaviour
     //  JOIN / REJOIN / DISCONNECT
     // ════════════════════════════════════════════
 
-    private void OnJoinRequested(string connId, string playerName, string roomCode)
+    private void OnJoinRequested(string connId, string playerName, string roomCode, int tableSide, string existingPlayerId)
     {
         if (!string.Equals(roomCode, RoomCode, StringComparison.OrdinalIgnoreCase))
         {
@@ -130,8 +142,21 @@ public class GameCoordinator : MonoBehaviour
             return;
         }
 
-        string playerId = PlayerManager.Instance.AddPlayer(playerName);
-        GameLog.Player($"\"{playerName}\" JOINED  (id: {playerId})  [{PlayerManager.Instance.PlayerCount} player(s)]");
+        string sideLabel = tableSide == 0 ? "this side" : "that side";
+
+        if (!string.IsNullOrEmpty(existingPlayerId) && PlayerManager.Instance.HasPlayer(existingPlayerId))
+        {
+            string oldName = PlayerManager.Instance.GetPlayerName(existingPlayerId);
+            PlayerManager.Instance.UpdatePlayer(existingPlayerId, playerName, tableSide);
+            PlayerManager.Instance.ReconnectPlayer(existingPlayerId);
+            GameLog.Player($"\"{oldName}\" RE-REGISTERED as \"{playerName}\" ({sideLabel} side)  [{PlayerManager.Instance.PlayerCount} player(s)]");
+            GameEvents.FireJoinAccepted(connId, existingPlayerId, playerName, RoomCode);
+            GameEvents.FirePlayerListChanged();
+            return;
+        }
+
+        string playerId = PlayerManager.Instance.AddPlayer(playerName, tableSide);
+        GameLog.Player($"\"{playerName}\" JOINED  (id: {playerId}, {sideLabel} side)  [{PlayerManager.Instance.PlayerCount} player(s)]");
         GameEvents.FireJoinAccepted(connId, playerId, playerName, RoomCode);
         GameEvents.FirePlayerListChanged();
     }
@@ -207,13 +232,19 @@ public class GameCoordinator : MonoBehaviour
 
     private void OnGameMessage(string playerId, string messageType, string json)
     {
-        if (messageType == "start_game")
+        if (messageType == MessageTypes.StartGame)
         {
             HandleHostStartGame(playerId);
             return;
         }
 
-        if (CurrentState == CoordinatorState.GameSelect && messageType == "game_vote")
+        if (messageType == MessageTypes.OpenRegistration)
+        {
+            HandleOpenRegistration(playerId);
+            return;
+        }
+
+        if (CurrentState == CoordinatorState.GameSelect && messageType == MessageTypes.GameVote)
         {
             HandleGameVote(playerId, json);
             return;
@@ -247,6 +278,30 @@ public class GameCoordinator : MonoBehaviour
             _timerActive = false;
             ResolveVote();
         }
+    }
+
+    private void HandleOpenRegistration(string playerId)
+    {
+        if (!PlayerManager.Instance.IsHost(playerId))
+        {
+            string name = PlayerManager.Instance.GetPlayerName(playerId);
+            GameLog.Warn($"\"{name}\" tried to open registration but is not the host");
+            return;
+        }
+
+        if (CurrentState != CoordinatorState.GameSelect)
+        {
+            GameLog.Warn("open_registration ignored — not in GameSelect state");
+            return;
+        }
+
+        string hostName = PlayerManager.Instance.GetPlayerName(playerId);
+        GameLog.Game($"Host \"{hostName}\" opened registration");
+
+        _timerActive = false;
+        _playerVotes.Clear();
+        CurrentState = CoordinatorState.Lobby;
+        BroadcastCoordinatorState();
     }
 
     // ════════════════════════════════════════════
@@ -396,7 +451,6 @@ public class GameCoordinator : MonoBehaviour
         }
 
         PlayerManager.Instance.CleanupDisconnectedPlayers();
-        PlayerManager.Instance.ResetScores();
 
         CurrentState = CoordinatorState.GameSelect;
         _playerVotes.Clear();

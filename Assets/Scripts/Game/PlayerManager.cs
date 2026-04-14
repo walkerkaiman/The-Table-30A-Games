@@ -33,16 +33,24 @@ public class PlayerManager : MonoBehaviour
 
     // ── Add / Remove ─────────────────────────────
 
-    public string AddPlayer(string name)
+    public string AddPlayer(string name, int tableSide = 0)
     {
         string id = Guid.NewGuid().ToString("N").Substring(0, 8);
-        _players[id] = new PlayerData { id = id, name = name, score = 0, isConnected = true };
+        _players[id] = new PlayerData { id = id, name = name, score = 0, isConnected = true, tableSide = tableSide };
         if (string.IsNullOrEmpty(HostPlayerId))
         {
             HostPlayerId = id;
             GameLog.Player($"\"{name}\" is the HOST");
         }
         return id;
+    }
+
+    public bool UpdatePlayer(string playerId, string newName, int tableSide)
+    {
+        if (!_players.TryGetValue(playerId, out var p)) return false;
+        p.name = newName;
+        p.tableSide = tableSide;
+        return true;
     }
 
     public void RemovePlayer(string playerId)
@@ -127,6 +135,11 @@ public class PlayerManager : MonoBehaviour
         return _players.TryGetValue(playerId, out var p) ? p.name : "Unknown";
     }
 
+    public int GetTableSide(string playerId)
+    {
+        return _players.TryGetValue(playerId, out var p) ? p.tableSide : 0;
+    }
+
     public void AddScore(string playerId, int points)
     {
         if (_players.TryGetValue(playerId, out var p))
@@ -144,7 +157,7 @@ public class PlayerManager : MonoBehaviour
         var infos = new PlayerInfo[_players.Count];
         int i = 0;
         foreach (var p in _players.Values)
-            infos[i++] = new PlayerInfo { id = p.id, name = p.name, score = p.score };
+            infos[i++] = new PlayerInfo { id = p.id, name = p.name, score = p.score, tableSide = p.tableSide };
         return infos;
     }
 
@@ -167,4 +180,5 @@ public class PlayerData
     public string name;
     public int score;
     public bool isConnected;
+    public int tableSide;  // 0 = near side, 1 = far side
 }
