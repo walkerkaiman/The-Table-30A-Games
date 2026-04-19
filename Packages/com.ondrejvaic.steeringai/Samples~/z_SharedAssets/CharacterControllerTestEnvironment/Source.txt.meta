@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 9a28feb2473ce2d44a8f4eadd4b0bbe8
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/z_SharedAssets/CharacterControllerTestEnvironment/Source.txt
+  uploadId: 798402

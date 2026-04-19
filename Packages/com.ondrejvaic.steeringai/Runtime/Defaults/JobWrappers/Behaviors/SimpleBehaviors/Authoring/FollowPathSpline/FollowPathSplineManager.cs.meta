@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: d3db43865c6e436dbcc54b4dc3d9996e
+timeCreated: 1745678538
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Defaults/JobWrappers/Behaviors/SimpleBehaviors/Authoring/FollowPathSpline/FollowPathSplineManager.cs
+  uploadId: 798402

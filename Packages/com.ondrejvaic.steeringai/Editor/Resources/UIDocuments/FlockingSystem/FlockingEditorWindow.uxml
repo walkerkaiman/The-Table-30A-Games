@@ -1,0 +1,79 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Packages/com.vaic.steering-ai/Editor/Resources/Styles/FlockingEditorStyles.uss?fileID=7433441132597879392&amp;guid=5a31414f1fff11741867f09cb4246a9c&amp;type=3#FlockingEditorStyles" />
+    <ui:Label tabindex="-1" text="Steering System Editor" display-tooltip-when-elided="true" name="title" enable-rich-text="true" style="-unity-text-align: middle-center; background-color: rgba(0, 0, 0, 0.11); font-size: 24px;" />
+    <uie:ObjectField label="Prefab" name="prefab-field" style="flex-grow: 0; align-self: flex-end;" />
+    <ui:VisualElement name="MainSettingsAndTag" style="background-color: rgba(0, 0, 0, 0); justify-content: flex-start; align-items: flex-start; flex-direction: column; flex-basis: auto; width: 350px; margin-left: 0; margin-right: 10px; margin-top: 10px; margin-bottom: 10px;">
+        <ui:VisualElement name="mainEntityTag" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 350px; flex-direction: row; margin-left: 5px; margin-right: 5px; margin-top: 1px; margin-bottom: 1px;">
+            <ui:VisualElement name="main-tag-dropdown" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); display: flex;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="VisualElement" style="flex-grow: 1; flex-direction: row; height: 10000px; min-width: 980px;">
+        <ui:VisualElement name="behaviors" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: column; margin-bottom: 5px; margin-left: 5px; margin-right: 5px; margin-top: 5px;">
+            <uie:Toolbar>
+                <uie:ToolbarToggle focusable="false" label="Neighbor behaviors" name="show-neighbor-behaviors" value="true" />
+                <uie:ToolbarToggle focusable="false" label="Ray behaviors" name="show-ray-behaviors" value="false" />
+                <uie:ToolbarToggle focusable="false" label="Simple behaviors" name="show-per-component-behaviors" />
+                <uie:ToolbarToggle focusable="false" label="Combine results" name="show-combine" />
+            </uie:Toolbar>
+            <ui:VisualElement name="behaviors-root" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row; align-items: stretch; display: flex;">
+                <ui:VisualElement name="neighbor-groups" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.31); margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; max-width: none; min-width: 650px; display: flex;">
+                    <ui:Label tabindex="-1" text="Neighborhood Groups" display-tooltip-when-elided="true" name="Label" style="-unity-text-align: middle-left; margin-left: 3px; margin-right: 3px; margin-top: 1px; margin-bottom: 1px; font-size: 14px; padding-right: 0; padding-left: 0;" />
+                    <ui:VisualElement name="VisualElement" style="flex-direction: row; min-height: 22px;">
+                        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);" />
+                        <ui:Button text="Create Group" display-tooltip-when-elided="true" name="add-neighbor-behavior-group-button" style="align-self: flex-end; width: 100px; height: 20px; margin-left: 0; margin-right: 5px;" />
+                    </ui:VisualElement>
+                    <ui:ListView spacing="10" focusable="true" name="neighborhood-groups" virtualization-method="DynamicHeight" show-border="false" show-foldout-header="false" selection-type="None" reorderable="false" style="background-color: rgba(0, 0, 0, 0); margin-left: 3px; margin-top: 3px; margin-bottom: 3px; margin-right: 3px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; align-items: stretch; flex-grow: 1; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);" />
+                </ui:VisualElement>
+                <ui:VisualElement name="ray-groups" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.31); margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; max-width: none; min-width: 600px; display: none;">
+                    <ui:Label tabindex="-1" text="Ray Groups" display-tooltip-when-elided="true" name="Label" style="-unity-text-align: middle-left; margin-left: 3px; margin-right: 3px; margin-top: 1px; margin-bottom: 1px; font-size: 14px; padding-right: 0; padding-left: 0;" />
+                    <ui:VisualElement name="VisualElement" style="flex-direction: row; min-height: 22px;">
+                        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);" />
+                        <ui:Button text="Create Group" display-tooltip-when-elided="true" name="add-ray-behavior-group-button" style="align-self: flex-end; width: 100px; height: 20px; margin-left: 0; margin-right: 5px;" />
+                    </ui:VisualElement>
+                    <ui:ListView spacing="10" focusable="true" name="ray-groups" virtualization-method="DynamicHeight" show-border="false" show-foldout-header="false" selection-type="None" style="background-color: rgba(0, 0, 0, 0); margin-left: 3px; margin-top: 3px; margin-bottom: 3px; margin-right: 3px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; align-items: stretch; flex-grow: 0; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="per-component-groups" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.31); margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; max-width: none; min-width: 600px; display: none;">
+                    <ui:Label tabindex="-1" text="Simple Behaviors" display-tooltip-when-elided="true" name="Label" enable-rich-text="false" style="-unity-text-align: middle-left; margin-left: 3px; margin-right: 3px; margin-top: 1px; margin-bottom: 1px; font-size: 14px; padding-right: 0; padding-left: 0;" />
+                    <ui:VisualElement name="per-component-dropdown" style="flex-direction: row; min-height: 22px;">
+                        <ui:VisualElement name="per-component-behavior-dropdown-parent" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0);" />
+                        <ui:Button text="+" display-tooltip-when-elided="true" name="add-per-component-behavior-button" style="align-self: flex-end; width: 20px; height: 20px; margin-left: 0;" />
+                    </ui:VisualElement>
+                    <ui:ListView spacing="10" focusable="true" name="per-component-behavior-list-view" virtualization-method="DynamicHeight" show-border="false" show-foldout-header="false" selection-type="None" style="background-color: rgba(0, 0, 0, 0); margin-left: 3px; margin-top: 3px; margin-bottom: 3px; margin-right: 3px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; align-items: stretch; flex-grow: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);" />
+                </ui:VisualElement>
+                <ui:VisualElement name="movement-parent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.31); margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; max-width: none; min-width: 600px; display: none;">
+                    <ui:Label tabindex="-1" text="Movement" display-tooltip-when-elided="true" name="Label" enable-rich-text="false" style="-unity-text-align: middle-left; margin-left: 3px; margin-right: 3px; margin-top: 1px; margin-bottom: 1px; font-size: 14px; padding-right: 0; padding-left: 0;" />
+                    <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                        <ui:VisualElement style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
+                            <ui:VisualElement name="move-dropdown" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0);" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="movemenet-holder" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                            <uie:PropertyField name="move-job-field" style="width: 300px;" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="combine-parent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.31); margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; max-width: none; min-width: 600px; display: none;">
+                    <ui:Label tabindex="-1" text="Combine Behavior Result" display-tooltip-when-elided="true" name="Label" enable-rich-text="false" style="-unity-text-align: middle-left; margin-left: 3px; margin-right: 3px; margin-top: 1px; margin-bottom: 1px; font-size: 14px; padding-right: 0; padding-left: 0;" />
+                    <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                        <ui:VisualElement style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
+                            <ui:VisualElement name="combine-dropdown" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0);" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="combine-holder" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                            <uie:PropertyField name="combine-job-field" style="width: 300px;" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement style="flex-grow: 0; background-color: rgba(0, 0, 0, 0);">
+            <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="source-components" style="min-width: 300px; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; background-color: rgba(0, 0, 0, 0.31); flex-grow: 1;">
+                <ui:VisualElement name="queries-parent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); max-width: 350px;">
+                    <ui:Label tabindex="-1" text="Query:" display-tooltip-when-elided="true" name="Label" style="margin-left: 5px; margin-right: 5px; margin-top: 0; margin-bottom: 0;" />
+                    <ui:VisualElement name="all-parent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
+                        <ui:Label tabindex="-1" text="(requiered)" display-tooltip-when-elided="true" style="font-size: 10px; color: rgba(210, 210, 210, 0.69); margin-right: 0; margin-left: 3px; margin-top: 1px; margin-bottom: 1px;" />
+                        <ui:ListView focusable="false" name="all-required-list-view" selection-type="None" picking-mode="Ignore" show-alternating-row-backgrounds="None" style="background-color: rgba(0, 0, 0, 0.32); margin-left: 3px; margin-right: 0; margin-top: 0; margin-bottom: 2px;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:ScrollView>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

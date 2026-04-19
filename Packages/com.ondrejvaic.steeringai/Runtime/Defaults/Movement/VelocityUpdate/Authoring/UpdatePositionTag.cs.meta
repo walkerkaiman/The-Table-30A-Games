@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 6a03b0a317b3496bb23ef094b99c5ce5
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Defaults/Movement/VelocityUpdate/Authoring/UpdatePositionTag.cs
+  uploadId: 798402

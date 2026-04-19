@@ -1,0 +1,182 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa89c12507e57944db9018ba7692748b, type: 3}
+  m_Name: BirdPredatorSteeringSystemAsset
+  m_EditorClassIdentifier: 
+  MergeJobWrapper:
+    Name: CombineVelocitiesJobWrapper
+    JobRunner:
+      rid: 1352562592630177793
+  NeighborBehaviorGroupInitDatas:
+  - BehaviorJobs:
+    - Name: SeekingJobWrapper
+      JobRunner:
+        rid: 5067596644439818266
+    Settings:
+      rid: 5067596563373359105
+    AdditionalTargetTypeDescs:
+    - Name: _9_BirdTagComponent
+      AssemblyQualifiedName: SteeringAI.Samples._9_BirdTagComponent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    NeighborQueryJob:
+      Name: SpacialHashKNNJobWrapper
+      JobRunner:
+        rid: 2149092750547222531
+  - BehaviorJobs:
+    - Name: MultiHomingJobWrapper
+      JobRunner:
+        rid: 5067596564544880642
+    Settings:
+      rid: 5067596564544880640
+    AdditionalTargetTypeDescs:
+    - Name: _9_BirdHomeTagComponent
+      AssemblyQualifiedName: SteeringAI.Samples._9_BirdHomeTagComponent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    NeighborQueryJob:
+      Name: SpacialHashKNNJobWrapper
+      JobRunner:
+        rid: 2149092750547222532
+  RaycastBehaviorGroupInitDatas:
+  - BehaviorJobs:
+    - Name: AvoidGroundJobWrapper
+      JobRunner:
+        rid: 5067596644439818263
+    RayQueryJob:
+      Name: DownSingleCreateRayJobWrapper
+      JobRunner:
+        rid: 5067596644439818262
+    RaycastSettings:
+      rid: 5067596644439818261
+  - BehaviorJobs:
+    - Name: EnvironmentAvoidanceJobWrapper
+      JobRunner:
+        rid: 1352562631906164740
+    RayQueryJob:
+      Name: ConeCreateRaysJobWrapper
+      JobRunner:
+        rid: 1352562631906164738
+    RaycastSettings:
+      rid: 1352562631906164739
+  SimpleBehaviorsList:
+  - Name: WanderingJobWrapper
+    JobRunner:
+      rid: 5067596643027910658
+  - Name: AlignUpJobWrapper
+    JobRunner:
+      rid: 5067596644439818264
+  - Name: KeepHeightJobWrapper
+    JobRunner:
+      rid: 5067596644439818265
+  MainTagDescription:
+    Name: _9_BirdPredatorTagComponent
+    AssemblyQualifiedName: SteeringAI.Samples._9_BirdPredatorTagComponent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  RequiredSourceTypesList:
+  - Name: _9_BirdPredatorTagComponent
+    AssemblyQualifiedName: SteeringAI.Samples._9_BirdPredatorTagComponent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: DesiredVelocityComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.DesiredVelocityComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: WanderingComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.WanderingComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: AlignUpComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.AlignUpComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: KeepHeightComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.KeepHeightComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: SeekingComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.SeekingComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: MultiHomingComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.MultiHomingComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: AvoidGroundComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.AvoidGroundComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: EnvironmentAvoidanceComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.EnvironmentAvoidanceComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Prefab: {fileID: -4141693865777486973, guid: 7026dcde0447cf24dbd069fef24fbffe, type: 3}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1352562592630177793
+      type: {class: CombineVelocitiesJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 1352562631906164738
+      type: {class: ConeCreateRaysJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data:
+        rayCreationSettings:
+          FOV: 270
+          Rotation: {x: 0, y: 0, z: 0}
+          Offset: {x: 0, y: 0, z: 0}
+    - rid: 1352562631906164739
+      type: {class: RaycastSettingsUI, ns: SteeringAI.Core, asm: Vaic.SteeringAI.Core}
+      data:
+        MaxDistance: 7
+        NumRays: 25
+        LayerMask:
+          serializedVersion: 2
+          m_Bits: 2147483647
+    - rid: 1352562631906164740
+      type: {class: EnvironmentAvoidanceJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 2149092750547222531
+      type: {class: SpacialHashKNNJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 2149092750547222532
+      type: {class: SpacialHashKNNJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 5067596563373359105
+      type: {class: NeighborhoodSettingsUI, ns: SteeringAI.Core, asm: Vaic.SteeringAI.Core}
+      data:
+        MaxNeighborDistance: 20
+        MaxFOV: 143
+        MaxNumNeighbors: 5
+    - rid: 5067596564544880640
+      type: {class: NeighborhoodSettingsUI, ns: SteeringAI.Core, asm: Vaic.SteeringAI.Core}
+      data:
+        MaxNeighborDistance: 150
+        MaxFOV: 360
+        MaxNumNeighbors: 5
+    - rid: 5067596564544880642
+      type: {class: MultiHomingJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 5067596643027910658
+      type: {class: WanderingJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 5067596644439818261
+      type: {class: RaycastSettingsUI, ns: SteeringAI.Core, asm: Vaic.SteeringAI.Core}
+      data:
+        MaxDistance: 50
+        NumRays: 1
+        LayerMask:
+          serializedVersion: 2
+          m_Bits: 4294967295
+    - rid: 5067596644439818262
+      type: {class: DownSingleCreateRayJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 5067596644439818263
+      type: {class: AvoidGroundJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 5067596644439818264
+      type: {class: AlignUpJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 5067596644439818265
+      type: {class: KeepHeightJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 5067596644439818266
+      type: {class: SeekingJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 

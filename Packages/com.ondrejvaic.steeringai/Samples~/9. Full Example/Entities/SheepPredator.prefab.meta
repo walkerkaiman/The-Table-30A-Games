@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 3a2f3f8d309b8e64aa3ef177d6bf2c9e
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/9. Full Example/Entities/SheepPredator.prefab
+  uploadId: 798402

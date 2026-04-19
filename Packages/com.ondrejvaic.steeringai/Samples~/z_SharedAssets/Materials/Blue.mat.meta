@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6b5bc1fb763a7694590aeb0c8ea92ea2
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/z_SharedAssets/Materials/Blue.mat
+  uploadId: 798402

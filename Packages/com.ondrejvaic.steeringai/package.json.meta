@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 1eabb42863f2287499d4924131cc8b5c
+PackageManifestImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/package.json
+  uploadId: 798402

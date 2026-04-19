@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a6bf0d83b8421b24791ac2b98c5b1e55
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/5. 2.5D Movement/Movement25DSystemAsset.asset
+  uploadId: 798402

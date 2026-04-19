@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f5dfa314660a05542996f666ba52c4b5
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/10. Cutscene Samples/Cutscenes/Cutscenes/Cutscene8/Predator.mat
+  uploadId: 798402

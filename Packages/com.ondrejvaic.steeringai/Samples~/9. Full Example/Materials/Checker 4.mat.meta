@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 93dff33a0456e084c91064b6e8bce70a
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/9. Full Example/Materials/Checker
+    4.mat
+  uploadId: 798402

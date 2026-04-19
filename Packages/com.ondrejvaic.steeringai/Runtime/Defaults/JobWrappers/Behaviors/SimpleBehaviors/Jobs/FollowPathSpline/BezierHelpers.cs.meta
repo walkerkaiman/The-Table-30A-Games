@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: 45545ea7453f408a967806602ce3d0ef
+timeCreated: 1758221522
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Defaults/JobWrappers/Behaviors/SimpleBehaviors/Jobs/FollowPathSpline/BezierHelpers.cs
+  uploadId: 798402

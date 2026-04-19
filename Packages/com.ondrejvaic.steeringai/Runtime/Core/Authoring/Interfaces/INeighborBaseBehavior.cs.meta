@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 91383ccb7e5444d199a3b9d1550d7b9f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Core/Authoring/Interfaces/INeighborBaseBehavior.cs
+  uploadId: 798402

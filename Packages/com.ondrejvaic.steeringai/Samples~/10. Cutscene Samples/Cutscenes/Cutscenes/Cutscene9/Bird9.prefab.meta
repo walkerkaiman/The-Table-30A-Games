@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 717173f2655232f4a87ad895ee742333
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/10. Cutscene Samples/Cutscenes/Cutscenes/Cutscene9/Bird9.prefab
+  uploadId: 798402

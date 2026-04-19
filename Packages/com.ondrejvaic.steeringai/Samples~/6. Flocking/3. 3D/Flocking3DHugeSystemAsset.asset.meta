@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 402ae7d8bcb24ef40977593e92cf2149
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/6. Flocking/3. 3D/Flocking3DHugeSystemAsset.asset
+  uploadId: 798402

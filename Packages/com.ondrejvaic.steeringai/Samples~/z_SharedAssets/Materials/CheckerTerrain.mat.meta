@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7c73e639644c4c04982c254d9110a2c7
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/z_SharedAssets/Materials/CheckerTerrain.mat
+  uploadId: 798402

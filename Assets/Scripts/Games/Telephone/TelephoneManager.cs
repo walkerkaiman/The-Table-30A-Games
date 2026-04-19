@@ -17,6 +17,10 @@ public class TelephoneManager : MonoBehaviour, IGameSession
     [SerializeField] private float revealChainPauseSeconds = 2f;
     [SerializeField] private float doneDisplaySeconds = 5f;
 
+    [Header("Chain Length")]
+    [Tooltip("Minimum steps per chain. With fewer players the chain wraps so every game has at least a full Draw→Describe cycle.")]
+    [SerializeField] private int minSteps = 5;
+
     public string GameType => "telephone";
     public string CurrentState => _state.ToString();
 
@@ -84,7 +88,7 @@ public class TelephoneManager : MonoBehaviour, IGameSession
     {
         _playerIds = playerIds;
         _playerCount = playerIds.Length;
-        _totalSteps = _playerCount;
+        _totalSteps = Mathf.Max(_playerCount, minSteps);
         _currentStep = 0;
 
         _chains = new List<List<ChainEntry>>();

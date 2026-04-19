@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f6bb51eb365b37a46b464e38325f2a1b
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/9. Full Example/SteeringSystems/SheepPredatorSteeringSystemAsset.asset
+  uploadId: 798402

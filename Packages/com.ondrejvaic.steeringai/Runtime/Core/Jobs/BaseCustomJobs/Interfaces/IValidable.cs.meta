@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: c9496b7db46e4071bb9eda667df24d1b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Core/Jobs/BaseCustomJobs/Interfaces/IValidable.cs
+  uploadId: 798402

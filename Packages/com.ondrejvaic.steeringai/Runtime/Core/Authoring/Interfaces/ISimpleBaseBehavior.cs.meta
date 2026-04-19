@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: ba22f54ee85a4d438583ac114af7dbd1
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Core/Authoring/Interfaces/ISimpleBaseBehavior.cs
+  uploadId: 798402

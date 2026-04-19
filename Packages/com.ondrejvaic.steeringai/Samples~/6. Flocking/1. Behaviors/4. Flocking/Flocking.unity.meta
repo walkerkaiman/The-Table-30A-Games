@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 8e73bb71911ec2b40816618de988b3c2
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/6. Flocking/1. Behaviors/4.
+    Flocking/Flocking.unity
+  uploadId: 798402

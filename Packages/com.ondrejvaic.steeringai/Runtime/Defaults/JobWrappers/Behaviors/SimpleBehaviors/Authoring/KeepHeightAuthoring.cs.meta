@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 6ea261b6dc1949e297a899a702b74356
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Defaults/JobWrappers/Behaviors/SimpleBehaviors/Authoring/KeepHeightAuthoring.cs
+  uploadId: 798402

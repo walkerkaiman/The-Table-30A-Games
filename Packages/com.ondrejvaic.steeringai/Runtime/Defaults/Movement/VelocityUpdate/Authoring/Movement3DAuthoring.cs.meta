@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 5fe85317ecd240dba2651d646791161f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Defaults/Movement/VelocityUpdate/Authoring/Movement3DAuthoring.cs
+  uploadId: 798402

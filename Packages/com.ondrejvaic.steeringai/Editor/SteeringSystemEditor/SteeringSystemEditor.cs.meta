@@ -1,0 +1,34 @@
+fileFormatVersion: 2
+guid: 085e1b778967c4243bcd2e1b50c276f4
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - m_ViewDataDictionary: {instanceID: 0}
+  - RootTemplate: {fileID: 9197481963319205126, guid: 0f333d1d260140547849cc15ffa4b795,
+      type: 3}
+  - NeighborBehaviorGroupItemTemplate: {fileID: 9197481963319205126, guid: e734bd828ce0ba745a9c75dd7183c172,
+      type: 3}
+  - RayBehaviorGroupItemTemplate: {fileID: 9197481963319205126, guid: 2c7382ee27633544bb8ada541766285a,
+      type: 3}
+  - NeighborBehaviorItemTemplate: {fileID: 9197481963319205126, guid: a9450e88701da0840867c3799f209eee,
+      type: 3}
+  - QueryItemTemplate: {fileID: 9197481963319205126, guid: 9d0de5e872987bf479791799dca5bb4d,
+      type: 3}
+  - RequiredQueryItemTemplate: {fileID: 9197481963319205126, guid: f4901787d39d72c4da90f464a5439b56,
+      type: 3}
+  - SimpleBehaviorItemTemplate: {fileID: 9197481963319205126, guid: a9450e88701da0840867c3799f209eee,
+      type: 3}
+  - steeringSystemAsset: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Editor/SteeringSystemEditor/SteeringSystemEditor.cs
+  uploadId: 798402

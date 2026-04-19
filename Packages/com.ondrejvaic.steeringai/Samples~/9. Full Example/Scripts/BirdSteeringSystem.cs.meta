@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: bd47bef91e879574d8759815d657548e
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/9. Full Example/Scripts/BirdSteeringSystem.cs
+  uploadId: 798402

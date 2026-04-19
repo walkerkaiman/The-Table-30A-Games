@@ -1,0 +1,183 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &6277207642895364374
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3161332954586969049, guid: e39ceaade854a52448e186c281317fb8,
+        type: 3}
+      propertyPath: m_Name
+      value: EntitySeparation
+      objectReference: {fileID: 0}
+    - target: {fileID: 6185867935190704210, guid: e39ceaade854a52448e186c281317fb8,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6185867935190704210, guid: e39ceaade854a52448e186c281317fb8,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6185867935190704210, guid: e39ceaade854a52448e186c281317fb8,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6185867935190704210, guid: e39ceaade854a52448e186c281317fb8,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6185867935190704210, guid: e39ceaade854a52448e186c281317fb8,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6185867935190704210, guid: e39ceaade854a52448e186c281317fb8,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6185867935190704210, guid: e39ceaade854a52448e186c281317fb8,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6185867935190704210, guid: e39ceaade854a52448e186c281317fb8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6185867935190704210, guid: e39ceaade854a52448e186c281317fb8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6185867935190704210, guid: e39ceaade854a52448e186c281317fb8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3161332954586969049, guid: e39ceaade854a52448e186c281317fb8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5166020681697300220}
+    - targetCorrespondingSourceObject: {fileID: 3161332954586969049, guid: e39ceaade854a52448e186c281317fb8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2577103574744948862}
+    - targetCorrespondingSourceObject: {fileID: 3161332954586969049, guid: e39ceaade854a52448e186c281317fb8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -8395360335218427685}
+    - targetCorrespondingSourceObject: {fileID: 3161332954586969049, guid: e39ceaade854a52448e186c281317fb8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6643864991605759892}
+  m_SourcePrefab: {fileID: 100100000, guid: e39ceaade854a52448e186c281317fb8, type: 3}
+--- !u!1 &8989836339532874447 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3161332954586969049, guid: e39ceaade854a52448e186c281317fb8,
+    type: 3}
+  m_PrefabInstance: {fileID: 6277207642895364374}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5166020681697300220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8989836339532874447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ce64792d77f48e09868c555cfa27f3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Radius: 0.5
+  Simulate: 1
+  Tags:
+  - Name: _6_SampleBehaviorsTagComponent
+    AssemblyQualifiedName: SteeringAI.Samples._6_SampleBehaviorsTagComponent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+--- !u!114 &2577103574744948862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8989836339532874447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8627434c8a394c6b9757af1153ea1ae9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DesiredVelocityComponent:
+    Value:
+      x: 0
+      y: 0
+      z: 0
+    Debug: 0
+    DebugScale: 10
+    Color: {r: 1, g: 0.6584776, b: 0.33490568, a: 1}
+--- !u!114 &-8395360335218427685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8989836339532874447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fd49fa5d0a4669488f450e63b5375ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Movement2DComponent:
+    MoveOptions:
+      MaxSpeed: 20
+      MaxForwardAcceleration: 5
+      MaxRightAcceleration: 1
+      Friction: 0.05
+      Move: 1
+    RotationOptions:
+      RotationSpeed: 100
+      Rotate: 0
+    IsActive: 1
+    Debug: 0
+  UpdatePosition: 0
+--- !u!114 &6643864991605759892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8989836339532874447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2469a7ce621d416a91d9fe9933bd6926, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SeparationComponent:
+    StartAngle: 216
+    DistanceP: 2
+    AngleP: 2
+    ActivationP: 2
+    ActivationK: 0.2
+    <BaseData>k__BackingField:
+      Priority: 0
+      MaxDistance: 5
+      MaxAngle: 360
+      DirectionStrength: 1
+      SpeedStrength: 0.5
+      <IsActive>k__BackingField: 1
+      Debug: 1
+      DebugScale: 5
+      DebugColor: {r: 1, g: 0, b: 0, a: 1}

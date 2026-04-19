@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: d180a637f57e7e44cb1ed89cde370b16
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/1. Minimal Set Up/SteeringEntity.prefab
+  uploadId: 798402

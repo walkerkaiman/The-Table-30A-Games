@@ -164,7 +164,7 @@ public class PongManager : MonoBehaviour, IGameSession
 
     private void AssignGoalZones(string[] playerIds)
     {
-        var goals = FindObjectsOfType<PongGoalZone>();
+        var goals = FindObjectsByType<PongGoalZone>();
         if (goals.Length == 0)
         {
             GameLog.Game("WARNING: No PongGoalZone objects found in scene — goals won't register!");
@@ -234,7 +234,7 @@ public class PongManager : MonoBehaviour, IGameSession
         if (_ballRb != null)
         {
             _ballRb.gravityScale = 0f;
-            _ballRb.velocity = _ballVelocity;
+            _ballRb.linearVelocity = _ballVelocity;
         }
         GameLog.Game($"Ball spawned — speed {_currentBallSpeed:F1}");
     }

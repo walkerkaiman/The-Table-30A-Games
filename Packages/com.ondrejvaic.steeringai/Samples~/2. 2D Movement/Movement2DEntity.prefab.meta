@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 39ae13c3e991c4a4c82162e8cc9635ef
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/2. 2D Movement/Movement2DEntity.prefab
+  uploadId: 798402

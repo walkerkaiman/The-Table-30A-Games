@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 907e38c82c3187e4eabba7b4129f6e98
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Editor/Vaic.SteeringAI.Editor.asmdef
+  uploadId: 798402

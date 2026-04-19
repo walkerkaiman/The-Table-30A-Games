@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 07c1b0a6767f5604b8aab7c5143671bc
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/z_SharedAssets/Terrains/Prefabs/smallTerrain1Prefab.prefab
+  uploadId: 798402

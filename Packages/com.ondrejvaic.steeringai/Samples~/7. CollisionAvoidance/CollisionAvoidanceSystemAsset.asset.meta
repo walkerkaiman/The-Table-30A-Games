@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ddb6c2d2d92918c4ba6e87f359d4bfd0
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/7. CollisionAvoidance/CollisionAvoidanceSystemAsset.asset
+  uploadId: 798402

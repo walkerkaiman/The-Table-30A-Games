@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: db7fe315ab8ab004897ed13cd2b5df4e
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/10. Cutscene Samples/Cutscenes/Cutscenes/Cutscene2/Sheep2.prefab
+  uploadId: 798402

@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 61c919fc4b6ef0446bcd878aa52b680c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/2. 2D Movement/Movement2DSteeringSystem.cs
+  uploadId: 798402

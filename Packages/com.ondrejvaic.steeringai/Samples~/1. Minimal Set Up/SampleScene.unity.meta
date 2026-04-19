@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 2098833867ba6c146a49ca1a763e4539
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/1. Minimal Set Up/SampleScene.unity
+  uploadId: 798402

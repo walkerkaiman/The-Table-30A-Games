@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 7026dcde0447cf24dbd069fef24fbffe
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/9. Full Example/Entities/BirdPredator.prefab
+  uploadId: 798402

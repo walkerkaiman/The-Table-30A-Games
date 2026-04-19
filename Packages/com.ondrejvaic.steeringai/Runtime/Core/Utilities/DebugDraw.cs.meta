@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 51a3a697ed714cc4aa291aea4e8bb4d4
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Core/Utilities/DebugDraw.cs
+  uploadId: 798402

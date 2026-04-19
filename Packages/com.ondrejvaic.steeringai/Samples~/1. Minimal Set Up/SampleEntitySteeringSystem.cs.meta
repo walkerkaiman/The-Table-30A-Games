@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 959887e6cf28462479c25f00ade9524d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/1. Minimal Set Up/SampleEntitySteeringSystem.cs
+  uploadId: 798402

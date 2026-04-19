@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: 02335f8f7c8b423d8c807193f1850019
+timeCreated: 1729805069
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Defaults/JobWrappers/Behaviors/RaycastBehaviors/Authoring/DebugRaysAuthoring.cs
+  uploadId: 798402

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 318f614f757540243bc71ce64cb63ced
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/8. Flocking With Predator/FlockingPredatorScene.unity
+  uploadId: 798402

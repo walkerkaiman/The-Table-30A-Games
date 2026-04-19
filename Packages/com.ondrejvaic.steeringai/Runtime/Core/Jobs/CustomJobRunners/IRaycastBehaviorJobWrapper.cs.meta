@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 85b347274a104b8fa439adbb8a0849e8
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Core/Jobs/CustomJobRunners/IRaycastBehaviorJobWrapper.cs
+  uploadId: 798402

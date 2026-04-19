@@ -1,0 +1,153 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa89c12507e57944db9018ba7692748b, type: 3}
+  m_Name: PreySteeringSystemAsset
+  m_EditorClassIdentifier: 
+  MergeJobWrapper:
+    Name: CombineVelocitiesJobWrapper
+    JobRunner:
+      rid: 1352562592630177808
+  NeighborBehaviorGroupInitDatas:
+  - BehaviorJobs:
+    - Name: FleeJobWrapper
+      JobRunner:
+        rid: 5067596507918106706
+    Settings:
+      rid: 5067596507918106704
+    AdditionalTargetTypeDescs:
+    - Name: _8_SamplePredatorTagComponent
+      AssemblyQualifiedName: SteeringAI.Samples._8_SamplePredatorTagComponent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    NeighborQueryJob:
+      Name: SpacialHashKNNJobWrapper
+      JobRunner:
+        rid: 2149092750547222529
+  - BehaviorJobs:
+    - Name: AlignmentJobWrapper
+      JobRunner:
+        rid: 5067596563373359107
+    - Name: CohesionJobWrapper
+      JobRunner:
+        rid: 5067596563373359108
+    - Name: SeparationJobWrapper
+      JobRunner:
+        rid: 5067596563373359109
+    Settings:
+      rid: 5067596563373359105
+    AdditionalTargetTypeDescs:
+    - Name: _8_SampleTagComponent
+      AssemblyQualifiedName: SteeringAI.Samples._8_SampleTagComponent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    NeighborQueryJob:
+      Name: SpacialHashKNNJobWrapper
+      JobRunner:
+        rid: 2149092750547222528
+  - BehaviorJobs:
+    - Name: MultiHomingJobWrapper
+      JobRunner:
+        rid: 5067596564544880642
+    Settings:
+      rid: 5067596564544880640
+    AdditionalTargetTypeDescs:
+    - Name: _8_SampleHomeTagComponent
+      AssemblyQualifiedName: SteeringAI.Samples._8_SampleHomeTagComponent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    NeighborQueryJob:
+      Name: SpacialHashKNNJobWrapper
+      JobRunner:
+        rid: 2149092750547222530
+  RaycastBehaviorGroupInitDatas: []
+  SimpleBehaviorsList:
+  - Name: GoForwardJobWrapper
+    JobRunner:
+      rid: 1352562594995240965
+  MainTagDescription:
+    Name: _8_SampleTagComponent
+    AssemblyQualifiedName: SteeringAI.Samples._8_SampleTagComponent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  RequiredSourceTypesList:
+  - Name: _8_SampleTagComponent
+    AssemblyQualifiedName: SteeringAI.Samples._8_SampleTagComponent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: DesiredVelocityComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.DesiredVelocityComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: GoForwardComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.GoForwardComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: FleeComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.FleeComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: AlignmentComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.AlignmentComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: CohesionComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.CohesionComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: SeparationComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.SeparationComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: MultiHomingComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.MultiHomingComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Prefab: {fileID: 1212032126809910386, guid: dd4ea92926cb0d542ab7d8343cf30f2d, type: 3}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1352562592630177808
+      type: {class: CombineVelocitiesJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 1352562594995240965
+      type: {class: GoForwardJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 2149092750547222528
+      type: {class: SpacialHashKNNJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 2149092750547222529
+      type: {class: SpacialHashKNNJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 2149092750547222530
+      type: {class: SpacialHashKNNJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 5067596507918106704
+      type: {class: NeighborhoodSettingsUI, ns: SteeringAI.Core, asm: Vaic.SteeringAI.Core}
+      data:
+        MaxNeighborDistance: 15
+        MaxFOV: 360
+        MaxNumNeighbors: 4
+    - rid: 5067596507918106706
+      type: {class: FleeJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 5067596563373359105
+      type: {class: NeighborhoodSettingsUI, ns: SteeringAI.Core, asm: Vaic.SteeringAI.Core}
+      data:
+        MaxNeighborDistance: 15
+        MaxFOV: 360
+        MaxNumNeighbors: 7
+    - rid: 5067596563373359107
+      type: {class: AlignmentJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 5067596563373359108
+      type: {class: CohesionJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 5067596563373359109
+      type: {class: SeparationJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 5067596564544880640
+      type: {class: NeighborhoodSettingsUI, ns: SteeringAI.Core, asm: Vaic.SteeringAI.Core}
+      data:
+        MaxNeighborDistance: 130
+        MaxFOV: 360
+        MaxNumNeighbors: 2
+    - rid: 5067596564544880642
+      type: {class: MultiHomingJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 

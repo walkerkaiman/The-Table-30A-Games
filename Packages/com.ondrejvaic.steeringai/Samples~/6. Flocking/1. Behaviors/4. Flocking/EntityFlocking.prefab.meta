@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a49d807a211c4344791e9389940ad080
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/6. Flocking/1. Behaviors/4.
+    Flocking/EntityFlocking.prefab
+  uploadId: 798402

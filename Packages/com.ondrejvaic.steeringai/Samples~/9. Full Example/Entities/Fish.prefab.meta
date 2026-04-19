@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: a51233a5ad6151b4da0398ecf0348655
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/9. Full Example/Entities/Fish.prefab
+  uploadId: 798402

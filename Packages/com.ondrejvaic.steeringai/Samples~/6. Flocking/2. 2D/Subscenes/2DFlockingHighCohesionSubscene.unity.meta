@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: f5b851c5b8f7a7340a200cafef350411
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/6. Flocking/2. 2D/Subscenes/2DFlockingHighCohesionSubscene.unity
+  uploadId: 798402

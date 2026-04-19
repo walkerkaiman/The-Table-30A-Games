@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: e12b41e2fa0eeae47ba2a3e8a46d564a
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/0. Documentation/README.txt
+  uploadId: 798402

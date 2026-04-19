@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 202541c107223bb4da851bcbed585323
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/z_SharedAssets/CharacterControllerTestEnvironment/Environment.prefab
+  uploadId: 798402

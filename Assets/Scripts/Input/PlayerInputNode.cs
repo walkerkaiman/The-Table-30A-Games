@@ -5,7 +5,7 @@ using UnityEngine;
 /// Stores identity info and the latest normalized input from the player's phone.
 /// The owning PlayerInputRelay drives all writes; game systems read from here.
 /// </summary>
-public class PlayerInputNode : MonoBehaviour
+public class PlayerInputNode : MonoBehaviour, IPlayerIdentity
 {
     private static readonly Color[] Palette =
     {

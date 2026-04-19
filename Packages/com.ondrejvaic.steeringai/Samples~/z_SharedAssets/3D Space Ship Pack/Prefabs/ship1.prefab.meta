@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e8a34e15403e31548aa63f18cb5b22fa
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/z_SharedAssets/3D Space
+    Ship Pack/Prefabs/ship1.prefab
+  uploadId: 798402

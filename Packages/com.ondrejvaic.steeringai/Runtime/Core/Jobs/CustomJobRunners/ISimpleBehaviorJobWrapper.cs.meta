@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 66aa493cdfd342ea9c86b57a4e3c9bfc
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Core/Jobs/CustomJobRunners/ISimpleBehaviorJobWrapper.cs
+  uploadId: 798402

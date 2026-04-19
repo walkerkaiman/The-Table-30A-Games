@@ -22,7 +22,6 @@ public class GameCoordinator : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private GameRegistry gameRegistry;
     [SerializeField] private int minPlayersToStart = 2;
-    [SerializeField] private float voteTimerSeconds = 15f;
 
     public static event System.Action<CoordinatorState> StateChanged;
 
@@ -329,7 +328,6 @@ public class GameCoordinator : MonoBehaviour
 
         CurrentState = CoordinatorState.GameSelect;
         _playerVotes.Clear();
-        StartTimer(voteTimerSeconds);
         BroadcastCoordinatorState();
     }
 
@@ -351,7 +349,6 @@ public class GameCoordinator : MonoBehaviour
 
         if (_playerVotes.Count >= PlayerManager.Instance.ActivePlayerCount)
         {
-            _timerActive = false;
             GameLog.Game("All votes in!");
             ResolveVote();
         }
@@ -454,7 +451,6 @@ public class GameCoordinator : MonoBehaviour
 
         CurrentState = CoordinatorState.GameSelect;
         _playerVotes.Clear();
-        StartTimer(voteTimerSeconds);
         BroadcastCoordinatorState();
     }
 
@@ -491,11 +487,9 @@ public class GameCoordinator : MonoBehaviour
 
     private void OnTimerExpired()
     {
-        if (CurrentState == CoordinatorState.GameSelect)
-        {
-            GameLog.Game("Vote timer expired");
-            ResolveVote();
-        }
+        // Game-select voting no longer uses a timer — voting only resolves when every active
+        // player has cast a vote, or when the host taps "Skip Vote". Other states can plug into
+        // this hook in the future by scheduling StartTimer() themselves.
     }
 
     // ── Helpers ──────────────────────────────────

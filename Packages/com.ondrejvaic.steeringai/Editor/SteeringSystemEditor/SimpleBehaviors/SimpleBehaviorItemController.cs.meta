@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 64aec62aadb648dbb3f639dc59c860a8
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Editor/SteeringSystemEditor/SimpleBehaviors/SimpleBehaviorItemController.cs
+  uploadId: 798402

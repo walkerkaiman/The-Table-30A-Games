@@ -65,7 +65,6 @@
     <div class="card">
       <div id="gameselect-scoreboard" class="scoreboard"></div>
       <h1>Pick a Game!</h1>
-      <div id="gameselect-timer" class="timer"></div>
       <p class="subtle-text">Tap to vote</p>
       <div id="gameselect-list" class="game-select-list"></div>
       <div id="host-gameselect-controls" class="host-controls" style="display:none;">
@@ -462,6 +461,42 @@
     </div>
   </div>
 
+  <!-- ═══ SHEEP HERDER ═══ -->
+
+  <div id="screen-sh-countdown" class="screen">
+    <div class="card">
+      <h1>Sheep Herder</h1>
+      <div id="sh-countdown-timer" class="timer pong-big-timer"></div>
+      <p class="subtle-text">Get ready to herd!</p>
+    </div>
+  </div>
+
+  <div id="screen-sh-playing" class="screen sh-controller">
+    <div class="sh-hud">
+      <div class="sh-hud-item">
+        <span class="sh-hud-label">Sheep left</span>
+        <span id="sh-remaining" class="sh-hud-value">0 / 0</span>
+      </div>
+      <div class="sh-hud-item">
+        <span class="sh-hud-label">Score</span>
+        <span id="sh-team-score" class="sh-hud-value">0</span>
+      </div>
+    </div>
+    <div id="sh-status" class="sh-status">Work together to herd the flock!</div>
+    <div id="sh-stick-area" class="sh-stick-area">
+      <div class="sh-stick-base"></div>
+      <div id="sh-stick-knob" class="sh-stick-knob"></div>
+    </div>
+  </div>
+
+  <div id="screen-sh-gameover" class="screen">
+    <div class="card">
+      <h1>All sheep collected!</h1>
+      <h2 id="sh-gameover-score" class="pic-reveal-price">Team Score: 0</h2>
+      <div id="sh-standings" class="results-list"></div>
+    </div>
+  </div>
+
   <!-- ─── Disconnected ─── -->
   <div id="screen-disconnected" class="screen">
     <div class="card">
@@ -480,5 +515,6 @@
   <script src="games/hot_potato.js"></script>
   <script src="games/caption_contest.js"></script>
   <script src="games/price_is_close.js"></script>
+  <script src="games/sheep_herder.js"></script>
 </body>
 </html>

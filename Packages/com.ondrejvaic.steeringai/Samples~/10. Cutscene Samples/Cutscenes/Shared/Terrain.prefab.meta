@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 13b270a2c56a3a046840962ee52bc951
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/10. Cutscene Samples/Cutscenes/Shared/Terrain.prefab
+  uploadId: 798402

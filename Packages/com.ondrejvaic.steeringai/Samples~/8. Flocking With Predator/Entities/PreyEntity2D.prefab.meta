@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: dd4ea92926cb0d542ab7d8343cf30f2d
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/8. Flocking With Predator/Entities/PreyEntity2D.prefab
+  uploadId: 798402

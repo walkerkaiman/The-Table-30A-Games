@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: a167ad345c53bd7428561fd82e7dea8c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Editor/SteeringSystemEditor/OpenSystem.cs
+  uploadId: 798402

@@ -1,0 +1,158 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &821083532753640991
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -2673110085757363558, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: GoForwardComponent.<BaseData>k__BackingField.DirectionStrength
+      value: 0.06
+      objectReference: {fileID: 0}
+    - target: {fileID: 199707643548291396, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 199707643548291396, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 199707643548291396, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 199707643548291396, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 199707643548291396, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 199707643548291396, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 199707643548291396, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 199707643548291396, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 199707643548291396, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 199707643548291396, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2670363071963270879, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: AlignmentComponent.StartAngle
+      value: 72
+      objectReference: {fileID: 0}
+    - target: {fileID: 2670363071963270879, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: AlignmentComponent.<BaseData>k__BackingField.MaxAngle
+      value: 270
+      objectReference: {fileID: 0}
+    - target: {fileID: 2670363071963270879, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: AlignmentComponent.<BaseData>k__BackingField.MaxDistance
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5166020681697300220, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: Tags.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5166020681697300220, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: Tags.Array.data[0].Name
+      value: _6_Sample3DLargeTagComponent
+      objectReference: {fileID: 0}
+    - target: {fileID: 5166020681697300220, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: Tags.Array.data[1].Name
+      value: SampleTagComponent7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5166020681697300220, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: Tags.Array.data[0].AssemblyQualifiedName
+      value: SteeringAI.Samples._6_Sample3DLargeTagComponent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 5166020681697300220, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: Tags.Array.data[1].AssemblyQualifiedName
+      value: Samples.SampleTagComponent7, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 5850832570366749318, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: SeparationComponent.<BaseData>k__BackingField.MaxDistance
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5850832570366749318, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: SeparationComponent.<BaseData>k__BackingField.DirectionStrength
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7834114463844601015, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: CohesionComponent.StartAngle
+      value: 72
+      objectReference: {fileID: 0}
+    - target: {fileID: 7834114463844601015, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: CohesionComponent.MinActivation
+      value: 0.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 7834114463844601015, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: CohesionComponent.<BaseData>k__BackingField.MaxAngle
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 7834114463844601015, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: CohesionComponent.<BaseData>k__BackingField.Priority
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7834114463844601015, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: CohesionComponent.<BaseData>k__BackingField.MaxDistance
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7834114463844601015, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: CohesionComponent.<BaseData>k__BackingField.DirectionStrength
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8989836339532874447, guid: 93f7d03433910df4ca93eefcaeff4492,
+        type: 3}
+      propertyPath: m_Name
+      value: EntityFlockingHuge
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 6219950855369497010, guid: 93f7d03433910df4ca93eefcaeff4492, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 93f7d03433910df4ca93eefcaeff4492, type: 3}

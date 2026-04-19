@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 7d8d3641d6b94bf6a8fb58b2243aca97
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Defaults/JobWrappers/DistanceQueries/Helpers/LoadPositionsAndForwardsJob.cs
+  uploadId: 798402

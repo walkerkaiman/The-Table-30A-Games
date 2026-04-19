@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 9dbd1e538467e3c47b97311090eb3880
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/6. Flocking/2. 2D/Flocking2DSystemAsset.asset
+  uploadId: 798402

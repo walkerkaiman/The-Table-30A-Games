@@ -40,7 +40,6 @@
     lobbyStatus: $("#lobby-status"),
     hostLobbyControls: $("#host-lobby-controls"),
     btnStartGame: $("#btn-start-game"),
-    gameselectTimer: $("#gameselect-timer"),
     gameselectList: $("#gameselect-list"),
     gameselectScoreboard: $("#gameselect-scoreboard"),
     hostGameselectControls: $("#host-gameselect-controls"),
@@ -372,9 +371,9 @@
     showScreen("gameselect");
     state.gameSelectVote = null;
 
-    if (msg.timer > 0) {
-      GameApp.startTimer(msg.timer, els.gameselectTimer);
-    }
+    // No vote timer — voting resolves as soon as every active player casts a vote, or the host
+    // taps Skip Vote. Stop any stale timer so it doesn't linger from a previous screen.
+    GameApp.stopTimer();
 
     renderScoreboard(msg.players || []);
     renderGameSelectList(msg.games || [], msg.voteCounts || []);

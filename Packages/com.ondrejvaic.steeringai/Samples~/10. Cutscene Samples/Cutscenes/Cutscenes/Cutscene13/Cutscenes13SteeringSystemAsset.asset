@@ -1,0 +1,142 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa89c12507e57944db9018ba7692748b, type: 3}
+  m_Name: Cutscenes13SteeringSystemAsset
+  m_EditorClassIdentifier: 
+  MergeJobWrapper:
+    Name: CombineVelocitiesJobWrapper
+    JobRunner:
+      rid: 1352562592630177794
+  NeighborBehaviorGroupInitDatas:
+  - BehaviorJobs:
+    - Name: AlignmentJobWrapper
+      JobRunner:
+        rid: 5067596563373359107
+    - Name: CohesionJobWrapper
+      JobRunner:
+        rid: 5067596563373359108
+    - Name: SeparationJobWrapper
+      JobRunner:
+        rid: 5067596563373359109
+    Settings:
+      rid: 5067596563373359105
+    AdditionalTargetTypeDescs:
+    - Name: __Cutscenes_13TagComponent
+      AssemblyQualifiedName: Cutscenes.__Cutscenes_13TagComponent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    NeighborQueryJob:
+      Name: SpacialHashKNNJobWrapper
+      JobRunner:
+        rid: 5067596651431723013
+  - BehaviorJobs:
+    - Name: MultiHomingJobWrapper
+      JobRunner:
+        rid: 5067596564544880642
+    Settings:
+      rid: 5067596564544880640
+    AdditionalTargetTypeDescs:
+    - Name: __Cutscenes_HomeTagComponent
+      AssemblyQualifiedName: Cutscenes.__Cutscenes_HomeTagComponent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    NeighborQueryJob:
+      Name: SpacialHashKNNJobWrapper
+      JobRunner:
+        rid: 2149092750547222533
+  RaycastBehaviorGroupInitDatas: []
+  SimpleBehaviorsList:
+  - Name: WanderingJobWrapper
+    JobRunner:
+      rid: 5067596643027910658
+  - Name: AlignUpJobWrapper
+    JobRunner:
+      rid: 5067596644439818264
+  - Name: KeepHeightJobWrapper
+    JobRunner:
+      rid: 5067596644439818265
+  MainTagDescription:
+    Name: __Cutscenes_13TagComponent
+    AssemblyQualifiedName: Cutscenes.__Cutscenes_13TagComponent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  RequiredSourceTypesList:
+  - Name: __Cutscenes_13TagComponent
+    AssemblyQualifiedName: Cutscenes.__Cutscenes_13TagComponent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: DesiredVelocityComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.DesiredVelocityComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: WanderingComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.WanderingComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: AlignUpComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.AlignUpComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: KeepHeightComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.KeepHeightComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: AlignmentComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.AlignmentComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: CohesionComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.CohesionComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: SeparationComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.SeparationComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: MultiHomingComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.MultiHomingComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Prefab: {fileID: 1433139838521370552, guid: 331bbdf9a7a1b4043bf97e94680d3d1a, type: 3}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1352562592630177794
+      type: {class: CombineVelocitiesJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 2149092750547222533
+      type: {class: SpacialHashKNNJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 5067596563373359105
+      type: {class: NeighborhoodSettingsUI, ns: SteeringAI.Core, asm: Vaic.SteeringAI.Core}
+      data:
+        MaxNeighborDistance: 8
+        MaxFOV: 360
+        MaxNumNeighbors: 6
+    - rid: 5067596563373359107
+      type: {class: AlignmentJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 5067596563373359108
+      type: {class: CohesionJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 5067596563373359109
+      type: {class: SeparationJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 5067596564544880640
+      type: {class: NeighborhoodSettingsUI, ns: SteeringAI.Core, asm: Vaic.SteeringAI.Core}
+      data:
+        MaxNeighborDistance: 150
+        MaxFOV: 360
+        MaxNumNeighbors: 1
+    - rid: 5067596564544880642
+      type: {class: MultiHomingJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 5067596643027910658
+      type: {class: WanderingJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 5067596644439818264
+      type: {class: AlignUpJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 5067596644439818265
+      type: {class: KeepHeightJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 5067596651431723013
+      type: {class: SpacialHashKNNJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 

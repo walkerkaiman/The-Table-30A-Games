@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 147258e32b4a4f2f864ddf8ee961becb
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Editor/SteeringSystemEditor/Queries/SourceQueryController.cs
+  uploadId: 798402

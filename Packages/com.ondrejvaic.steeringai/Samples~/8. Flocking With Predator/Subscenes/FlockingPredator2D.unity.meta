@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: ab8e5df61ea977841b6ae5d4289e9ebb
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/8. Flocking With Predator/Subscenes/FlockingPredator2D.unity
+  uploadId: 798402

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 27e514a0d1083fb408f561fbb84ef0c1
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/z_SharedAssets/Materials/ObstacleSphhere.mat
+  uploadId: 798402

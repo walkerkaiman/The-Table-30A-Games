@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 88ce98d7992208a4291c391ab7a6ffe3
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/10. Cutscene Samples/Cutscenes/Shared/Systems/CutscenesBirdsSteeringSystem.cs
+  uploadId: 798402

@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: a4d4d701917f408ea8e5023f0c563e25
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Core/Authoring/Components/MaxSpeedComponent.cs
+  uploadId: 798402

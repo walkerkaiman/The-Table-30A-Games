@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 6cc9214da4a7487dbec81ad5b954c975
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Defaults/Utilities/Spawning/SphereSpawner/SpawnerAuthoring.cs
+  uploadId: 798402

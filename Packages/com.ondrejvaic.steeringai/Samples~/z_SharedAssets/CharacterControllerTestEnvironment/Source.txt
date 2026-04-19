@@ -1,0 +1,2 @@
+https://github.com/nicholas-maltbie/OpenKCC - Licenced under MIT
+From Open Kinematic Character Controller

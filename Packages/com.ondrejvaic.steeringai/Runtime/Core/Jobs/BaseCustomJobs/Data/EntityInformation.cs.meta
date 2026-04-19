@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 544491e58502465bb3fa8f83dd7a326f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Core/Jobs/BaseCustomJobs/Data/EntityInformation.cs
+  uploadId: 798402

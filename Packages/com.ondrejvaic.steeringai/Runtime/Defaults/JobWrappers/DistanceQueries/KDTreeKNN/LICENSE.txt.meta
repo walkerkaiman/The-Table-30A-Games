@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: 69c6e7201dfc4d40a485598833ff4c0d
+timeCreated: 1736569731
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Defaults/JobWrappers/DistanceQueries/KDTreeKNN/LICENSE.txt
+  uploadId: 798402

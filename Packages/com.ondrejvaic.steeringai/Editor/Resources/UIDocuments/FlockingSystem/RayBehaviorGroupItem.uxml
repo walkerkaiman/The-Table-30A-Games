@@ -1,0 +1,23 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:VisualElement name="list-entry" style="background-color: rgba(0, 0, 0, 0.2); margin-left: 3px; margin-right: 3px; margin-top: 3px; margin-bottom: 3px;">
+        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;">
+            <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                <ui:Button text="x" display-tooltip-when-elided="true" name="delete-group-button" style="width: 20px; height: 20px; -unity-text-align: middle-center; font-size: 14px; align-self: flex-end; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; background-color: rgb(88, 88, 88); color: rgb(238, 238, 238); -unity-font-style: bold;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="VisualElement" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); align-items: stretch; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; flex-direction: row;">
+            <ui:VisualElement name="create-ray-drop-down" style="margin-right: 0; margin-top: 0; margin-bottom: 0; margin-left: 0;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="ray-creation-job-holder" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+            <uie:PropertyField name="ray-creation-job-field" />
+        </ui:VisualElement>
+        <ui:VisualElement name="base-ray-setting-holder" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+            <uie:PropertyField name="base-ray-settings-field" />
+        </ui:VisualElement>
+        <ui:VisualElement name="VisualElement" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); align-items: stretch; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; flex-direction: row;">
+            <ui:VisualElement name="behaviors-drop-down" style="margin-right: 0; margin-top: 0; margin-bottom: 0; margin-left: 0;" />
+            <ui:Button text="+" display-tooltip-when-elided="true" name="add-behavior-button" style="align-self: flex-end; align-items: stretch; width: 20px; height: 20px; margin-left: 0; margin-right: 3px; margin-top: 1px; margin-bottom: 1px;" />
+        </ui:VisualElement>
+        <ui:ListView focusable="true" name="ray-behaviors" virtualization-method="DynamicHeight" style="background-color: rgba(0, 0, 0, 0.18); margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;" />
+    </ui:VisualElement>
+</ui:UXML>

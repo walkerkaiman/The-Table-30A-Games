@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e1d3e6ce084cc9c4e949cd5ba76aba10
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/6. Flocking/1. Behaviors/3.
+    Alignment/Alignment.unity
+  uploadId: 798402

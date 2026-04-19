@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 650f0e1c4e0d43feaeba6eb30ac9dc9d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Core/Editor/SteeringSystemAssetInspector.cs
+  uploadId: 798402

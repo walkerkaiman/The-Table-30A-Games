@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: ee458ec4f8c04939b4a105b9c079f2ad
+timeCreated: 1758221380
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Defaults/JobWrappers/Behaviors/SimpleBehaviors/Jobs/FollowPathSpline/Hybrid.cs
+  uploadId: 798402

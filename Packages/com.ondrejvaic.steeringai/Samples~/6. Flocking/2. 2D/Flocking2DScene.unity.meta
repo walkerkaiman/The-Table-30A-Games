@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: dea622ab0bdfca04a96440634a578e83
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/6. Flocking/2. 2D/Flocking2DScene.unity
+  uploadId: 798402

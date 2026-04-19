@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: a9a57b55a2e4b5e4babdd5fd397ea1f1
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/4. Collisions/CollisionsScene/CollisionsSubscene.unity
+  uploadId: 798402

@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: 8f4dac996ba841c2adbe5c54e1449434
+timeCreated: 1729802253
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Defaults/JobWrappers/Behaviors/SimpleBehaviors/Jobs/DebugSimpleJobWrapper.cs
+  uploadId: 798402

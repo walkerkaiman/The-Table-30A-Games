@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: e734bd828ce0ba745a9c75dd7183c172
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 13804, guid: 0000000000000000e000000000000000, type: 0}
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Editor/Resources/UIDocuments/FlockingSystem/NeighborBehaviorGroupItem.uxml
+  uploadId: 798402

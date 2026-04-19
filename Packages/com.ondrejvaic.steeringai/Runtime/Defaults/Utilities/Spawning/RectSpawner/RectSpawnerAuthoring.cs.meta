@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: a00e4a6179c64404abc17924b5e0c656
+timeCreated: 1754918497
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Defaults/Utilities/Spawning/RectSpawner/RectSpawnerAuthoring.cs
+  uploadId: 798402

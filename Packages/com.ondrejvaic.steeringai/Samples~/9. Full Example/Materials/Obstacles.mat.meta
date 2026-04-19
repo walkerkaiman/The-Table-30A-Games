@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 292046397b145874e8b815c7fdcda500
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/9. Full Example/Materials/Obstacles.mat
+  uploadId: 798402

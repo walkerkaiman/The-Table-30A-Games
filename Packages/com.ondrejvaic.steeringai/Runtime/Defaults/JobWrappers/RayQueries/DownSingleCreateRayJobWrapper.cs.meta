@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: c1468c8813a34652b4c7ce20624b45bd
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Defaults/JobWrappers/RayQueries/DownSingleCreateRayJobWrapper.cs
+  uploadId: 798402

@@ -51,6 +51,10 @@ public static class MessageTypes
 
     public const string SubmitGuess = "submit_guess";
     public const string GuessReceived = "guess_received";
+
+    public const string JoystickMove = "joystick_move";
+    public const string SheepHerderFrame = "sh_frame";
+    public const string SheepHerderEvent = "sh_event";
 }
 
 // ──────────────────────────────────────────────
@@ -557,6 +561,46 @@ public class CaptionContestStateMessage
     public CaptionInfo[] captions;
     public CaptionResultInfo[] results;
     public PlayerInfo[] players;
+}
+
+// ──────────────────────────────────────────────
+//  Sheep Herder (client → server)
+// ──────────────────────────────────────────────
+
+[Serializable]
+public class JoystickMoveMessage
+{
+    public string type;
+    public float x;     // stick X in [-1, 1]
+    public float y;     // stick Y in [-1, 1]
+}
+
+// ──────────────────────────────────────────────
+//  Sheep Herder (server → client)
+// ──────────────────────────────────────────────
+
+[Serializable]
+public class SheepHerderStateMessage
+{
+    public string type = MessageTypes.GameState;
+    public string gameType = "sheep_herder";
+    public string state;
+    public int timer;
+    public int sheepRemaining;
+    public int sheepTotal;
+    public int teamScore;
+    public string mode;          // "collab" or "competitive"
+    public PlayerInfo[] players;
+}
+
+[Serializable]
+public class SheepHerderEventMessage
+{
+    public string type = MessageTypes.SheepHerderEvent;
+    public string eventName;     // "sheep_scored", "game_over"
+    public string playerId;      // who triggered the event (nullable)
+    public int sheepRemaining;
+    public int teamScore;
 }
 
 [Serializable]

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 6cb12aa8fce871e4fba9b02ec62d6790
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/10. Cutscene Samples/Cutscenes/Cutscenes/Cutscene2/Cutscene2Sub.unity
+  uploadId: 798402

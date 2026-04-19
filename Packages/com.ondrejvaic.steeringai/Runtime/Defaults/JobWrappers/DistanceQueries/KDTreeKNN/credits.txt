@@ -1,0 +1,2 @@
+﻿From solution for finding K nearest neighbors found at: 
+https://github.com/ArthurBrussee/KNN 

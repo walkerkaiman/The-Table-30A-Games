@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa89c12507e57944db9018ba7692748b, type: 3}
+  m_Name: Movement2DSystemAsset
+  m_EditorClassIdentifier: 
+  MergeJobWrapper:
+    Name: CombineVelocitiesJobWrapper
+    JobRunner:
+      rid: 1352562592630177804
+  NeighborBehaviorGroupInitDatas: []
+  RaycastBehaviorGroupInitDatas: []
+  SimpleBehaviorsList:
+  - Name: FollowPathSplineJobWrapper
+    JobRunner:
+      rid: 3154112232907866295
+  MainTagDescription:
+    Name: _2_SampleTagComponent
+    AssemblyQualifiedName: SteeringAI.Samples._2_SampleTagComponent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  RequiredSourceTypesList:
+  - Name: _2_SampleTagComponent
+    AssemblyQualifiedName: SteeringAI.Samples._2_SampleTagComponent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: DesiredVelocityComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.DesiredVelocityComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: FollowPathSplineComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.FollowPathSplineComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Prefab: {fileID: -5820386191254812013, guid: 39ae13c3e991c4a4c82162e8cc9635ef, type: 3}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1352562592630177804
+      type: {class: CombineVelocitiesJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 3154112232907866295
+      type: {class: FollowPathSplineJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data:
+        SplineIndex: 0

@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa89c12507e57944db9018ba7692748b, type: 3}
+  m_Name: Cutscene11SystemAsset
+  m_EditorClassIdentifier: 
+  MergeJobWrapper:
+    Name: CombineVelocitiesJobWrapper
+    JobRunner:
+      rid: 1352562592630177794
+  NeighborBehaviorGroupInitDatas:
+  - BehaviorJobs:
+    - Name: SeekJobWrapper
+      JobRunner:
+        rid: 3154112508305604830
+    Settings:
+      rid: 4258913452049301620
+    AdditionalTargetTypeDescs: []
+    NeighborQueryJob:
+      Name: SpacialHashKNNJobWrapper
+      JobRunner:
+        rid: 4258913452049301621
+  RaycastBehaviorGroupInitDatas: []
+  SimpleBehaviorsList:
+  - Name: GoForwardJobWrapper
+    JobRunner:
+      rid: 4258913452049301585
+  - Name: KeepHeightJobWrapper
+    JobRunner:
+      rid: 4258913452049301690
+  MainTagDescription:
+    Name: __Cutscenes_11TagComponent
+    AssemblyQualifiedName: Cutscenes.__Cutscenes_11TagComponent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  RequiredSourceTypesList:
+  - Name: __Cutscenes_11TagComponent
+    AssemblyQualifiedName: Cutscenes.__Cutscenes_11TagComponent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: DesiredVelocityComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.DesiredVelocityComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: GoForwardComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.GoForwardComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: KeepHeightComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.KeepHeightComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: SeekComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.SeekComponent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  Prefab: {fileID: 7255373660632406630, guid: 057c0a68b563fac4d99acd2bd7e3d1c5, type: 3}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1352562592630177794
+      type: {class: CombineVelocitiesJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 3154112508305604830
+      type: {class: SeekJob/SeekJobWrapper, ns: SteeringAI.Samples.Cutscenes, asm: Assembly-CSharp}
+      data: 
+    - rid: 4258913452049301585
+      type: {class: GoForwardJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 4258913452049301620
+      type: {class: NeighborhoodSettingsUI, ns: SteeringAI.Core, asm: Vaic.SteeringAI.Core}
+      data:
+        MaxNeighborDistance: 20
+        MaxFOV: 360
+        MaxNumNeighbors: 7
+    - rid: 4258913452049301621
+      type: {class: SpacialHashKNNJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 4258913452049301690
+      type: {class: KeepHeightJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 

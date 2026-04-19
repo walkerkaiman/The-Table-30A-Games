@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa89c12507e57944db9018ba7692748b, type: 3}
+  m_Name: Cutscenes8PredatorSteeringSystemAsset
+  m_EditorClassIdentifier: 
+  MergeJobWrapper:
+    Name: CombineVelocitiesJobWrapper
+    JobRunner:
+      rid: 4258913270811852946
+  NeighborBehaviorGroupInitDatas:
+  - BehaviorJobs:
+    - Name: MultiHomingJobWrapper
+      JobRunner:
+        rid: 4258913270811852963
+    Settings:
+      rid: 4258913270811852961
+    AdditionalTargetTypeDescs:
+    - Name: __Cutscenes_HomeTagComponent
+      AssemblyQualifiedName: Cutscenes.__Cutscenes_HomeTagComponent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    NeighborQueryJob:
+      Name: SpacialHashKNNJobWrapper
+      JobRunner:
+        rid: 4258913270811852962
+  RaycastBehaviorGroupInitDatas:
+  - BehaviorJobs:
+    - Name: AvoidVerticalWallsJobWrapper
+      JobRunner:
+        rid: 4258913270811852958
+    RayQueryJob:
+      Name: ConeCreateRaysJobWrapper
+      JobRunner:
+        rid: 4258913270811852956
+    RaycastSettings:
+      rid: 4258913270811852957
+  SimpleBehaviorsList:
+  - Name: WanderingJobWrapper
+    JobRunner:
+      rid: 4258913270811852950
+  MainTagDescription:
+    Name: __Cutscenes_8PredatorTagComponent
+    AssemblyQualifiedName: Cutscenes.__Cutscenes_8PredatorTagComponent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  RequiredSourceTypesList:
+  - Name: __Cutscenes_8PredatorTagComponent
+    AssemblyQualifiedName: Cutscenes.__Cutscenes_8PredatorTagComponent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: DesiredVelocityComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.DesiredVelocityComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: WanderingComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.WanderingComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: MultiHomingComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.MultiHomingComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Name: AvoidVerticalWallsComponent
+    AssemblyQualifiedName: SteeringAI.Defaults.AvoidVerticalWallsComponent, Vaic.SteeringAI.Defaults,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Prefab: {fileID: 7255373660632406630, guid: 80ea32ae0a94b2f4a8aa2ee2b106a382, type: 3}
+  references:
+    version: 2
+    RefIds:
+    - rid: 4258913270811852946
+      type: {class: CombineVelocitiesJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 4258913270811852950
+      type: {class: WanderingJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 4258913270811852956
+      type: {class: ConeCreateRaysJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data:
+        rayCreationSettings:
+          FOV: 270
+          Rotation: {x: 0, y: 0, z: 0}
+          Offset: {x: 0, y: 0, z: 0}
+    - rid: 4258913270811852957
+      type: {class: RaycastSettingsUI, ns: SteeringAI.Core, asm: Vaic.SteeringAI.Core}
+      data:
+        MaxDistance: 40
+        NumRays: 30
+        LayerMask:
+          serializedVersion: 2
+          m_Bits: 1
+    - rid: 4258913270811852958
+      type: {class: AvoidVerticalWallsJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 4258913270811852961
+      type: {class: NeighborhoodSettingsUI, ns: SteeringAI.Core, asm: Vaic.SteeringAI.Core}
+      data:
+        MaxNeighborDistance: 1000
+        MaxFOV: 360
+        MaxNumNeighbors: 7
+    - rid: 4258913270811852962
+      type: {class: SpacialHashKNNJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 
+    - rid: 4258913270811852963
+      type: {class: MultiHomingJobWrapper, ns: SteeringAI.Defaults, asm: Vaic.SteeringAI.Defaults}
+      data: 

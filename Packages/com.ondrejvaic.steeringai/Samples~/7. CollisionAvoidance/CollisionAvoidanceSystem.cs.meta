@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 3e2400820f5f0844cbc40d90f79964fd
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/7. CollisionAvoidance/CollisionAvoidanceSystem.cs
+  uploadId: 798402

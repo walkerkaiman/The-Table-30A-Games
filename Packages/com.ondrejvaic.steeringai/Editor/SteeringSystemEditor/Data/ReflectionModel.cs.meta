@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 768e1f9bd29f41a5bc8e5b90d8b93cb7
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Editor/SteeringSystemEditor/Data/ReflectionModel.cs
+  uploadId: 798402

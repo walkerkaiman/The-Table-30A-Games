@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: b2edc2bedb1c4d419f20a860f6f0bbeb
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Defaults/JobWrappers/Merging/Helpers/PriorityComparerSpeed.cs
+  uploadId: 798402

@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: c64f07d4e1804f2fa7b48b12d00eca42
+timeCreated: 1754178396
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/10. Cutscene Samples/Cutscenes/Cutscenes/Cutscene9/CutsceneHomeAnimation.cs
+  uploadId: 798402

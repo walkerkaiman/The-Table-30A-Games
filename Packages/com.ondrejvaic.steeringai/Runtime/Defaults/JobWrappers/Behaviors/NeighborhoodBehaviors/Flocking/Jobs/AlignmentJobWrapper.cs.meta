@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: f881b0b530b44524b1ac2881813daee7
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Defaults/JobWrappers/Behaviors/NeighborhoodBehaviors/Flocking/Jobs/AlignmentJobWrapper.cs
+  uploadId: 798402

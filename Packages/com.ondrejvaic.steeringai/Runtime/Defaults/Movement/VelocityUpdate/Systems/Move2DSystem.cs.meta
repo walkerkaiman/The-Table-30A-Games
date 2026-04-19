@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: a95bd4b1ef44485aa4ef85abf48ff889
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Defaults/Movement/VelocityUpdate/Systems/Move2DSystem.cs
+  uploadId: 798402

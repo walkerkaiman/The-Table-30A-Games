@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: d43d5c3a265f496f8c4763c7ac700c8c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Core/Jobs/BaseCustomJobs/Interfaces/IToStringFixed.cs
+  uploadId: 798402

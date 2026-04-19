@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: a75f4ebe3180c9547b91efb315af2d8d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/4. Collisions/CollisionsSteeringSystem.cs
+  uploadId: 798402

@@ -1,0 +1,21 @@
+{
+    "name": "Vaic.SteeringAI.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:29c19bc3ecb2e624896bc1e224aed2b7",
+        "GUID:734d92eba21c94caba915361bd5ac177",
+        "GUID:e0cd26848372d4e5c891c569017e11f1",
+        "GUID:37f7024bf4fd2044a86bd49f5cb876da"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

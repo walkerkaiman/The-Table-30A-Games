@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 07f8ab7ccce35a04ab46a197f4ffe166
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/z_SharedAssets/Materials/WhiteDouble.mat
+  uploadId: 798402

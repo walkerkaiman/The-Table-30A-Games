@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: eacfb44c8122b604682b3b68ffe43928
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/z_SharedAssets/3D Space
+    Ship Pack/Source.txt
+  uploadId: 798402

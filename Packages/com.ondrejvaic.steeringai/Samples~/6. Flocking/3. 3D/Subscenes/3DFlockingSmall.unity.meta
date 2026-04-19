@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 18da65c0fab7b4146b2baeecc0925cd2
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/6. Flocking/3. 3D/Subscenes/3DFlockingSmall.unity
+  uploadId: 798402

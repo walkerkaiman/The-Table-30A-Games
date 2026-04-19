@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 7aff809374cf4427932b7c99cca3cae0
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Defaults/JobWrappers/Behaviors/NeighborhoodBehaviors/Other/Authoring/SeekingAuthoring.cs
+  uploadId: 798402

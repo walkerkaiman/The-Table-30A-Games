@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 40622d0f2a38c1544ac9ee498a1bd9da
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/3. 3D Movement/Movement3DSubscene/Movement3DSubscene.unity
+  uploadId: 798402

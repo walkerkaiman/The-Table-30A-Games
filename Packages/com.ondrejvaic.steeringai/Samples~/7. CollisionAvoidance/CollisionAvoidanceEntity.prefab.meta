@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: b4d2de1e478241e46b04001cbd3ca797
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/7. CollisionAvoidance/CollisionAvoidanceEntity.prefab
+  uploadId: 798402

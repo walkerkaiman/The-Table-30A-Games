@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: bf385e0be41a45f4945639aced9f2c2d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Runtime/Core/Jobs/CustomJobRunners/ICreateRaysJobWrapper.cs
+  uploadId: 798402

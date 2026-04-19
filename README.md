@@ -77,6 +77,15 @@ Like Quiplash but with images. A funny or unusual image is shown on the table, a
 4. Points are awarded based on votes
 5. Images are loaded from `StreamingAssets/GameContent/caption_contest/` and served via `StreamingAssets/WebApp/media/caption_contest/` — swap files to update content without code changes
 
+### Sheep Herder
+Top-down 2D herding game. Each player controls a shepherd via a virtual joystick on their phone and tries to push AI-driven sheep into a goal zone.
+
+**Collaborative mode:** All shepherds work together toward a single shared goal zone. Each sheep collected adds to the team score, and the round ends once the flock is empty.
+
+**Competitive mode (planned):** Each player has their own goal zone — highest score at the end wins.
+
+Shepherds accelerate toward a top speed (Mario-64-style feel). Sheep flock via separation / alignment / cohesion and flee from nearby shepherds. All physics use `Rigidbody2D` on the XY plane. Designed so the joystick / mover / boid pieces can be reused for future pet-herding or crowd-control games.
+
 ### Price is Close
 A guessing game where players estimate the price of items, products, or experiences.
 
@@ -183,6 +192,42 @@ Player prefabs spawned by the `PlayerInputRelay` are automatically offset to the
 4. Items are loaded from `Assets/StreamingAssets/GameContent/caption_contest/items.json`
 5. Images must be placed in `Assets/StreamingAssets/WebApp/media/caption_contest/` and referenced by URL in the JSON (e.g. `/media/caption_contest/photo.jpg`)
 
+### 10a. Create the Sheep Herder Scene (Collaborative, top-down 2D)
+
+Sheep Herder is a **top-down 2D** game — all physics use `Rigidbody2D` + `Collider2D` on the XY plane. Don't mix 3D physics components, or you'll hit "Can't add component X because it conflicts with the existing Y derived component."
+
+1. Open `Assets/Scenes/Sheep Herder_collab.unity` — the arena, barriers, and goal placeholder are already in place.
+2. Create an empty GameObject called **SheepHerderManager** and attach `SheepHerderManager.cs`
+   - Leave `Mode` = Collaborative
+3. As a child of SheepHerderManager, create a **JoystickInputRelay** GameObject and attach `JoystickInputRelay.cs`
+   - Assign a **Shepherd Prefab** (see below) to the `Player Node Prefab` field
+   - Set `Spawn Plane` = **XY**
+   - Configure `Spawn Center` / `Spawn Radius` to spread players around the map
+4. Create a **Shepherd Prefab** (2D):
+   - Empty GameObject with a **Rigidbody2D** (Gravity Scale = 0, Collision Detection = Continuous, Freeze Rotation Z unless you want the sprite to face the move direction)
+   - A child sprite (or the prefab itself with a `SpriteRenderer`) plus a `CapsuleCollider2D` or `CircleCollider2D`
+   - Add `PlayerJoystickNode`, `AcceleratedMover`, and `Shepherd` scripts
+   - Configure AcceleratedMover: `Max Speed` ≈ 6, `Acceleration` ≈ 30, `Deceleration` ≈ 20, **`Input Plane` = XY**
+   - (Optional) Add a nameplate: create a child Canvas (`Render Mode = World Space`), drop a `TextMeshProUGUI` into it, size/position the Canvas above the shepherd, then add `PlayerNameplate` to the prefab root. `PlayerNameplate` auto-finds the TMP target and the `PlayerJoystickNode` identity, and writes the player's name (tinted by their palette color) every session.
+5. Create a **Sheep Prefab** (2D):
+   - Empty GameObject with a **Rigidbody2D** (Gravity Scale = 0)
+   - A child sprite plus a `CircleCollider2D`
+   - Add `Sheep` script; tune flocking weights in the Inspector
+   - If you want sheep to rotate toward motion, enable `Face Move Direction` on the `Sheep` component (and unfreeze rotation on the Rigidbody2D)
+6. Add a **SheepSpawner** GameObject and attach `SheepSpawner.cs`
+   - Assign the sheep prefab, set `Sheep Count` (20 is a good starting point)
+   - Spawn area is sized on the XY plane — set `Spawn Center` to the middle of your arena and `Spawn Size` to match
+7. Add a **Goal Zone**:
+   - Use the existing `Goal` GameObject in the scene
+   - Add a `BoxCollider2D` (or `CircleCollider2D`) with **`Is Trigger` = true** sized to the collection area
+   - Attach `SheepHerderGoalZone.cs`
+   - Leave `Owner Player Id` empty for the shared collaborative zone
+8. Add arena walls so sheep can't escape:
+   - Static 2D colliders (`EdgeCollider2D` or `BoxCollider2D` with `Is Trigger` = false) around the play area
+9. Select the Main Camera:
+   - Set **Projection = Orthographic**, size it to fit the arena
+   - (Optional) Add the `MirroredTableCamera` component if the arena is tabletop-projected
+
 ### 10. Create the Price is Close Scene
 
 1. **File → New Scene**, save as `Assets/Scenes/PriceIsClose.unity`
@@ -202,6 +247,7 @@ For each new game, create a **Game Entry** asset via `Create → Party Game → 
 | Hot Potato | `hot_potato` | Hot Potato | HotPotato | 3 | 10 |
 | Caption Contest | `caption_contest` | Caption Contest | CaptionContest | 3 | 8 |
 | Price is Close | `price_is_close` | Price is Close | PriceIsClose | 2 | 10 |
+| Sheep Herder | `sheep_herder` | Sheep Herder | Sheep Herder_collab | 1 | 8 |
 
 Drag all new entries into the `GameRegistry` asset's `Entries` list.
 
@@ -219,6 +265,22 @@ Drag all new entries into the `GameRegistry` asset's `Entries` list.
 | HotPotato | 5 |
 | CaptionContest | 6 |
 | PriceIsClose | 7 |
+| Sheep Herder_collab | 8 |
+
+### 12b. Set Up Steering AI (required for Sheep Herder)
+
+The [SteeringAI](https://steeringai.ondrejvaic.com/docs/getting-started/installation) package is installed at `Packages/com.ondrejvaic.steeringai`. The project ships with `Assets/Editor/SteeringAISetup.cs` which automates every post-install chore on first editor load — but if you ever need to run it manually, use the **Tools → Steering AI** menu:
+
+| Menu Item | What it does |
+|-----------|--------------|
+| Run Full Setup | Re-runs define + Addressables + Forward+ (idempotent) |
+| Import Samples | Pulls `SteeringAI Samples` into `Assets/Samples/` via the Package Manager API |
+| Mark All SteeringSystemAssets Addressable | Moves every `t:SteeringSystemAsset` into the `SteeringAI` addressable group using its asset path as the address key (matches what `BaseSteeringSystem` expects) |
+| Set All URP Renderers to Forward+ | Flips every `UniversalRendererData` asset's `Rendering Mode` to Forward+ (required by `com.unity.entities.graphics`) |
+
+Notes:
+- `STEERING_DEBUG` is automatically added to the Standalone / Android / iOS / WebGL scripting define symbols on first load. Remove it before a release build for a slight perf win.
+- The Sheep Herder game itself uses GameObject-based boids (see `Sheep.cs`) for simplicity — the full ECS SteeringAI pipeline stays available for future games that need thousands of agents.
 
 ### 13. Windows Firewall
 
@@ -358,6 +420,68 @@ The first time you run, Windows may prompt you to allow Unity through the firewa
 | Within 10 Points | 400 | Points if within 10% of correct |
 | Closest Bonus Points | 200 | Bonus for the closest guess |
 
+### SheepHerderManager (on the Sheep Herder scene)
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| Mode | Collaborative | Collaborative = one shared goal; Competitive = one goal per player |
+| Countdown Seconds | 3 | Pre-game countdown |
+| Game Over Display Seconds | 8 | Winner screen duration |
+| Broadcast Every N Frames | 6 | How often sheep count/team score is broadcast |
+| Points Per Sheep | 100 | Score awarded each time a sheep is collected |
+
+### Sheep (on each sheep prefab)
+
+Tune flocking behaviour in the Inspector:
+- `Max Speed` / `Max Force` — top speed and steering strength
+- `Neighbor Radius` / `Separation Radius` — boid perception distances
+- `Separation` / `Alignment` / `Cohesion Weight` — blend of Reynolds boid forces
+- `Shepherd Fear Radius` / `Weight` — how far and how hard sheep bolt from shepherds
+- `Home Radius` / `Weight` — soft leash back toward the arena centre
+- `Face Move Direction` — rotate the sprite (around Z) toward velocity in top-down 2D
+
+### AcceleratedMover (reusable Mario-style controller)
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| Max Speed | 6 | Top speed at full stick |
+| Acceleration | 30 | Ramp-up rate (units/sec²) when stick is held |
+| Deceleration | 20 | Coast-down rate (units/sec²) when stick is released |
+| Input Plane | XY | XY for top-down 2D (default), XZ for top-down 3D |
+| Face Move Direction | true | Rotate toward velocity |
+| Turn Speed | 720 | Degrees/sec rotation rate |
+| Facing Angle Offset 2D | -90 | Extra rotation applied in XY mode (-90 = sprite's local-up is forward; 0 = sprite's local-right is forward) |
+
+### JoystickInputRelay (reusable 2D phone joystick)
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| Player Node Prefab | — | Prefab spawned per player (must have Rigidbody2D or Rigidbody + AcceleratedMover for motion) |
+| Listen Message Types | `joystick_move` | Which phone message types to intercept |
+| Spawn Plane | XY | XY for top-down 2D, XZ for top-down 3D |
+| Spawn Center / Radius | (0,0,0) / 2 | Ring around which players spawn |
+| Side Offset | (0,0,0) | Per-table-side displacement |
+| Dead Zone | 0.1 | Minimum stick magnitude before motion registers |
+
+### PlayerNameplate (reusable name label)
+
+Attach to any player-owned GameObject that has (or is parented under) an `IPlayerIdentity` source — i.e. a `PlayerInputNode` or `PlayerJoystickNode`. Put a `TextMeshProUGUI`, world-space `TextMeshPro`, or legacy `UI.Text` somewhere in the prefab's hierarchy and `PlayerNameplate` will fill in the player's name (and optionally tint it with their palette color).
+
+**Hooking up the text** — you have two options; do **not** add `UI.Text` / `TextMeshProUGUI` directly to the prefab root (both require a `RectTransform` and Unity refuses to swap a prefab root's Transform type):
+
+1. **World-space TextMeshPro (simplest for 2D/3D players)** — right-click the prefab root → 3D Object → Text - TextMeshPro. This adds a `TextMeshPro` (not `TextMeshProUGUI`) child with a regular `Transform`, no Canvas required. Position it above the player.
+2. **Child world-space Canvas** — right-click the prefab root → UI → Canvas (this always creates the Canvas *as a child* because the root has a non-`RectTransform` Transform). Set Render Mode = World Space, scale to ~`0.01`, then right-click the Canvas → UI → Text - TextMeshPro to add a `TextMeshProUGUI` inside it.
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| Identity Source | — | Optional explicit node (MonoBehaviour implementing `IPlayerIdentity`). Leave empty to auto-find on self or any parent. |
+| TMP Target | — | TMP_Text to write into. Auto-found in children if blank. |
+| UI Text Target | — | Legacy UI.Text to write into. Auto-found in children if blank. |
+| Tint With Player Color | true | Use the palette color defined by `PlayerInputNode.Palette` for the label's color. |
+| Format | `{0}` | Optional format string. E.g. `★ {0}` or `P{0}`. |
+| Hide Until Ready | true | Disable the text component(s) until the identity actually has a non-empty name, so prefab-authored placeholder text doesn't flash. |
+| Flip For Far Table Side | true | When the owning player sits on the far side (`TableSide == 1`), rotate the label 180° around Z so it reads right-side up from their seat. Only the Z axis is touched — any X/Y rotation authored in the prefab (e.g. a billboard tilt) is preserved. |
+
 ### MirroredTableCamera (on the Main Camera in each game scene)
 
 | Setting | Default | Description |
@@ -487,8 +611,14 @@ Assets/
       GameRegistryEntry.cs       ScriptableObject per game type
       PromptDatabase.cs          Quiplash prompt loader
     Input/
-      PlayerInputRelay.cs        Spawns per-player child objects, receives real-time phone input
+      PlayerInputRelay.cs        Spawns per-player child objects, receives real-time phone input (1D paddle-style)
       PlayerInputNode.cs         Per-player data component (raw input, identity, color, table side)
+      JoystickInputRelay.cs      Spawns per-player child objects, receives 2D analog stick input
+      PlayerJoystickNode.cs      Per-player data component for joystick vector + identity
+      IPlayerIdentity.cs         Shared interface implemented by player nodes (id / name / index / color / side)
+      AcceleratedMover.cs        Reusable Mario-style acceleration controller (Rigidbody or Transform)
+    Display/
+      PlayerNameplate.cs         Reusable nameplate: writes player name/color into a child TMP_Text or UI.Text
     Display/
       MirroredTableCamera.cs     Dual-camera mirrored display for tabletop projection
       QRCodeDisplay.cs           Generates WiFi + URL QR codes on Canvas
@@ -512,6 +642,13 @@ Assets/
         CaptionContestManager.cs Caption Contest image-caption game session
       PriceIsClose/
         PriceIsCloseManager.cs   Price is Close guessing game session
+      SheepHerder/
+        SheepHerderManager.cs    Sheep Herder IGameSession (collab + future competitive)
+        SheepSpawner.cs          Spawns configured count of sheep in a spawn rectangle
+        SheepRegistry.cs         Scene-level flock/shepherd lookup for O(n) boid queries
+        Sheep.cs                 GameObject-based boid (separation/alignment/cohesion + shepherd fear)
+        Shepherd.cs              Wires a PlayerJoystickNode into AcceleratedMover + registers with SheepRegistry
+        SheepHerderGoalZone.cs   Trigger volume that collects sheep (collab or per-player owner)
     GameEvents.cs                Event bus (decouples network from logic)
     GameLog.cs                   Structured color-coded logging
   StreamingAssets/
@@ -535,7 +672,7 @@ Assets/
       media/
         caption_contest/         Local images for Caption Contest (add .jpg/.png here)
         price_is_close/          Local images/videos for Price is Close (add .jpg/.mp4 here)
-  Scenes/
+    Scenes/
     Lobby.unity                  Main scene (persistent managers)
     Quiplash.unity               Quiplash game scene
     Pong.unity                   Pong game scene
@@ -544,6 +681,9 @@ Assets/
     HotPotato.unity              Hot Potato game scene
     CaptionContest.unity         Caption Contest game scene
     PriceIsClose.unity           Price is Close game scene
+    Sheep Herder_collab.unity    Sheep Herder (collaborative) game scene
+  Editor/
+    SteeringAISetup.cs           Auto-runs Addressable + Forward+ + define setup for com.ondrejvaic.steeringai
 ```
 
 ## Architecture

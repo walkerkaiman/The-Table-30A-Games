@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 80ea32ae0a94b2f4a8aa2ee2b106a382
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 333012
+  packageName: Steering & Flocking | ECS
+  packageVersion: 1.0
+  assetPath: Packages/com.ondrejvaic.steeringai/Samples~/10. Cutscene Samples/Cutscenes/Cutscenes/Cutscene8/Sheep8Predator.prefab
+  uploadId: 798402

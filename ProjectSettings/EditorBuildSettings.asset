@@ -35,4 +35,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Telephone.unity
     guid: fc7c4c9c28e75174aa20ec93161a6b2e
-  m_configObjects: {}
+  - enabled: 1
+    path: Assets/Scenes/Sheep Herder_collab.unity
+    guid: f4b925b93181bd046b135eed7c702283
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 22bc18b5607d72440adf547da3a6b688, type: 2}
