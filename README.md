@@ -1,6 +1,6 @@
 # The Table 30A - Party Games
 
-A local multiplayer party game system designed for tabletop projection at venues, parties, and gatherings. A projector displays the Unity app onto a long table while players sit on both sides and join from their phones via a web browser over local WiFi. Supports multiple game types — players vote on which game to play between rounds.
+A local multiplayer party game system designed for tabletop projection at venues, parties, and gatherings. A projector displays the Unity app onto a long table while players sit on both sides and join from their phones via a web browser over local WiFi. Supports multiple game types — the host picks which game to play between rounds.
 
 ## How It Works
 
@@ -9,8 +9,8 @@ A local multiplayer party game system designed for tabletop projection at venues
 3. Players open a URL on their phones, see available games on the network, and tap to join
 4. Each player picks which **side of the table** they're sitting on ("This Side" or "That Side")
 5. The first player to join becomes the **host** and gets a "Start Game" button on their phone
-6. The host starts game selection — everyone votes on which game to play
-7. The winning game loads, everyone plays, and then it's back to voting for the next game
+6. The host starts game selection — the host picks which game to play
+7. The picked game loads, everyone plays, and then it's back to game selection for the next round
 8. The projected display is **mirrored** so both sides of the table can read text and see the game right-side-up
 
 ## Available Games
@@ -317,9 +317,9 @@ The first time you run, Windows may prompt you to allow Unity through the firewa
 ### Play
 
 1. The **host** taps **Start Game** on their phone (or press Space on the keyboard as a fallback)
-2. **Game Selection** — all players vote on which game to play. The host can tap **Skip Vote** to force-advance.
-3. The winning game loads and plays
-4. When the game ends, it returns to game selection for the next round
+2. **Game Selection** — only the host sees tappable cards. They tap a game card to select it, then tap **Play** to load it. Non-host players see the list in read-only mode while they wait.
+3. The picked game loads and plays
+4. When the game ends, it returns to game selection so the host can pick the next game
 5. Players stay connected the entire time — no need to rejoin
 
 ## Configuration
@@ -330,7 +330,6 @@ The first time you run, Windows may prompt you to allow Unity through the firewa
 |---------|---------|-------------|
 | Game Registry | — | Drag the GameRegistry asset here |
 | Min Players To Start | 2 | Minimum players before the host can start |
-| Vote Timer Seconds | 15 | How long players have to vote on a game |
 
 ### NetworkManager
 
@@ -356,9 +355,11 @@ The first time you run, Windows may prompt you to allow Unity through the firewa
 | Setting | Default | Description |
 |---------|---------|-------------|
 | Ball Prefab | — | Your ball prefab (sprite/mesh). Add Rigidbody2D + Collider2D for physics bouncing, or leave physics-free for manual movement. |
+| Ball Spawn Point | — | Optional world-space Transform used as the ball's spawn location. If empty, the ball spawns at world origin. Point this at a spot that is clear of walls and paddles — a tightly-enclosed spawn will let Unity's overlap resolution force the ball into a predictable direction regardless of the random launch angle. |
 | Ball Speed | 5 | Initial ball speed |
 | Ball Speed Increment | 0.3 | Speed increase after each goal |
 | Ball Max Speed | 15 | Maximum ball speed |
+| Min Launch Axis Deviation | 0 | Minimum degrees the randomized launch angle must be from any cardinal axis (0°/90°/180°/270°). `0` = fully uniform 360° launch. Raise to something like `15` if near-horizontal or near-vertical launches feel flat. |
 | Start Lives | 3 | Lives each player starts with |
 | Countdown Seconds | 3 | Countdown before the ball launches |
 | Goal Pause Seconds | 1.5 | Pause after a goal before play resumes |
@@ -740,7 +741,8 @@ This lets you control player visual representation (sprites, models, effects) vi
 
 The first player to join is the host. They get:
 - A **Start Game** button in the lobby
-- A **Skip Vote** button during game selection
+- Tappable game cards + a **Play** button during game selection (non-hosts see the list in read-only mode)
+- A **Registration** button during game selection to reopen the lobby for new joiners
 - A star badge next to their name
 
 If the host disconnects from the lobby, the next player is automatically promoted.

@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 ///
 /// Responsibilities:
 ///   - Handles all join/rejoin/disconnect logic (replaces old GameManager lobby code)
-///   - Manages game voting during GameSelect
+///   - During GameSelect the host picks a game (no voting) and taps Play to load it
 ///   - Loads/unloads game scenes and routes messages to the active IGameSession
 ///   - Owns the room code
 /// </summary>
@@ -39,7 +39,6 @@ public class GameCoordinator : MonoBehaviour
     public string RoomCode { get; private set; }
 
     private IGameSession _activeSession;
-    private Dictionary<string, string> _playerVotes = new Dictionary<string, string>();
     private float _timer;
     private bool _timerActive;
     private string _loadedSceneName;
@@ -243,9 +242,9 @@ public class GameCoordinator : MonoBehaviour
             return;
         }
 
-        if (CurrentState == CoordinatorState.GameSelect && messageType == MessageTypes.GameVote)
+        if (CurrentState == CoordinatorState.GameSelect && messageType == MessageTypes.PickGame)
         {
-            HandleGameVote(playerId, json);
+            HandlePickGame(playerId, json);
             return;
         }
 
@@ -273,9 +272,9 @@ public class GameCoordinator : MonoBehaviour
         }
         else if (CurrentState == CoordinatorState.GameSelect)
         {
-            GameLog.Game($"Host \"{hostName}\" forced vote to resolve");
-            _timerActive = false;
-            ResolveVote();
+            // Host no longer has a "force start" path during GameSelect — they pick a game
+            // card and press Play, which arrives as a pick_game message.
+            GameLog.Warn($"Host \"{hostName}\" sent start_game during GameSelect — ignoring (use Play).");
         }
     }
 
@@ -298,13 +297,12 @@ public class GameCoordinator : MonoBehaviour
         GameLog.Game($"Host \"{hostName}\" opened registration");
 
         _timerActive = false;
-        _playerVotes.Clear();
         CurrentState = CoordinatorState.Lobby;
         BroadcastCoordinatorState();
     }
 
     // ════════════════════════════════════════════
-    //  GAME SELECTION / VOTING
+    //  GAME SELECTION
     // ════════════════════════════════════════════
 
     private void TryStartGameSelect()
@@ -323,82 +321,45 @@ public class GameCoordinator : MonoBehaviour
         }
 
         GameLog.Divider();
-        GameLog.Game($"GAME SELECTION — {count} players voting");
+        GameLog.Game($"GAME SELECTION — host picks a game ({count} players)");
         GameLog.Divider();
 
         CurrentState = CoordinatorState.GameSelect;
-        _playerVotes.Clear();
         BroadcastCoordinatorState();
     }
 
-    private void HandleGameVote(string playerId, string json)
+    private void HandlePickGame(string playerId, string json)
     {
-        var msg = JsonUtility.FromJson<GameVoteMessage>(json);
-        if (msg == null || string.IsNullOrEmpty(msg.gameId)) return;
+        if (!PlayerManager.Instance.IsHost(playerId))
+        {
+            string who = PlayerManager.Instance.GetPlayerName(playerId);
+            GameLog.Warn($"\"{who}\" tried to pick a game but is not the host");
+            return;
+        }
+
+        var msg = JsonUtility.FromJson<PickGameMessage>(json);
+        if (msg == null || string.IsNullOrEmpty(msg.gameId))
+        {
+            GameLog.Warn("pick_game ignored — missing gameId");
+            return;
+        }
 
         var entry = gameRegistry.GetEntryById(msg.gameId);
-        if (entry == null) return;
-
-        if (PlayerManager.Instance.ActivePlayerCount < entry.minPlayers) return;
-
-        _playerVotes[playerId] = msg.gameId;
-        string name = PlayerManager.Instance.GetPlayerName(playerId);
-        GameLog.Game($"\"{name}\" voted for {entry.displayName}");
-
-        BroadcastVoteUpdate();
-
-        if (_playerVotes.Count >= PlayerManager.Instance.ActivePlayerCount)
+        if (entry == null)
         {
-            GameLog.Game("All votes in!");
-            ResolveVote();
-        }
-    }
-
-    private void BroadcastVoteUpdate()
-    {
-        var msg = new VoteUpdateMessage { votes = BuildVoteCounts() };
-        GameEvents.FireBroadcast(JsonUtility.ToJson(msg));
-    }
-
-    private void ResolveVote()
-    {
-        var counts = new Dictionary<string, int>();
-        foreach (var vote in _playerVotes.Values)
-        {
-            counts.TryGetValue(vote, out int c);
-            counts[vote] = c + 1;
+            GameLog.Warn($"pick_game ignored — unknown gameId \"{msg.gameId}\"");
+            return;
         }
 
-        int maxVotes = 0;
-        var candidates = new List<string>();
-        foreach (var kvp in counts)
+        if (PlayerManager.Instance.ActivePlayerCount < entry.minPlayers)
         {
-            if (kvp.Value > maxVotes)
-            {
-                maxVotes = kvp.Value;
-                candidates.Clear();
-                candidates.Add(kvp.Key);
-            }
-            else if (kvp.Value == maxVotes)
-            {
-                candidates.Add(kvp.Key);
-            }
+            GameLog.Warn($"pick_game ignored — {entry.displayName} needs {entry.minPlayers} players");
+            return;
         }
 
-        string winnerId;
-        if (candidates.Count == 0)
-        {
-            int idx = UnityEngine.Random.Range(0, gameRegistry.entries.Count);
-            winnerId = gameRegistry.entries[idx].id;
-        }
-        else
-        {
-            winnerId = candidates[UnityEngine.Random.Range(0, candidates.Count)];
-        }
-
-        var winner = gameRegistry.GetEntryById(winnerId);
-        GameLog.Game($"Vote winner: {winner.displayName}");
-        LoadGame(winner);
+        string hostName = PlayerManager.Instance.GetPlayerName(playerId);
+        GameLog.Game($"Host \"{hostName}\" picked {entry.displayName}");
+        LoadGame(entry);
     }
 
     // ════════════════════════════════════════════
@@ -430,7 +391,7 @@ public class GameCoordinator : MonoBehaviour
 
     /// <summary>
     /// Called by the active IGameSession when the game is over.
-    /// Returns to GameSelect for the next round of voting.
+    /// Returns to GameSelect so the host can pick the next game.
     /// </summary>
     public void OnGameEnded()
     {
@@ -450,7 +411,6 @@ public class GameCoordinator : MonoBehaviour
         PlayerManager.Instance.CleanupDisconnectedPlayers();
 
         CurrentState = CoordinatorState.GameSelect;
-        _playerVotes.Clear();
         BroadcastCoordinatorState();
     }
 
@@ -478,7 +438,6 @@ public class GameCoordinator : MonoBehaviour
             case CoordinatorState.GameSelect:
                 msg.gameType = "game_select";
                 msg.games = BuildGameSelectInfos();
-                msg.voteCounts = BuildVoteCounts();
                 break;
         }
 
@@ -487,9 +446,8 @@ public class GameCoordinator : MonoBehaviour
 
     private void OnTimerExpired()
     {
-        // Game-select voting no longer uses a timer — voting only resolves when every active
-        // player has cast a vote, or when the host taps "Skip Vote". Other states can plug into
-        // this hook in the future by scheduling StartTimer() themselves.
+        // Coordinator-level timer is currently unused — game scenes run their own timers. Kept
+        // here as a hook for any future state that wants to schedule StartTimer() itself.
     }
 
     // ── Helpers ──────────────────────────────────
@@ -511,25 +469,6 @@ public class GameCoordinator : MonoBehaviour
             });
         }
         return list.ToArray();
-    }
-
-    private VoteCount[] BuildVoteCounts()
-    {
-        if (gameRegistry == null) return new VoteCount[0];
-        var counts = new Dictionary<string, int>();
-        foreach (var e in gameRegistry.entries)
-        {
-            if (e != null) counts[e.id] = 0;
-        }
-        foreach (var vote in _playerVotes.Values)
-        {
-            if (counts.ContainsKey(vote)) counts[vote]++;
-        }
-        var result = new VoteCount[counts.Count];
-        int i = 0;
-        foreach (var kvp in counts)
-            result[i++] = new VoteCount { gameId = kvp.Key, count = kvp.Value };
-        return result;
     }
 
     private void StartTimer(float seconds)

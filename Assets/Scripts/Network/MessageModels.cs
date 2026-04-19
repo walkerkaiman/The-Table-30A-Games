@@ -13,9 +13,8 @@ public static class MessageTypes
     public const string RejoinSuccess = "rejoin_success";
     public const string Error = "error";
     public const string PlayerList = "player_list";
-    public const string VoteUpdate = "vote_update";
     public const string StartGame = "start_game";
-    public const string GameVote = "game_vote";
+    public const string PickGame = "pick_game";
     public const string OpenRegistration = "open_registration";
 
     public const string SubmitAnswer = "submit_answer";
@@ -110,7 +109,7 @@ public class RejoinMessage
 // ──────────────────────────────────────────────
 
 [Serializable]
-public class GameVoteMessage
+public class PickGameMessage
 {
     public string type;
     public string gameId;
@@ -217,7 +216,6 @@ public class GameStateMessage
 
     // Game select
     public GameSelectInfo[] games;
-    public VoteCount[] voteCounts;
 
     // Quiplash
     public string prompt;
@@ -235,24 +233,6 @@ public class GameSelectInfo
     public string description;
     public int minPlayers;
     public int maxPlayers;
-}
-
-[Serializable]
-public class VoteCount
-{
-    public string gameId;
-    public int count;
-}
-
-// ──────────────────────────────────────────────
-//  Server → Client (game select vote tally)
-// ──────────────────────────────────────────────
-
-[Serializable]
-public class VoteUpdateMessage
-{
-    public string type = MessageTypes.VoteUpdate;
-    public VoteCount[] votes;
 }
 
 // ──────────────────────────────────────────────

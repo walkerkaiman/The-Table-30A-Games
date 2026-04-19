@@ -15,7 +15,8 @@
     reconnectAttempts: 0,
     discoveryInterval: null,
     isRejoining: false,
-    gameSelectVote: null,
+    selectedGameId: null,
+    gameSelectGames: [],
     isHost: false,
   };
 
@@ -42,8 +43,9 @@
     btnStartGame: $("#btn-start-game"),
     gameselectList: $("#gameselect-list"),
     gameselectScoreboard: $("#gameselect-scoreboard"),
+    gameselectStatus: $("#gameselect-status"),
     hostGameselectControls: $("#host-gameselect-controls"),
-    btnSkipVote: $("#btn-skip-vote"),
+    btnPlayGame: $("#btn-play-game"),
     btnRegistration: $("#btn-registration"),
     btnReconnect: $("#btn-reconnect"),
     btnSideNear: $("#btn-side-near"),
@@ -306,10 +308,6 @@
         handleGameState(msg);
         break;
 
-      case "vote_update":
-        handleVoteUpdate(msg);
-        break;
-
       default:
         if (activeModule && activeModule.handleMessage) {
           activeModule.handleMessage(msg);
@@ -369,14 +367,13 @@
   // ─── Game Selection ───────────────────────
   function handleGameSelectState(msg) {
     showScreen("gameselect");
-    state.gameSelectVote = null;
+    state.selectedGameId = null;
+    state.gameSelectGames = msg.games || [];
 
-    // No vote timer — voting resolves as soon as every active player casts a vote, or the host
-    // taps Skip Vote. Stop any stale timer so it doesn't linger from a previous screen.
     GameApp.stopTimer();
 
     renderScoreboard(msg.players || []);
-    renderGameSelectList(msg.games || [], msg.voteCounts || []);
+    renderGameSelectList(state.gameSelectGames);
     updateHostControls();
   }
 
@@ -403,65 +400,45 @@
     els.gameselectScoreboard.innerHTML = html;
   }
 
-  function renderGameSelectList(games, voteCounts) {
-    var voteMap = {};
-    voteCounts.forEach(function (v) { voteMap[v.gameId] = v.count; });
+  function renderGameSelectList(games) {
     var playerCount = 0;
     if (PlayerManager_cache) playerCount = PlayerManager_cache.length;
 
     els.gameselectList.innerHTML = "";
     games.forEach(function (g) {
-      var votes = voteMap[g.id] || 0;
       var tooFewPlayers = playerCount > 0 && playerCount < g.minPlayers;
-      var isSelected = state.gameSelectVote === g.id;
+      var isSelected = state.selectedGameId === g.id;
 
       var card = document.createElement("div");
       card.className = "gameselect-card" + (tooFewPlayers ? " disabled" : "") + (isSelected ? " selected" : "");
       card.innerHTML =
         '<div class="gameselect-card-header">' +
           '<span class="gameselect-card-name">' + GameApp.escapeHtml(g.name) + '</span>' +
-          '<span class="gameselect-vote-badge">' + votes + '</span>' +
         '</div>' +
         '<div class="gameselect-card-desc">' + GameApp.escapeHtml(g.description) + '</div>' +
         '<div class="gameselect-card-meta">' + g.minPlayers + '-' + g.maxPlayers + ' players</div>';
 
-      if (!tooFewPlayers) {
+      // Only the host can tap to pick; non-hosts view the list in read-only mode.
+      if (state.isHost && !tooFewPlayers) {
         card.addEventListener("click", function () {
-          state.gameSelectVote = g.id;
-          GameApp.sendMessage({ type: "game_vote", gameId: g.id });
-          renderGameSelectList(games, voteCounts);
+          state.selectedGameId = g.id;
+          renderGameSelectList(games);
+          updatePlayButton();
         });
+      } else if (!state.isHost) {
+        card.classList.add("readonly");
       }
 
       els.gameselectList.appendChild(card);
     });
+
+    updatePlayButton();
   }
 
-  function handleVoteUpdate(msg) {
-    if (state.currentScreen !== "gameselect") return;
-    var cards = els.gameselectList.querySelectorAll(".gameselect-card");
-    var votes = msg.votes || [];
-    var voteMap = {};
-    votes.forEach(function (v) { voteMap[v.gameId] = v.count; });
-
-    cards.forEach(function (card) {
-      var badge = card.querySelector(".gameselect-vote-badge");
-      var name = card.querySelector(".gameselect-card-name");
-      if (badge && name) {
-        for (var gid in voteMap) {
-          if (card.innerHTML.indexOf(gid) !== -1) {
-            // Match by stored reference is fragile — update all badges
-          }
-        }
-      }
-    });
-
-    // Simpler: just re-render if we have the games data cached
-    // The next game_state will update fully; vote_update just increments badges
-    var badges = els.gameselectList.querySelectorAll(".gameselect-vote-badge");
-    votes.forEach(function (v, i) {
-      if (badges[i]) badges[i].textContent = v.count;
-    });
+  function updatePlayButton() {
+    if (!els.btnPlayGame) return;
+    els.btnPlayGame.disabled = !state.selectedGameId;
+    els.btnPlayGame.textContent = state.selectedGameId ? "Play" : "Pick a game";
   }
 
   var PlayerManager_cache = [];
@@ -492,6 +469,16 @@
     if (els.hostGameselectControls) {
       els.hostGameselectControls.style.display = state.isHost ? "" : "none";
     }
+    if (els.gameselectStatus) {
+      els.gameselectStatus.textContent = state.isHost
+        ? "Pick a game and tap Play"
+        : "Waiting for the host to pick a game...";
+    }
+
+    // If host ownership changes mid-gameselect, re-render so card click handlers match.
+    if (state.currentScreen === "gameselect" && state.gameSelectGames && state.gameSelectGames.length) {
+      renderGameSelectList(state.gameSelectGames);
+    }
   }
 
   // ─── Helpers ──────────────────────────────
@@ -511,9 +498,10 @@
     });
   }
 
-  if (els.btnSkipVote) {
-    els.btnSkipVote.addEventListener("click", function () {
-      GameApp.sendMessage({ type: "start_game" });
+  if (els.btnPlayGame) {
+    els.btnPlayGame.addEventListener("click", function () {
+      if (!state.selectedGameId) return;
+      GameApp.sendMessage({ type: "pick_game", gameId: state.selectedGameId });
     });
   }
 

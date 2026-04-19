@@ -31,7 +31,7 @@ public static class GameEvents
     //  GENERIC GAME MESSAGE
     //  Fired by NetworkManager for any message type that is not join/rejoin.
     //  GameCoordinator routes it to the active IGameSession or handles it
-    //  (e.g., game_vote during GameSelect).
+    //  (e.g., pick_game during GameSelect).
     //  Args: playerId, messageType, rawJson
     // ─────────────────────────────────────────────
 

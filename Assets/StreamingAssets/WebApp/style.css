@@ -302,7 +302,7 @@ textarea {
 .game-card-state { color: #64ffda; font-weight: 600; }
 .game-card-state.in-progress { color: #ffb74d; }
 
-/* ─── Game Selection (Voting) ─── */
+/* ─── Game Selection (host picks) ─── */
 .game-select-list {
   display: flex;
   flex-direction: column;
@@ -335,6 +335,12 @@ textarea {
   pointer-events: none;
 }
 
+/* Non-host players see the list in read-only mode — same layout, no tap feedback. */
+.gameselect-card.readonly {
+  cursor: default;
+  pointer-events: none;
+}
+
 .gameselect-card-header {
   display: flex;
   justify-content: space-between;
@@ -345,20 +351,6 @@ textarea {
   font-weight: 700;
   font-size: 1.15rem;
   color: #fff;
-}
-
-.gameselect-vote-badge {
-  background: #64ffda;
-  color: #0a192f;
-  font-weight: 700;
-  font-size: 0.9rem;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
 }
 
 .gameselect-card-desc {

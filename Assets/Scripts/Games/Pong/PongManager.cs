@@ -17,9 +17,21 @@ public class PongManager : MonoBehaviour, IGameSession
     [Header("Ball")]
     [Tooltip("Your ball prefab. Add Rigidbody2D + Collider2D for physics bouncing, or leave physics-free for manual control.")]
     [SerializeField] private GameObject ballPrefab;
+
+    [Tooltip("Optional world-space spawn point for the ball. If empty, spawns at (0,0,0). " +
+             "Use a Transform that is clear of walls/paddles so physics-overlap resolution " +
+             "doesn't nudge the ball into a predictable direction on spawn.")]
+    [SerializeField] private Transform ballSpawnPoint;
+
     [SerializeField] private float ballSpeed = 5f;
     [SerializeField] private float ballSpeedIncrement = 0.3f;
     [SerializeField] private float ballMaxSpeed = 15f;
+
+    [Tooltip("If > 0, constrain launch angles so the ball is never launched within this many " +
+             "degrees of the horizontal or vertical axes. Avoids boring near-straight lobs. " +
+             "Leave at 0 for a fully uniform 360° launch.")]
+    [Range(0f, 30f)]
+    [SerializeField] private float minLaunchAxisDeviation = 0f;
 
     [Header("Game Settings")]
     [SerializeField] private int startLives = 3;
@@ -224,19 +236,49 @@ public class PongManager : MonoBehaviour, IGameSession
             return;
         }
 
-        _ballInstance = Instantiate(ballPrefab, Vector3.zero, Quaternion.identity);
+        Vector3 spawnPos = ballSpawnPoint != null ? ballSpawnPoint.position : Vector3.zero;
+        _ballInstance = Instantiate(ballPrefab, spawnPos, Quaternion.identity);
         _ballInstance.name = "PongBall";
 
-        float angle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
-        _ballVelocity = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * _currentBallSpeed;
+        float angleDeg = PickLaunchAngleDegrees();
+        float angleRad = angleDeg * Mathf.Deg2Rad;
+        _ballVelocity = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)) * _currentBallSpeed;
 
         _ballRb = _ballInstance.GetComponent<Rigidbody2D>();
         if (_ballRb != null)
         {
+            // Defensively force-configure in case the prefab gets edited in a way that would
+            // otherwise swallow the launch (kinematic body, gravity, spin, or a stale velocity).
+            _ballRb.bodyType = RigidbodyType2D.Dynamic;
             _ballRb.gravityScale = 0f;
+            _ballRb.angularVelocity = 0f;
             _ballRb.linearVelocity = _ballVelocity;
         }
-        GameLog.Game($"Ball spawned — speed {_currentBallSpeed:F1}");
+
+        GameLog.Game($"Ball spawned — angle {angleDeg:F0}°  speed {_currentBallSpeed:F1}");
+    }
+
+    /// <summary>
+    /// Picks a uniformly random launch direction in degrees (0-360). If
+    /// <see cref="minLaunchAxisDeviation"/> is non-zero, re-rolls until the chosen angle is at
+    /// least that many degrees away from every cardinal axis (0°, 90°, 180°, 270°) so the ball
+    /// never launches in a near-horizontal or near-vertical line.
+    /// </summary>
+    private float PickLaunchAngleDegrees()
+    {
+        const int maxAttempts = 16;
+        float buffer = Mathf.Clamp(minLaunchAxisDeviation, 0f, 30f);
+
+        for (int i = 0; i < maxAttempts; i++)
+        {
+            float a = Random.Range(0f, 360f);
+            if (buffer <= 0f) return a;
+
+            float aMod = a % 90f;
+            if (aMod >= buffer && aMod <= 90f - buffer)
+                return a;
+        }
+        return Random.Range(0f, 360f);
     }
 
     private void DestroyBall()

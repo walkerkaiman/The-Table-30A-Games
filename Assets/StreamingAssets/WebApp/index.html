@@ -60,15 +60,15 @@
     </div>
   </div>
 
-  <!-- ─── Game Selection / Voting ─── -->
+  <!-- ─── Game Selection ─── -->
   <div id="screen-gameselect" class="screen">
     <div class="card">
       <div id="gameselect-scoreboard" class="scoreboard"></div>
       <h1>Pick a Game!</h1>
-      <p class="subtle-text">Tap to vote</p>
+      <p id="gameselect-status" class="subtle-text">Waiting for the host to pick a game...</p>
       <div id="gameselect-list" class="game-select-list"></div>
       <div id="host-gameselect-controls" class="host-controls" style="display:none;">
-        <button id="btn-skip-vote" class="btn-secondary btn-host">Skip Vote</button>
+        <button id="btn-play-game" class="btn-primary btn-host" disabled>Play</button>
         <button id="btn-registration" class="btn-secondary btn-host" style="margin-top:0.6rem;">Registration</button>
       </div>
     </div>
