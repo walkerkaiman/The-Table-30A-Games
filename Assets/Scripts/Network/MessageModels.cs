@@ -16,6 +16,7 @@ public static class MessageTypes
     public const string StartGame = "start_game";
     public const string PickGame = "pick_game";
     public const string OpenRegistration = "open_registration";
+    public const string LobbyNotice = "lobby_notice";
 
     public const string SubmitAnswer = "submit_answer";
     public const string Vote = "vote";
@@ -54,6 +55,17 @@ public static class MessageTypes
     public const string JoystickMove = "joystick_move";
     public const string SheepHerderFrame = "sh_frame";
     public const string SheepHerderEvent = "sh_event";
+
+    public const string GameTypeTreasureHunter = "treasure_hunter";
+    public const string TreasureHunterFrame = "th_frame";
+    public const string TreasureHunterEvent = "th_event";
+    public const string TreasureHunterBriefing = "th_briefing";
+    public const string TreasureHunterBriefingReady = "th_briefing_ready";
+    public const string TreasureHunterResults = "th_results";
+
+    // Wang Tiles
+    public const string GameTypeWangTiles = "wangtiles";
+    public const string EndGame = "end_game";
 }
 
 // ──────────────────────────────────────────────
@@ -175,6 +187,13 @@ public class RejoinSuccessMessage
 public class ErrorMessage
 {
     public string type = MessageTypes.Error;
+    public string message;
+}
+
+[Serializable]
+public class LobbyNoticeMessage
+{
+    public string type = MessageTypes.LobbyNotice;
     public string message;
 }
 
@@ -340,6 +359,9 @@ public class DrawStrokeMessage
     public string type;
     public float[] points; // [x0, y0, x1, y1, ...] normalized 0-1
     public string color;
+    // Optional per-point timestamps in milliseconds (one per (x,y) pair). When present,
+    // the renderer can vary brush thickness with speed. Older clients omit this field.
+    public float[] timestamps;
 }
 
 [Serializable]
@@ -583,6 +605,94 @@ public class SheepHerderEventMessage
     public int teamScore;
 }
 
+// ──────────────────────────────────────────────
+//  Treasure Hunter (server → client)
+// ──────────────────────────────────────────────
+
+[Serializable]
+public class TreasureHunterExplorerState
+{
+    public string id;
+    public float x;
+    public float y;
+    public float facing;        // radians
+    public bool isDown;
+    public int gold;
+    public float reviveProgress;  // 0..1
+    public bool escaped;
+}
+
+[Serializable]
+public class TreasureHunterStateMessage
+{
+    // NOTE: type MUST be "game_state" so the phone's main router activates the
+    // treasure_hunter module (same pattern as SheepHerderStateMessage). Using
+    // MessageTypes.TreasureHunterFrame here silently drops the message on the
+    // client because only "game_state" messages trigger module activation.
+    public string type = MessageTypes.GameState;
+    public string gameType = MessageTypes.GameTypeTreasureHunter;
+    public string state;
+    public float timer;              // raw seconds remaining for the current phase
+    public int levelIndex;
+    public int puzzlesRemaining;
+    public int puzzlesTotal;
+    public int goldTeamTotal;
+    public bool exitUnlocked;
+    public int trapsTripped;
+    public TreasureHunterExplorerState[] explorers;
+}
+
+[Serializable]
+public class TreasureHunterBriefingMessage
+{
+    public string type = MessageTypes.TreasureHunterBriefing;
+    public string[] clues;          // clue text strings for this player only
+    public float briefingSeconds;
+}
+
+[Serializable]
+public class TreasureHunterBriefingReadyMessage
+{
+    public string type;
+}
+
+[Serializable]
+public class TreasureHunterEventMessage
+{
+    public string type = MessageTypes.TreasureHunterEvent;
+    public string eventName;         // "trap_tripped", "revived", "gold_pickup", "puzzle_solved", "escape_unlocked", "escaped"
+    public string playerId;          // who triggered / is affected (nullable)
+    public int goldDelta;            // for gold_pickup
+    public int puzzlesRemaining;     // for puzzle_solved
+}
+
+[Serializable]
+public class TreasureHunterPlayerResult
+{
+    public string id;
+    public string name;
+    public int goldCollected;
+    public int trapsTripped;
+    public bool escaped;
+    public int score;
+}
+
+[Serializable]
+public class TreasureHunterResultsMessage
+{
+    // Same routing rule as TreasureHunterStateMessage: type must be "game_state".
+    public string type = MessageTypes.GameState;
+    public string gameType = MessageTypes.GameTypeTreasureHunter;
+    public string state = "Results";
+    public int timer;
+    public float timeRemaining;
+    public int puzzlesSolved;
+    public int puzzlesTotal;
+    public int goldTeamTotal;
+    public TreasureHunterPlayerResult[] results;
+    public PlayerInfo[] players;
+}
+
 [Serializable]
 public class PriceIsCloseStateMessage
 {
@@ -600,6 +710,40 @@ public class PriceIsCloseStateMessage
     public float correctPrice;
     public PriceGuessResult[] results;
     public PlayerInfo[] players;
+}
+
+// ──────────────────────────────────────────────
+//  Wang Tiles (server → client)
+// ──────────────────────────────────────────────
+
+[Serializable]
+public class WangTileAssignment
+{
+    /// <summary>One of the WangTileShape names: "NS", "EW", "NE", "NW", "SE", "SW".</summary>
+    public string shape;
+    /// <summary>
+    /// Anchor positions in normalized 0..1 tile space (origin top-left to match canvas).
+    /// Always exactly 2 entries for the binary alphabet.
+    /// Flat: [x0, y0, x1, y1].
+    /// </summary>
+    public float[] anchors;
+}
+
+[Serializable]
+public class WangTilesStateMessage
+{
+    public string type = MessageTypes.GameState;
+    public string gameType = MessageTypes.GameTypeWangTiles;
+    public string state;          // "Painting", "Ending", "ShowingQR"
+    public int timer;             // 0 in Painting; countdown to game-select in ShowingQR
+    public PlayerInfo[] players;
+
+    // Painting: present per-player
+    public WangTileAssignment assignment;
+    public string playerColor;    // e.g. "#64ffda"
+
+    // ShowingQR: present for everyone
+    public string imageUrl;       // direct PNG download URL of the snapshot
 }
 
 // ──────────────────────────────────────────────

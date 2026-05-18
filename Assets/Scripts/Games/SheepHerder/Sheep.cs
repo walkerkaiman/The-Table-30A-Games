@@ -107,6 +107,8 @@ public class Sheep : MonoBehaviour
         Vector2 avgVel = Vector2.zero;
 
         Vector2 myPos = transform.position;
+        float neighborRadiusSq = neighborRadius * neighborRadius;
+        float separationRadiusSq = separationRadius * separationRadius;
 
         foreach (var other in flock.Sheep)
         {
@@ -114,17 +116,16 @@ public class Sheep : MonoBehaviour
 
             Vector2 otherPos = other.transform.position;
             Vector2 toOther = otherPos - myPos;
-            float dist = toOther.magnitude;
-            if (dist > neighborRadius) continue;
+            float distSq = toOther.sqrMagnitude;
+            if (distSq > neighborRadiusSq) continue;
 
             neighbors++;
             center += otherPos;
             avgVel += other._rb.linearVelocity;
 
-            if (dist < separationRadius && dist > 0.001f)
+            if (distSq < separationRadiusSq && distSq > 0.000001f)
             {
-                // Strength scales inversely with distance so tight crowds push apart harder.
-                separation -= toOther / (dist * dist);
+                separation -= toOther / distSq;
                 separators++;
             }
         }
@@ -143,15 +144,15 @@ public class Sheep : MonoBehaviour
     {
         Vector2 flee = Vector2.zero;
         Vector2 myPos = transform.position;
+        float fearRadiusSq = shepherdFearRadius * shepherdFearRadius;
         foreach (var s in flock.Shepherds)
         {
             if (s == null) continue;
             Vector2 away = myPos - (Vector2)s.position;
-            float d = away.magnitude;
-            if (d > shepherdFearRadius || d < 0.001f) continue;
+            float dSq = away.sqrMagnitude;
+            if (dSq > fearRadiusSq || dSq < 0.000001f) continue;
 
-            // Quadratic falloff — a shepherd at the edge of the radius barely nudges a sheep,
-            // but a shepherd right on top sends it bolting.
+            float d = Mathf.Sqrt(dSq);
             float strength = 1f - (d / shepherdFearRadius);
             flee += (away / d) * strength * strength;
         }

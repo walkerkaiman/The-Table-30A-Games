@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -158,9 +157,7 @@ public class SheepHerderManager : MonoBehaviour, IGameSession
 
     public void OnPlayerDisconnected(string playerId)
     {
-        PlayerManager.Instance.DisconnectPlayer(playerId);
         GameLog.Player($"\"{PlayerManager.Instance.GetPlayerName(playerId)}\" disconnected from Sheep Herder");
-        GameEvents.FirePlayerListChanged();
     }
 
     public void OnGameMessage(string playerId, string messageType, string json)

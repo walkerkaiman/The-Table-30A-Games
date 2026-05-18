@@ -114,9 +114,6 @@ public class TelephoneManager : MonoBehaviour, IGameSession
 
     public void OnPlayerDisconnected(string playerId)
     {
-        PlayerManager.Instance.DisconnectPlayer(playerId);
-        GameEvents.FirePlayerListChanged();
-
         if (_state == Phase.Reveal || _state == Phase.RevealPause || _state == Phase.Done)
             return;
 

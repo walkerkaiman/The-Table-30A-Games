@@ -497,6 +497,85 @@
     </div>
   </div>
 
+  <!-- ═══ TREASURE HUNTER ═══ -->
+
+  <div id="screen-th-briefing" class="screen">
+    <div class="card">
+      <h1>Treasure Hunter</h1>
+      <p class="subtle-text">Your secret clues — memorise them before the round starts!</p>
+      <ul id="th-clue-list" class="th-clue-list"></ul>
+      <div id="th-briefing-timer" class="timer"></div>
+      <button id="th-ready-btn" class="btn-primary">I'm Ready!</button>
+      <p id="th-ready-sent" class="subtle-text" style="display:none;">Ready — waiting for others...</p>
+    </div>
+  </div>
+
+  <div id="screen-th-deploy" class="screen">
+    <div class="card">
+      <h1>Treasure Hunter</h1>
+      <p class="subtle-text">Entering the dungeon...</p>
+      <div id="th-deploy-timer" class="timer pong-big-timer"></div>
+    </div>
+  </div>
+
+  <div id="screen-th-play" class="screen sh-controller">
+    <div class="sh-hud">
+      <span id="th-gold" class="sh-hud-value">Gold: 0</span>
+      <span id="th-escape-timer" class="sh-hud-value" style="margin-left:1em;">0s</span>
+    </div>
+    <div id="th-escape-label" class="sh-status" style="display:none; color:#f90;">
+      ESCAPE! Get to the exit!
+    </div>
+    <div id="th-downed-banner" class="th-downed-banner" style="display:none;">
+      <p>You tripped a trap!</p>
+      <p class="subtle-text">Hold still — a teammate can revive you.</p>
+      <div class="th-revive-track">
+        <div id="th-revive-bar" class="th-revive-bar" style="width:0%"></div>
+      </div>
+    </div>
+    <div id="th-stick-area" class="sh-stick-area">
+      <div class="sh-stick-base"></div>
+      <div id="th-stick-knob" class="sh-stick-knob"></div>
+    </div>
+  </div>
+
+  <div id="screen-th-results" class="screen">
+    <div class="card">
+      <h1>Results</h1>
+      <p id="th-results-gold" class="subtle-text">Team Gold: 0</p>
+      <p id="th-results-puzzles" class="subtle-text">Puzzles: 0 / 0</p>
+      <table class="th-results-table">
+        <thead><tr><th>Player</th><th>Status</th><th>Gold</th><th>Score</th></tr></thead>
+        <tbody id="th-results-rows"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══ WANG TILES ═══ -->
+
+  <div id="screen-wt-draw" class="screen wt-draw-screen">
+    <div class="wt-draw-hud">
+      <p class="round-info">Connect the dots</p>
+      <p id="wt-draw-progress" class="subtle-text">Drawing freely</p>
+    </div>
+    <div class="wt-draw-canvas-wrap">
+      <canvas id="wt-draw-canvas" class="wt-draw-canvas" width="400" height="400"></canvas>
+    </div>
+    <div class="wt-draw-footer">
+      <button id="wt-draw-btn" class="btn-primary">Done</button>
+      <button id="wt-end-btn" class="btn-secondary btn-host" hidden style="margin-top:0.6rem;">End Game</button>
+    </div>
+  </div>
+
+  <div id="screen-wt-end" class="screen">
+    <div class="card">
+      <h1>Tapestry Saved</h1>
+      <p class="subtle-text">Scan the QR on the table — or tap the link below — to download a copy.</p>
+      <a id="wt-end-link" class="btn-primary" target="_blank" rel="noopener" style="display:inline-block; text-decoration:none; padding:0.9rem;">Open snapshot</a>
+      <p id="wt-end-url" class="subtle-text" style="margin-top:0.75rem; word-break:break-all; font-family:monospace;"></p>
+    </div>
+  </div>
+
   <!-- ─── Disconnected ─── -->
   <div id="screen-disconnected" class="screen">
     <div class="card">
@@ -516,5 +595,7 @@
   <script src="games/caption_contest.js"></script>
   <script src="games/price_is_close.js"></script>
   <script src="games/sheep_herder.js"></script>
+  <script src="games/treasure_hunter.js"></script>
+  <script src="games/wangtiles.js"></script>
 </body>
 </html>

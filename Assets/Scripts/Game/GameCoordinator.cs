@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Action3 = System.Action<string, string, string>;
 
 /// <summary>
 /// Persistent singleton that owns the top-level state machine:
@@ -39,9 +40,8 @@ public class GameCoordinator : MonoBehaviour
     public string RoomCode { get; private set; }
 
     private IGameSession _activeSession;
-    private float _timer;
-    private bool _timerActive;
     private string _loadedSceneName;
+    private Dictionary<string, Action3> _messageHandlers;
 
     // ── Unity Lifecycle ──────────────────────────
 
@@ -73,18 +73,10 @@ public class GameCoordinator : MonoBehaviour
 
     private void Update()
     {
-        if (_timerActive)
-        {
-            _timer -= Time.deltaTime;
-            if (_timer <= 0f)
-            {
-                _timerActive = false;
-                OnTimerExpired();
-            }
-        }
-
+#if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.Space) && CurrentState == CoordinatorState.Lobby)
             TryStartGameSelect();
+#endif
     }
 
     private void OnDestroy()
@@ -96,6 +88,13 @@ public class GameCoordinator : MonoBehaviour
 
     private void SubscribeToEvents()
     {
+        _messageHandlers = new Dictionary<string, Action3>
+        {
+            { MessageTypes.StartGame, (pid, _, __) => HandleHostStartGame(pid) },
+            { MessageTypes.OpenRegistration, (pid, _, __) => HandleOpenRegistration(pid) },
+            { MessageTypes.PickGame, (pid, _, json) => HandlePickGame(pid, json) },
+        };
+
         GameEvents.JoinRequested += OnJoinRequested;
         GameEvents.RejoinRequested += OnRejoinRequested;
         GameEvents.PlayerDisconnected += OnPlayerDisconnected;
@@ -135,8 +134,32 @@ public class GameCoordinator : MonoBehaviour
                 GameEvents.FirePlayerListChanged();
                 return;
             }
-            GameLog.Player($"Join REJECTED: \"{playerName}\" — game in progress");
-            GameEvents.FireJoinRejected(connId, "Game in progress");
+
+            // Mid-game-join opt-in: sessions that return true from AllowsMidGameJoin
+            // (e.g. Wang Tiles) accept fresh joiners directly into the running game.
+            if (_activeSession != null && _activeSession.AllowsMidGameJoin)
+            {
+                string midId = PlayerManager.Instance.AddPlayer(playerName, tableSide);
+                GameLog.Player($"\"{playerName}\" JOINED mid-game (id: {midId}, {(tableSide == 0 ? "this side" : "that side")})  [{PlayerManager.Instance.PlayerCount} player(s)]");
+                GameEvents.FireJoinAccepted(connId, midId, playerName, RoomCode);
+                GameEvents.FirePlayerListChanged();
+                _activeSession.OnPlayerJoinedMidGame(midId);
+                return;
+            }
+
+            // Late joiner: a brand-new player arrived while a game is running.
+            // Don't reject them — accept them as a regular player so they appear
+            // in the lobby/game-select once the current game ends. The active
+            // IGameSession only knows about the playerIds it received in
+            // OnSessionStart, so this player is invisible to the running game.
+            string lateId = PlayerManager.Instance.AddPlayer(playerName, tableSide);
+            GameLog.Player($"\"{playerName}\" JOINED late (id: {lateId}, {(tableSide == 0 ? "this side" : "that side")}) — will play next game  [{PlayerManager.Instance.PlayerCount} player(s)]");
+            GameEvents.FireJoinAccepted(connId, lateId, playerName, RoomCode);
+            GameEvents.FireSendToPlayer(lateId, JsonUtility.ToJson(new LobbyNoticeMessage
+            {
+                message = "A game is in progress. You're in — you'll join when this round finishes."
+            }));
+            GameEvents.FirePlayerListChanged();
             return;
         }
 
@@ -175,7 +198,8 @@ public class GameCoordinator : MonoBehaviour
 
         if (PlayerManager.Instance.IsPlayerConnected(playerId))
         {
-            GameEvents.FireRejoinRejected(connId, "Already connected");
+            GameLog.Player($"Rejoin REJECTED: \"{playerName}\" (id: {playerId}) — already connected from another session");
+            GameEvents.FireRejoinRejected(connId, "Already connected from another device");
             return;
         }
 
@@ -201,7 +225,28 @@ public class GameCoordinator : MonoBehaviour
             return;
         }
 
-        GameEvents.FireRejoinRejected(connId, "Session not found");
+        // Stale rejoin during InGame: the original session was cleaned up.
+        // If the active session allows mid-game joins (e.g. Wang Tiles via the
+        // table QR code), bring them straight into the running game instead of
+        // parking them with a "wait for next round" notice.
+        if (_activeSession != null && _activeSession.AllowsMidGameJoin)
+        {
+            string midId = PlayerManager.Instance.AddPlayer(playerName);
+            GameLog.Player($"\"{playerName}\" JOINED mid-game from stale rejoin (id: {midId})");
+            GameEvents.FireJoinAccepted(connId, midId, playerName, RoomCode);
+            GameEvents.FirePlayerListChanged();
+            _activeSession.OnPlayerJoinedMidGame(midId);
+            return;
+        }
+
+        string lateId = PlayerManager.Instance.AddPlayer(playerName);
+        GameLog.Player($"\"{playerName}\" JOINED late from stale rejoin (id: {lateId}) — will play next game");
+        GameEvents.FireJoinAccepted(connId, lateId, playerName, RoomCode);
+        GameEvents.FireSendToPlayer(lateId, JsonUtility.ToJson(new LobbyNoticeMessage
+        {
+            message = "A game is in progress. You're in — you'll join when this round finishes."
+        }));
+        GameEvents.FirePlayerListChanged();
     }
 
     private void OnPlayerDisconnected(string playerId)
@@ -230,21 +275,9 @@ public class GameCoordinator : MonoBehaviour
 
     private void OnGameMessage(string playerId, string messageType, string json)
     {
-        if (messageType == MessageTypes.StartGame)
+        if (_messageHandlers.TryGetValue(messageType, out var handler))
         {
-            HandleHostStartGame(playerId);
-            return;
-        }
-
-        if (messageType == MessageTypes.OpenRegistration)
-        {
-            HandleOpenRegistration(playerId);
-            return;
-        }
-
-        if (CurrentState == CoordinatorState.GameSelect && messageType == MessageTypes.PickGame)
-        {
-            HandlePickGame(playerId, json);
+            handler(playerId, messageType, json);
             return;
         }
 
@@ -296,7 +329,6 @@ public class GameCoordinator : MonoBehaviour
         string hostName = PlayerManager.Instance.GetPlayerName(playerId);
         GameLog.Game($"Host \"{hostName}\" opened registration");
 
-        _timerActive = false;
         CurrentState = CoordinatorState.Lobby;
         BroadcastCoordinatorState();
     }
@@ -330,6 +362,8 @@ public class GameCoordinator : MonoBehaviour
 
     private void HandlePickGame(string playerId, string json)
     {
+        if (CurrentState != CoordinatorState.GameSelect) return;
+
         if (!PlayerManager.Instance.IsHost(playerId))
         {
             string who = PlayerManager.Instance.GetPlayerName(playerId);
@@ -338,7 +372,7 @@ public class GameCoordinator : MonoBehaviour
         }
 
         var msg = JsonUtility.FromJson<PickGameMessage>(json);
-        if (msg == null || string.IsNullOrEmpty(msg.gameId))
+        if (string.IsNullOrEmpty(msg.gameId))
         {
             GameLog.Warn("pick_game ignored — missing gameId");
             return;
@@ -425,7 +459,7 @@ public class GameCoordinator : MonoBehaviour
         var msg = new GameStateMessage
         {
             state = CurrentState.ToString(),
-            timer = Mathf.CeilToInt(_timer),
+            timer = 0,
             players = PlayerManager.Instance.GetAllPlayerInfos()
         };
 
@@ -442,12 +476,6 @@ public class GameCoordinator : MonoBehaviour
         }
 
         GameEvents.FireBroadcast(JsonUtility.ToJson(msg));
-    }
-
-    private void OnTimerExpired()
-    {
-        // Coordinator-level timer is currently unused — game scenes run their own timers. Kept
-        // here as a hook for any future state that wants to schedule StartTimer() itself.
     }
 
     // ── Helpers ──────────────────────────────────
@@ -469,12 +497,6 @@ public class GameCoordinator : MonoBehaviour
             });
         }
         return list.ToArray();
-    }
-
-    private void StartTimer(float seconds)
-    {
-        _timer = seconds;
-        _timerActive = true;
     }
 
     private static string GenerateRoomCode()

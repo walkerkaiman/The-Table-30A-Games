@@ -219,8 +219,9 @@ public class PlayerInputRelay : MonoBehaviour
     }
 
     /// <summary>
-    /// Lightweight JSON field extraction. Avoids allocating a full deserialized object
-    /// for every high-frequency input message. Returns 0.5 if the field is not found.
+    /// Zero-allocation JSON float extraction using char-by-char parsing.
+    /// Avoids Substring and deserialized objects on the 30-60 Hz input path.
+    /// Returns 0.5 if the field is not found.
     /// </summary>
     private static float ExtractFloat(string json, string fieldName)
     {
@@ -248,14 +249,29 @@ public class PlayerInputRelay : MonoBehaviour
 
         if (start == idx) return 0.5f;
 
-        if (float.TryParse(json.Substring(start, idx - start),
-            System.Globalization.NumberStyles.Float,
-            System.Globalization.CultureInfo.InvariantCulture,
-            out float result))
+        return ParseFloatInPlace(json, start, idx - start, 0.5f);
+    }
+
+    private static float ParseFloatInPlace(string s, int offset, int length, float fallback)
+    {
+        if (length <= 0 || length > 20) return fallback;
+
+        bool negative = false;
+        int i = offset;
+        int end = offset + length;
+
+        if (s[i] == '-') { negative = true; i++; }
+
+        double result = 0;
+        while (i < end && s[i] != '.') { result = result * 10 + (s[i] - '0'); i++; }
+        if (i < end && s[i] == '.')
         {
-            return result;
+            i++;
+            double frac = 0, div = 1;
+            while (i < end) { frac = frac * 10 + (s[i] - '0'); div *= 10; i++; }
+            result += frac / div;
         }
 
-        return 0.5f;
+        return (float)(negative ? -result : result);
     }
 }

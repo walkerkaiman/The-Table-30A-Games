@@ -48,10 +48,10 @@ public class CaptionContestManager : RoundBasedGameSession<CaptionContestManager
     {
         switch (messageType)
         {
-            case "submit_caption":
+            case MessageTypes.SubmitCaption:
                 HandleCaption(playerId, JsonUtility.FromJson<SubmitCaptionMessage>(json).caption);
                 break;
-            case "caption_vote":
+            case MessageTypes.CaptionVote:
                 HandleVote(playerId, JsonUtility.FromJson<CaptionVoteMessage>(json).captionId);
                 break;
         }

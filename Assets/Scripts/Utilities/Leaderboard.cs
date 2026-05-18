@@ -7,9 +7,11 @@ public static class Leaderboard
 {
     public static PlayerInfo[] GetSorted()
     {
-        var standings = PlayerManager.Instance.GetAllPlayerInfos();
-        Array.Sort(standings, (a, b) => b.score.CompareTo(a.score));
-        return standings;
+        var source = PlayerManager.Instance.GetAllPlayerInfos();
+        var copy = new PlayerInfo[source.Length];
+        Array.Copy(source, copy, source.Length);
+        Array.Sort(copy, (a, b) => b.score.CompareTo(a.score));
+        return copy;
     }
 
     public static void LogStandings(string gameName, PlayerInfo[] sorted)

@@ -45,8 +45,8 @@ public class GameServer
         _listenThread = new Thread(ListenLoop) { IsBackground = true };
         _listenThread.Start();
 
-        Debug.Log($"[Server] Listening on port {port}");
-        Debug.Log($"[Server] Serving web files from: {_webRootPath}");
+        GameLog.Server($"Listening on port {port}");
+        GameLog.Server($"Serving web files from: {_webRootPath}");
     }
 
     public void Stop()
@@ -73,7 +73,7 @@ public class GameServer
             }
             catch (SocketException)
             {
-                if (_running) Debug.Log("[Server] Accept interrupted");
+                if (_running) GameLog.Server("Accept interrupted");
             }
         }
     }
@@ -103,7 +103,7 @@ public class GameServer
         }
         catch (Exception ex)
         {
-            Debug.Log($"[Server] Connection handling error: {ex.Message}");
+            GameLog.Server($"Connection handling error: {ex.Message}");
             try { client.Close(); } catch { }
         }
     }
@@ -263,7 +263,7 @@ public class GameServer
             OnClientDisconnected?.Invoke(connection);
         };
 
-        Debug.Log($"[Server] WebSocket client connected: {connection.Id}");
+        GameLog.Server($"WebSocket client connected: {connection.Id}");
         OnClientConnected?.Invoke(connection);
 
         connection.StartReceiving();

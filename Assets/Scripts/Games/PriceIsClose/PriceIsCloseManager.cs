@@ -46,7 +46,7 @@ public class PriceIsCloseManager : RoundBasedGameSession<PriceIsCloseManager.Pri
 
     public override void OnGameMessage(string playerId, string messageType, string json)
     {
-        if (messageType == "submit_guess")
+        if (messageType == MessageTypes.SubmitGuess)
         {
             var msg = JsonUtility.FromJson<SubmitGuessMessage>(json);
             HandleGuess(playerId, msg.guess);

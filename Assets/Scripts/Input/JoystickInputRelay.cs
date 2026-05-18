@@ -187,9 +187,8 @@ public class JoystickInputRelay : MonoBehaviour
     }
 
     /// <summary>
-    /// Lightweight JSON float extraction. We handle the high-frequency input path without
-    /// allocating a full deserialized object — the regex-free implementation is both faster
-    /// and churns less GC than JsonUtility on 30-60Hz messages.
+    /// Zero-allocation JSON float extraction using char-by-char parsing.
+    /// Avoids Substring and deserialized objects on the 30-60 Hz input path.
     /// </summary>
     private static float ExtractFloat(string json, string fieldName)
     {
@@ -211,10 +210,29 @@ public class JoystickInputRelay : MonoBehaviour
 
         if (start == idx) return 0f;
 
-        return float.TryParse(
-            json.Substring(start, idx - start),
-            System.Globalization.NumberStyles.Float,
-            System.Globalization.CultureInfo.InvariantCulture,
-            out float result) ? result : 0f;
+        return ParseFloatInPlace(json, start, idx - start, 0f);
+    }
+
+    private static float ParseFloatInPlace(string s, int offset, int length, float fallback)
+    {
+        if (length <= 0 || length > 20) return fallback;
+
+        bool negative = false;
+        int i = offset;
+        int end = offset + length;
+
+        if (s[i] == '-') { negative = true; i++; }
+
+        double result = 0;
+        while (i < end && s[i] != '.') { result = result * 10 + (s[i] - '0'); i++; }
+        if (i < end && s[i] == '.')
+        {
+            i++;
+            double frac = 0, div = 1;
+            while (i < end) { frac = frac * 10 + (s[i] - '0'); div *= 10; i++; }
+            result += frac / div;
+        }
+
+        return (float)(negative ? -result : result);
     }
 }

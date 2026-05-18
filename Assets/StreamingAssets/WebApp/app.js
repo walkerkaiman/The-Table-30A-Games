@@ -18,6 +18,7 @@
     selectedGameId: null,
     gameSelectGames: [],
     isHost: false,
+    lobbyNotice: "",
   };
 
   var MAX_RECONNECT_ATTEMPTS = 3;
@@ -291,8 +292,21 @@
         break;
 
       case "error":
-        if (state.isRejoining) { clearSession(); showJoinScreen(); }
+        if (state.isRejoining) {
+          clearSession();
+          state.playerId = null;
+          state.isRejoining = false;
+          showJoinScreen();
+          showJoinError(msg.message || "Could not rejoin your previous session.");
+        }
         else showJoinError(msg.message);
+        break;
+
+      case "lobby_notice":
+        state.lobbyNotice = msg.message || "";
+        if (els.lobbyStatus && state.currentScreen === "lobby") {
+          els.lobbyStatus.textContent = state.lobbyNotice;
+        }
         break;
 
       case "player_list":
@@ -369,6 +383,7 @@
     showScreen("gameselect");
     state.selectedGameId = null;
     state.gameSelectGames = msg.games || [];
+    state.lobbyNotice = "";
 
     GameApp.stopTimer();
 
@@ -459,12 +474,19 @@
   // ─── Host Controls ─────────────────────────
   function updateHostControls() {
     if (els.hostLobbyControls) {
-      els.hostLobbyControls.style.display = state.isHost ? "" : "none";
+      // Late joiners can't host the round in progress; hide host controls
+      // while a lobby notice is active so they don't see a stale "Start" button.
+      var hideForLateJoin = !!state.lobbyNotice;
+      els.hostLobbyControls.style.display = (state.isHost && !hideForLateJoin) ? "" : "none";
     }
     if (els.lobbyStatus) {
-      els.lobbyStatus.textContent = state.isHost
-        ? "You are the host"
-        : "Waiting for the host to start...";
+      if (state.lobbyNotice) {
+        els.lobbyStatus.textContent = state.lobbyNotice;
+      } else {
+        els.lobbyStatus.textContent = state.isHost
+          ? "You are the host"
+          : "Waiting for the host to start...";
+      }
     }
     if (els.hostGameselectControls) {
       els.hostGameselectControls.style.display = state.isHost ? "" : "none";

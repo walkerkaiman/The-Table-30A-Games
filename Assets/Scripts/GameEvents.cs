@@ -49,10 +49,18 @@ public static class GameEvents
     //  TABLE DISPLAY
     //  Fired on every phase transition so the table-side display
     //  can show phase name, timer, etc. without parsing broadcast JSON.
-    //  Args: gameType, phase, timer (seconds remaining)
+    //  Args: gameType, phase, timer (seconds — remaining in countdown mode, elapsed in count-up)
     // ─────────────────────────────────────────────
 
     public static event Action<string, string, int> DisplayStateChanged;
+
+    /// <summary>
+    /// Fired by a session whenever its timer mode flips between countdown (false) and
+    /// count-up (true). <see cref="GameTableDisplay"/> subscribes so its local timer
+    /// ticks in the right direction. Sessions that never use count-up don't need to
+    /// fire this event.
+    /// </summary>
+    public static event Action<bool> DisplayTimerCountUpChanged;
 
     // ─────────────────────────────────────────────
     //  FIRE HELPERS
@@ -94,6 +102,9 @@ public static class GameEvents
     public static void FireDisplayState(string gameType, string phase, int timer)
         => DisplayStateChanged?.Invoke(gameType, phase, timer);
 
+    public static void FireDisplayTimerCountUp(bool countsUp)
+        => DisplayTimerCountUpChanged?.Invoke(countsUp);
+
     public static void ClearAll()
     {
         JoinRequested = null;
@@ -108,5 +119,6 @@ public static class GameEvents
         SendToPlayer = null;
         PlayerListChanged = null;
         DisplayStateChanged = null;
+        DisplayTimerCountUpChanged = null;
     }
 }

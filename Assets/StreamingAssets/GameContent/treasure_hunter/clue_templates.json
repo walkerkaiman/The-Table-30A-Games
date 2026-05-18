@@ -1,0 +1,74 @@
+{
+  "templates": [
+    {
+      "factType": "TrapWarning",
+      "text": "DANGER! A hidden trap lurks to the {direction} in the {roomName}. Step carefully.",
+      "flavor": "warning"
+    },
+    {
+      "factType": "TrapWarning",
+      "text": "I overheard the dungeon-keeper say: beware the {roomName} — the floor is treacherous to the {direction}.",
+      "flavor": "lore"
+    },
+    {
+      "factType": "TrapWarning",
+      "text": "The old map marks a trap somewhere in the {roomName}.",
+      "flavor": "map"
+    },
+    {
+      "factType": "TrapWarning",
+      "text": "Watch your step near the {direction} side of the {roomName} — something's wrong with the floor.",
+      "flavor": "warning"
+    },
+    {
+      "factType": "ExitLocation",
+      "text": "The escape route leads through the {roomName} to the {direction}.",
+      "flavor": "direct"
+    },
+    {
+      "factType": "ExitLocation",
+      "text": "I saw the exit door in the {roomName}. Head {direction} from the start.",
+      "flavor": "seen"
+    },
+    {
+      "factType": "ExitLocation",
+      "text": "The dungeon-keeper's quarters are near the exit — look for them in the {roomName}.",
+      "flavor": "lore"
+    },
+    {
+      "factType": "GoldLocation",
+      "text": "A merchant stashed gold in the {roomName} to the {direction}. It's unguarded.",
+      "flavor": "lore"
+    },
+    {
+      "factType": "GoldLocation",
+      "text": "The {roomName} holds treasure — head {direction} to find it.",
+      "flavor": "direct"
+    },
+    {
+      "factType": "GoldLocation",
+      "text": "Rumour has it there's unclaimed gold somewhere in the {roomName}.",
+      "flavor": "rumour"
+    },
+    {
+      "factType": "PlateColorOrder",
+      "text": "The rune plates must be activated in this exact order: {colorSequence}.",
+      "flavor": "direct"
+    },
+    {
+      "factType": "PlateColorOrder",
+      "text": "The ancient inscription reads: press the plates {colorSequence} — or face the curse.",
+      "flavor": "lore"
+    },
+    {
+      "factType": "PlateColorOrder",
+      "text": "A ghost whispered the plate sequence to me: {colorSequence}. Don't ask how.",
+      "flavor": "spooky"
+    },
+    {
+      "factType": "PlateColorOrder",
+      "text": "I memorised the puzzle: {colorSequence} — tell the others when you find the rune chamber.",
+      "flavor": "cooperative"
+    }
+  ]
+}

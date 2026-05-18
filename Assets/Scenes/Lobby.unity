@@ -165,6 +165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   port: 7777
   gameName: The Table 30A Games
+  networkName: Suspicious White Van
 --- !u!1 &261406906
 GameObject:
   m_ObjectHideFlags: 0
@@ -1650,8 +1651,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 631503a7d07c35547b71e6651cc2af79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wifiSSID: TP-Link_B342
-  wifiPassword: 26883007
+  wifiSSID: Suspicious White Van
+  wifiPassword: 1234567890
   wifiAuthType: WPA
   wifiQRImage: {fileID: 1801368991}
   browserQRImage: {fileID: 1919530497}

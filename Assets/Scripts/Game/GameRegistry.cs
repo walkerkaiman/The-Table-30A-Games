@@ -19,4 +19,18 @@ public class GameRegistry : ScriptableObject
         }
         return null;
     }
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        var seen = new HashSet<string>();
+        for (int i = 0; i < entries.Count; i++)
+        {
+            var e = entries[i];
+            if (e == null) continue;
+            if (!string.IsNullOrEmpty(e.id) && !seen.Add(e.id))
+                Debug.LogWarning($"[GameRegistry] Duplicate game id \"{e.id}\" at index {i}", this);
+        }
+    }
+#endif
 }

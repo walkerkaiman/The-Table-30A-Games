@@ -31,6 +31,10 @@ public class GameDiscovery
     private const int DISCOVERY_PORT = 47777;
     private const int BROADCAST_INTERVAL_MS = 2000;
     private const long STALE_THRESHOLD_MS = 6000;
+    private const long GAMES_JSON_CACHE_MS = 1000;
+
+    private volatile string _cachedGamesJson;
+    private long _cachedGamesJsonTimestamp;
 
     // ── Lifecycle ────────────────────────────────
 
@@ -108,11 +112,17 @@ public class GameDiscovery
 
     /// <summary>
     /// Returns JSON for the /api/games endpoint. Includes self and all non-stale discovered servers.
-    /// Safe to call from any thread.
+    /// Safe to call from any thread. Result is cached for up to 1 second to avoid
+    /// rebuilding on every HTTP poll.
     /// </summary>
     public string GetAllGamesJson()
     {
         long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+        string cached = _cachedGamesJson;
+        if (cached != null && now - _cachedGamesJsonTimestamp < GAMES_JSON_CACHE_MS)
+            return cached;
+
         var list = new List<DiscoveredGameInfo>();
 
         if (_selfInfo != null)
@@ -129,7 +139,12 @@ public class GameDiscovery
         }
 
         var wrapper = new DiscoveredGamesWrapper { games = list.ToArray() };
-        return JsonUtility.ToJson(wrapper);
+        string json = JsonUtility.ToJson(wrapper);
+
+        _cachedGamesJson = json;
+        _cachedGamesJsonTimestamp = now;
+
+        return json;
     }
 
     /// <summary>

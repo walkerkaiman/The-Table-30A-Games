@@ -7,15 +7,23 @@ using UnityEngine;
 ///
 /// If a Canvas component is present on this GameObject, it toggles
 /// Canvas.enabled so the GameObject stays active and keeps receiving events.
-/// Otherwise it toggles a CanvasGroup alpha + blocksRaycasts as a fallback.
+/// Otherwise it adds/uses a CanvasGroup to toggle visibility without
+/// deactivating the GameObject (which would unsubscribe from events).
 /// </summary>
 public class LobbyDisplay : MonoBehaviour
 {
     private Canvas _canvas;
+    private CanvasGroup _canvasGroup;
 
     private void Awake()
     {
         _canvas = GetComponent<Canvas>();
+        if (_canvas == null)
+        {
+            _canvasGroup = GetComponent<CanvasGroup>();
+            if (_canvasGroup == null)
+                _canvasGroup = gameObject.AddComponent<CanvasGroup>();
+        }
     }
 
     private void OnEnable()
@@ -38,7 +46,9 @@ public class LobbyDisplay : MonoBehaviour
         }
         else
         {
-            gameObject.SetActive(visible);
+            _canvasGroup.alpha = visible ? 1f : 0f;
+            _canvasGroup.blocksRaycasts = visible;
+            _canvasGroup.interactable = visible;
         }
     }
 }

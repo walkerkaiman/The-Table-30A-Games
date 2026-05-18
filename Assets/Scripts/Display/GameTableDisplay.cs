@@ -28,6 +28,13 @@ public class GameTableDisplay : MonoBehaviour
     protected string _gameType;
     protected string _phase;
     protected float _displayTimer;
+    private int _lastDisplayedSecond = -1;
+    /// <summary>
+    /// When true, the local timer ticks UPWARDS instead of downwards. Flipped via
+    /// <see cref="GameEvents.FireDisplayTimerCountUp"/>. Used by games like Treasure
+    /// Hunter that want an elapsed "run clock" rather than a countdown.
+    /// </summary>
+    protected bool _timerCountsUp;
 
     protected MeshRenderer _gameNameRenderer;
     protected MeshRenderer _phaseRenderer;
@@ -42,6 +49,8 @@ public class GameTableDisplay : MonoBehaviour
         { "hot_potato",     "Hot Potato" },
         { "telephone",      "Telephone" },
         { "pong",           "Pong Arena" },
+        { "treasure_hunter","Treasure Hunter" },
+        { "wangtiles",      "Wang Tiles" },
     };
 
     private static readonly Dictionary<string, string> PhaseOverrides = new Dictionary<string, string>
@@ -51,6 +60,11 @@ public class GameTableDisplay : MonoBehaviour
         { "Voting",        "Vote!" },
         { "RoundResults",  "Results" },
         { "GameOver",      "Game Over!" },
+        { "Briefing",      "Memorize Your Clues..." },
+        { "Deploying",     "Entering the Dungeon..." },
+        { "Exploring",     "Explore!" },
+        { "Escape",        "ESCAPE!" },
+        { "Results",       "Results" },
         { "WriteBluff",    "Write a Bluff!" },
         { "Vote",          "Vote!" },
         { "ShowImage",     "Look at This!" },
@@ -68,6 +82,9 @@ public class GameTableDisplay : MonoBehaviour
         { "Exploded",      "BOOM!" },
         { "Countdown",     "Get Ready..." },
         { "GoalScored",    "Goal!" },
+        { "Painting",      "Drawing the Tapestry..." },
+        { "Ending",        "Capturing Your Tapestry..." },
+        { "ShowingQR",     "Scan to Take it Home" },
     };
 
     protected virtual void Awake()
@@ -84,16 +101,23 @@ public class GameTableDisplay : MonoBehaviour
     protected virtual void OnEnable()
     {
         GameEvents.DisplayStateChanged += OnDisplayStateChanged;
+        GameEvents.DisplayTimerCountUpChanged += OnTimerCountUpChanged;
     }
 
     protected virtual void OnDisable()
     {
         GameEvents.DisplayStateChanged -= OnDisplayStateChanged;
+        GameEvents.DisplayTimerCountUpChanged -= OnTimerCountUpChanged;
     }
 
     protected virtual void Update()
     {
-        if (_displayTimer > 0f)
+        if (_timerCountsUp)
+        {
+            // Infinite count-up: tick forever. The display text formats MM:SS for readability.
+            _displayTimer += Time.deltaTime;
+        }
+        else if (_displayTimer > 0f)
         {
             _displayTimer -= Time.deltaTime;
             if (_displayTimer < 0f) _displayTimer = 0f;
@@ -101,11 +125,38 @@ public class GameTableDisplay : MonoBehaviour
 
         if (timerText != null)
         {
-            int t = Mathf.CeilToInt(_displayTimer);
-            bool hasTime = t > 0;
-            timerText.text = hasTime ? t.ToString() : "";
-            SetRendererEnabled(_timerRenderer, hasTime);
+            int t = _timerCountsUp ? Mathf.FloorToInt(_displayTimer) : Mathf.CeilToInt(_displayTimer);
+            if (t != _lastDisplayedSecond)
+            {
+                _lastDisplayedSecond = t;
+                bool hasTime = _timerCountsUp || t > 0;
+                timerText.text = hasTime ? FormatTimer(t) : "";
+                SetRendererEnabled(_timerRenderer, hasTime);
+            }
         }
+    }
+
+    private void OnTimerCountUpChanged(bool countsUp)
+    {
+        if (_timerCountsUp == countsUp) return;
+        _timerCountsUp = countsUp;
+        // Reset local accumulator so the shared screen starts from the current network value.
+        // BaseGameSession will fire DisplayStateChanged shortly with the authoritative seed.
+        _displayTimer = 0f;
+        _lastDisplayedSecond = -1;
+    }
+
+    /// <summary>
+    /// Formats an integer seconds value for on-screen display. Subclasses can override for
+    /// game-specific formats (e.g. "MM:SS" for long runs).
+    /// </summary>
+    protected virtual string FormatTimer(int seconds)
+    {
+        if (!_timerCountsUp) return seconds.ToString();
+        if (seconds < 60) return seconds.ToString();
+        int mins = seconds / 60;
+        int secs = seconds % 60;
+        return mins + ":" + (secs < 10 ? "0" : "") + secs;
     }
 
     private void OnDisplayStateChanged(string gameType, string phase, int timer)
@@ -128,9 +179,10 @@ public class GameTableDisplay : MonoBehaviour
 
         if (timerText != null)
         {
-            bool hasTime = timer > 0;
-            timerText.text = hasTime ? timer.ToString() : "";
+            bool hasTime = _timerCountsUp || timer > 0;
+            timerText.text = hasTime ? FormatTimer(timer) : "";
             SetRendererEnabled(_timerRenderer, hasTime);
+            _lastDisplayedSecond = timer;
         }
 
         OnPhaseChanged(gameType, phase, timer);

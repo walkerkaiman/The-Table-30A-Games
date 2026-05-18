@@ -14,4 +14,16 @@ public class GameRegistryEntry : ScriptableObject
     public string sceneName;
     public int minPlayers = 2;
     public int maxPlayers = 8;
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        if (string.IsNullOrWhiteSpace(id))
+            Debug.LogWarning($"[GameRegistryEntry] \"{name}\": id is empty", this);
+        if (string.IsNullOrWhiteSpace(sceneName))
+            Debug.LogWarning($"[GameRegistryEntry] \"{name}\": sceneName is empty", this);
+        if (minPlayers > maxPlayers)
+            Debug.LogWarning($"[GameRegistryEntry] \"{name}\": minPlayers ({minPlayers}) > maxPlayers ({maxPlayers})", this);
+    }
+#endif
 }

@@ -13,8 +13,9 @@ using UnityEngine.UI;
 /// </summary>
 public class QRCodeDisplay : MonoBehaviour
 {
-    [Header("WiFi Network")]
-    [Tooltip("The WiFi network name (SSID) players should connect to.")]
+    [Header("WiFi Network (for the WiFi-join QR code)")]
+    [Tooltip("The SSID phones should join when they scan the WiFi QR. This is the router's broadcast name (e.g. \"TP-Link_B342\"), " +
+             "NOT the OS adapter name. Adapter selection lives on NetworkManager.networkName.")]
     [SerializeField] private string wifiSSID = "MyNetwork";
 
     [Tooltip("The WiFi password. Leave empty for open networks.")]
@@ -47,7 +48,9 @@ public class QRCodeDisplay : MonoBehaviour
         ApplyQR(wifiQRImage, "WiFi QR", wifiPayload);
         ApplyQR(browserQRImage, "Browser QR", urlPayload);
 
-        GameLog.Game($"QR codes generated — WiFi: \"{wifiSSID}\", URL: {urlPayload}");
+        GameLog.Game($"QR codes generated:");
+        GameLog.Game($"  WiFi QR    → joins SSID \"{wifiSSID}\" (payload: {wifiPayload})");
+        GameLog.Game($"  Browser QR → opens {urlPayload}  ← scan THIS one to load the player website");
     }
 
     private void ApplyQR(Image img, string label, string payload)

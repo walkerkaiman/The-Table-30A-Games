@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class HotPotatoManager : RoundBasedGameSession<HotPotatoManager.PotatoState>
@@ -73,13 +72,12 @@ public class HotPotatoManager : RoundBasedGameSession<HotPotatoManager.PotatoSta
 
     public override void OnPlayerDisconnected(string playerId)
     {
-        PlayerManager.Instance.DisconnectPlayer(playerId);
-        GameEvents.FirePlayerListChanged();
+        // Game state adjustment only — coordinator already marked the player as disconnected.
     }
 
     public override void OnGameMessage(string playerId, string messageType, string json)
     {
-        if (messageType == "potato_pass")
+        if (messageType == MessageTypes.PotatoPass)
         {
             var msg = JsonUtility.FromJson<PotatoPassMessage>(json);
             HandlePass(playerId, msg.direction);
@@ -202,7 +200,8 @@ public class HotPotatoManager : RoundBasedGameSession<HotPotatoManager.PotatoSta
 
     protected override void EndGame()
     {
-        string winnerId = _alive.FirstOrDefault(kvp => kvp.Value).Key;
+        string winnerId = null;
+        foreach (var kvp in _alive) { if (kvp.Value) { winnerId = kvp.Key; break; } }
         if (!string.IsNullOrEmpty(winnerId))
             PlayerManager.Instance.AddScore(winnerId, 1000);
 
@@ -227,11 +226,13 @@ public class HotPotatoManager : RoundBasedGameSession<HotPotatoManager.PotatoSta
 
     private void BuildRing()
     {
-        _ring = _playerIds.Where(pid =>
+        _ring.Clear();
+        foreach (string pid in _playerIds)
         {
-            _alive.TryGetValue(pid, out bool isAlive);
-            return (isAlive || !_alive.ContainsKey(pid)) && PlayerManager.Instance.IsPlayerConnected(pid);
-        }).ToList();
+            bool isAlive = !_alive.TryGetValue(pid, out bool a) || a;
+            if (isAlive && PlayerManager.Instance.IsPlayerConnected(pid))
+                _ring.Add(pid);
+        }
         for (int i = 0; i < _ring.Count; i++)
             _seatIndex[_ring[i]] = i;
     }

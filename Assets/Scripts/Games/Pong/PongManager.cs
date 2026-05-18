@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -63,6 +62,9 @@ public class PongManager : MonoBehaviour, IGameSession
     private Vector2 _ballVelocity;
     private float _currentBallSpeed;
     private Rigidbody2D _ballRb;
+
+    private PongPaddleState[] _paddleBuffer;
+    private PongFrameMessage _frameMsg = new PongFrameMessage();
 
     // ── Unity Lifecycle ──────────────────────────
 
@@ -160,9 +162,7 @@ public class PongManager : MonoBehaviour, IGameSession
 
     public void OnPlayerDisconnected(string playerId)
     {
-        PlayerManager.Instance.DisconnectPlayer(playerId);
         GameLog.Player($"\"{PlayerManager.Instance.GetPlayerName(playerId)}\" disconnected from Pong");
-        GameEvents.FirePlayerListChanged();
     }
 
     public void OnGameMessage(string playerId, string messageType, string json)
@@ -338,10 +338,15 @@ public class PongManager : MonoBehaviour, IGameSession
             GameLog.Game($"\"{name}\" ELIMINATED");
             BroadcastPongEvent("eliminated", scoredOnPlayerId, null, 0);
 
-            int alive = _playerIds.Count(id => !_eliminatedPlayers.Contains(id));
+            int alive = 0;
+            string lastAliveId = null;
+            foreach (string pid in _playerIds)
+            {
+                if (!_eliminatedPlayers.Contains(pid)) { alive++; lastAliveId = pid; }
+            }
             if (alive <= 1)
             {
-                string winnerId = _playerIds.FirstOrDefault(id => !_eliminatedPlayers.Contains(id));
+                string winnerId = lastAliveId;
                 HandleWinner(winnerId);
                 return;
             }
@@ -423,28 +428,29 @@ public class PongManager : MonoBehaviour, IGameSession
 
     private void BroadcastPongFrame()
     {
-        var paddles = new List<PongPaddleState>();
+        if (_paddleBuffer == null || _paddleBuffer.Length != _playerIds.Length)
+        {
+            _paddleBuffer = new PongPaddleState[_playerIds.Length];
+            for (int i = 0; i < _playerIds.Length; i++)
+                _paddleBuffer[i] = new PongPaddleState();
+        }
+
         for (int i = 0; i < _playerIds.Length; i++)
         {
             string id = _playerIds[i];
-            paddles.Add(new PongPaddleState
-            {
-                id = id,
-                position = _inputRelay.GetRawInput(id),
-                side = i,
-                lives = _playerLives.ContainsKey(id) ? _playerLives[id] : 0
-            });
+            var ps = _paddleBuffer[i];
+            ps.id = id;
+            ps.position = _inputRelay.GetRawInput(id);
+            ps.side = i;
+            ps.lives = _playerLives.TryGetValue(id, out int lv) ? lv : 0;
         }
 
         Vector3 ballPos = _ballInstance != null ? _ballInstance.transform.position : Vector3.zero;
 
-        var frame = new PongFrameMessage
-        {
-            bx = ballPos.x,
-            by = ballPos.y,
-            paddles = paddles.ToArray()
-        };
-        GameEvents.FireBroadcast(JsonUtility.ToJson(frame));
+        _frameMsg.bx = ballPos.x;
+        _frameMsg.by = ballPos.y;
+        _frameMsg.paddles = _paddleBuffer;
+        GameEvents.FireBroadcast(JsonUtility.ToJson(_frameMsg));
     }
 
     private void BroadcastPongEvent(string eventName, string playerId, string scoredOn, int livesLeft)

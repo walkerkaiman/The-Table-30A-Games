@@ -28,6 +28,8 @@ public class TelephoneTableDisplay : GameTableDisplay
     private MeshRenderer _progressRenderer;
 
     private Texture2D _drawingTex;
+    private Sprite _reusableSprite;
+    private Color32[] _clearBuffer;
     private bool _revealActive;
 
     protected override void Awake()
@@ -58,8 +60,8 @@ public class TelephoneTableDisplay : GameTableDisplay
 
     private void OnDestroy()
     {
-        if (_drawingTex != null)
-            Destroy(_drawingTex);
+        if (_reusableSprite != null) Destroy(_reusableSprite);
+        if (_drawingTex != null) Destroy(_drawingTex);
     }
 
     protected override void OnPhaseChanged(string gameType, string phase, int timer)
@@ -132,12 +134,18 @@ public class TelephoneTableDisplay : GameTableDisplay
             RenderStrokes(strokes);
 
         _drawingTex.Apply();
-        drawingRenderer.sprite = Sprite.Create(
-            _drawingTex,
-            new Rect(0, 0, textureSize, textureSize),
-            new Vector2(0.5f, 0.5f),
-            100f
-        );
+
+        if (_reusableSprite == null)
+        {
+            _reusableSprite = Sprite.Create(
+                _drawingTex,
+                new Rect(0, 0, textureSize, textureSize),
+                new Vector2(0.5f, 0.5f),
+                100f
+            );
+        }
+
+        drawingRenderer.sprite = _reusableSprite;
         drawingRenderer.enabled = true;
     }
 
@@ -151,22 +159,25 @@ public class TelephoneTableDisplay : GameTableDisplay
     {
         if (_drawingTex != null && _drawingTex.width == textureSize) return;
 
-        if (_drawingTex != null)
-            Destroy(_drawingTex);
+        if (_reusableSprite != null) { Destroy(_reusableSprite); _reusableSprite = null; }
+        if (_drawingTex != null) Destroy(_drawingTex);
 
         _drawingTex = new Texture2D(textureSize, textureSize, TextureFormat.RGBA32, false)
         {
             filterMode = FilterMode.Bilinear,
             wrapMode = TextureWrapMode.Clamp
         };
+
+        int pixelCount = textureSize * textureSize;
+        _clearBuffer = new Color32[pixelCount];
+        Color32 bg = backgroundColor;
+        for (int i = 0; i < pixelCount; i++)
+            _clearBuffer[i] = bg;
     }
 
     private void ClearTexture()
     {
-        var pixels = _drawingTex.GetPixels();
-        for (int i = 0; i < pixels.Length; i++)
-            pixels[i] = backgroundColor;
-        _drawingTex.SetPixels(pixels);
+        _drawingTex.SetPixels32(_clearBuffer);
     }
 
     private void RenderStrokes(TelephoneStroke[] strokes)

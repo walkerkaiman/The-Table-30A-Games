@@ -1,14 +1,20 @@
 using System;
+using System.Buffers;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using UnityEngine;
 
 public class WebSocketConnection
 {
     public string Id { get; private set; }
-    public bool IsConnected { get; private set; }
+
+    private volatile bool _isConnected;
+    public bool IsConnected
+    {
+        get => _isConnected;
+        private set => _isConnected = value;
+    }
 
     public event Action<string> OnMessage;
     public event Action OnDisconnected;
@@ -48,6 +54,7 @@ public class WebSocketConnection
                 {
                     byte[] ext = ReadBytes(2);
                     payloadLen = (ext[0] << 8) | ext[1];
+                    ReturnBuffer(ext);
                 }
                 else if (payloadLen == 127)
                 {
@@ -55,25 +62,41 @@ public class WebSocketConnection
                     payloadLen = 0;
                     for (int i = 0; i < 8; i++)
                         payloadLen = (payloadLen << 8) | ext[i];
+                    ReturnBuffer(ext);
                 }
+
+                ReturnBuffer(header);
 
                 byte[] maskKey = masked ? ReadBytes(4) : null;
                 byte[] payload = ReadBytes((int)payloadLen);
 
                 if (masked && maskKey != null)
-                    for (int i = 0; i < payload.Length; i++)
+                {
+                    for (int i = 0; i < (int)payloadLen; i++)
                         payload[i] ^= maskKey[i % 4];
+                }
 
                 switch (opcode)
                 {
                     case 0x1: // text frame
-                        OnMessage?.Invoke(Encoding.UTF8.GetString(payload));
+                        string text = Encoding.UTF8.GetString(payload, 0, (int)payloadLen);
+                        ReturnBuffer(payload);
+                        ReturnBuffer(maskKey);
+                        OnMessage?.Invoke(text);
                         break;
                     case 0x8: // close
+                        ReturnBuffer(payload);
+                        ReturnBuffer(maskKey);
                         SendCloseFrame();
                         return;
                     case 0x9: // ping
-                        SendPong(payload);
+                        SendPong(payload, (int)payloadLen);
+                        ReturnBuffer(payload);
+                        ReturnBuffer(maskKey);
+                        break;
+                    default:
+                        ReturnBuffer(payload);
+                        ReturnBuffer(maskKey);
                         break;
                 }
             }
@@ -81,7 +104,7 @@ public class WebSocketConnection
         catch (Exception ex)
         {
             if (IsConnected)
-                Debug.Log($"[WS] Connection {Id} read error: {ex.Message}");
+                GameLog.Net($"Connection {Id} read error: {ex.Message}");
         }
         finally
         {
@@ -91,15 +114,24 @@ public class WebSocketConnection
 
     private byte[] ReadBytes(int count)
     {
-        byte[] buf = new byte[count];
+        byte[] buf = ArrayPool<byte>.Shared.Rent(count);
         int read = 0;
         while (read < count)
         {
             int n = _stream.Read(buf, read, count - read);
-            if (n == 0) throw new IOException("Connection closed");
+            if (n == 0)
+            {
+                ArrayPool<byte>.Shared.Return(buf);
+                throw new IOException("Connection closed");
+            }
             read += n;
         }
         return buf;
+    }
+
+    private void ReturnBuffer(byte[] buf)
+    {
+        if (buf != null) ArrayPool<byte>.Shared.Return(buf);
     }
 
     // ── Send ─────────────────────────────────────
@@ -160,16 +192,16 @@ public class WebSocketConnection
         return frame;
     }
 
-    private void SendPong(byte[] payload)
+    private void SendPong(byte[] payload, int length)
     {
         lock (_sendLock)
         {
             try
             {
-                byte[] frame = new byte[2 + payload.Length];
+                byte[] frame = new byte[2 + length];
                 frame[0] = 0x8A; // FIN + pong opcode
-                frame[1] = (byte)payload.Length;
-                Array.Copy(payload, 0, frame, 2, payload.Length);
+                frame[1] = (byte)length;
+                Array.Copy(payload, 0, frame, 2, length);
                 _stream.Write(frame, 0, frame.Length);
             }
             catch { /* ignore pong failures */ }

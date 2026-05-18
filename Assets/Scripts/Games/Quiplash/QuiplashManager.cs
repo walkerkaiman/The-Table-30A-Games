@@ -42,10 +42,10 @@ public class QuiplashManager : RoundBasedGameSession<QuiplashManager.QuiplashSta
     {
         switch (messageType)
         {
-            case "submit_answer":
+            case MessageTypes.SubmitAnswer:
                 HandleAnswer(playerId, JsonUtility.FromJson<SubmitAnswerMessage>(json).answer);
                 break;
-            case "vote":
+            case MessageTypes.Vote:
                 HandleVote(playerId, JsonUtility.FromJson<VoteMessage>(json).answerId);
                 break;
         }

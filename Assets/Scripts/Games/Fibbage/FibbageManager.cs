@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class FibbageManager : RoundBasedGameSession<FibbageManager.FibbageState>
@@ -51,10 +50,10 @@ public class FibbageManager : RoundBasedGameSession<FibbageManager.FibbageState>
     {
         switch (messageType)
         {
-            case "submit_bluff":
+            case MessageTypes.SubmitBluff:
                 HandleBluff(playerId, JsonUtility.FromJson<SubmitBluffMessage>(json).bluff);
                 break;
-            case "fibbage_vote":
+            case MessageTypes.FibbageVote:
                 HandleVote(playerId, JsonUtility.FromJson<FibbageVoteMessage>(json).choiceIndex);
                 break;
         }
@@ -180,7 +179,8 @@ public class FibbageManager : RoundBasedGameSession<FibbageManager.FibbageState>
         var fooledCounts = new Dictionary<string, int>();
         foreach (var kvp in _bluffs) fooledCounts[kvp.Key] = 0;
 
-        int totalVoters = _votes.Count;
+        bool anyFoundTruth = false;
+        int maxFooled = 0;
 
         foreach (var kvp in _votes)
         {
@@ -188,17 +188,17 @@ public class FibbageManager : RoundBasedGameSession<FibbageManager.FibbageState>
             if (choice.isTruth)
             {
                 PlayerManager.Instance.AddScore(kvp.Key, truthPoints);
+                anyFoundTruth = true;
             }
-            else
+            else if (!string.IsNullOrEmpty(choice.authorId) && fooledCounts.ContainsKey(choice.authorId))
             {
-                if (!string.IsNullOrEmpty(choice.authorId) && fooledCounts.ContainsKey(choice.authorId))
-                    fooledCounts[choice.authorId]++;
+                int newCount = ++fooledCounts[choice.authorId];
+                if (newCount > maxFooled) maxFooled = newCount;
             }
         }
 
-        bool noneFoundTruth = totalVoters > 0 && !_votes.Values.Any(vi => _choices[vi].isTruth);
+        bool noneFoundTruth = _votes.Count > 0 && !anyFoundTruth;
 
-        int maxFooled = fooledCounts.Count > 0 ? fooledCounts.Values.Max() : 0;
         foreach (var kvp in fooledCounts)
         {
             int earned = kvp.Value * fooledPoints;
@@ -213,7 +213,7 @@ public class FibbageManager : RoundBasedGameSession<FibbageManager.FibbageState>
         {
             string n = PlayerManager.Instance.GetPlayerName(pid);
             bool picked = _votes.TryGetValue(pid, out int vi) && _choices[vi].isTruth;
-            int fooled = fooledCounts.ContainsKey(pid) ? fooledCounts[pid] : 0;
+            int fooled = fooledCounts.TryGetValue(pid, out int fc) ? fc : 0;
             GameLog.Round($"  \"{n}\" — picked truth: {picked}, fooled: {fooled}");
         }
 
@@ -257,29 +257,41 @@ public class FibbageManager : RoundBasedGameSession<FibbageManager.FibbageState>
 
     private FibbageResultEntry[] BuildResultEntries()
     {
-        var entries = new List<FibbageResultEntry>();
-        foreach (string pid in _playerIds)
+        var fooledCounts = new Dictionary<string, int>();
+        foreach (var kvp in _bluffs) fooledCounts[kvp.Key] = 0;
+        foreach (var v in _votes)
         {
-            var e = new FibbageResultEntry
+            if (v.Value >= 0 && v.Value < _choices.Count)
+            {
+                string authorId = _choices[v.Value].authorId;
+                if (!string.IsNullOrEmpty(authorId) && fooledCounts.ContainsKey(authorId))
+                    fooledCounts[authorId]++;
+            }
+        }
+
+        var playerInfos = PlayerManager.Instance.GetAllPlayerInfos();
+        var scoreMap = new Dictionary<string, int>(playerInfos.Length);
+        foreach (var pi in playerInfos) scoreMap[pi.id] = pi.score;
+
+        var entries = new FibbageResultEntry[_playerIds.Length];
+        for (int i = 0; i < _playerIds.Length; i++)
+        {
+            string pid = _playerIds[i];
+            bool picked = _votes.TryGetValue(pid, out int vi) && _choices[vi].isTruth;
+            int fooled = fooledCounts.TryGetValue(pid, out int fc) ? fc : 0;
+
+            entries[i] = new FibbageResultEntry
             {
                 id = pid,
                 name = PlayerManager.Instance.GetPlayerName(pid),
-                totalScore = PlayerManager.Instance.GetAllPlayerInfos().FirstOrDefault(p => p.id == pid)?.score ?? 0,
-                bluff = _bluffs.ContainsKey(pid) ? _bluffs[pid] : "",
-                pickedTruth = _votes.TryGetValue(pid, out int vi) && _choices[vi].isTruth,
-                fooledCount = 0
+                totalScore = scoreMap.TryGetValue(pid, out int s) ? s : 0,
+                bluff = _bluffs.TryGetValue(pid, out string b) ? b : "",
+                pickedTruth = picked,
+                fooledCount = fooled,
+                pointsThisRound = (picked ? truthPoints : 0) + fooled * fooledPoints
             };
-
-            foreach (var v in _votes)
-            {
-                if (v.Value >= 0 && v.Value < _choices.Count && _choices[v.Value].authorId == pid)
-                    e.fooledCount++;
-            }
-
-            e.pointsThisRound = (e.pickedTruth ? truthPoints : 0) + e.fooledCount * fooledPoints;
-            entries.Add(e);
         }
-        return entries.ToArray();
+        return entries;
     }
 }
 

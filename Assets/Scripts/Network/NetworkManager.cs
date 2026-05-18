@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using UnityEngine;
 
@@ -18,6 +19,15 @@ public class NetworkManager : MonoBehaviour
 
     [Header("Discovery")]
     [SerializeField] private string gameName = "Game 1";
+
+    [Header("Network Adapter Selection")]
+    [Tooltip("Optional: name (or partial name) of the OS network adapter to bind the host's IP to, " +
+             "e.g. \"Ethernet\", \"Wi-Fi\", or \"Realtek\". This is the NIC NAME on this PC, " +
+             "NOT the WiFi SSID you want phones to join (that's QRCodeDisplay.wifiSSID). " +
+             "When set, GetLocalIPAddress prefers an adapter whose Name or Description contains this string (case-insensitive). " +
+             "Leave blank to auto-pick the first routable IPv4. Use the component's right-click ▸ Log Network Adapters " +
+             "context menu to see candidate names.")]
+    public string networkName = "";
 
     private GameServer _server;
     private GameDiscovery _discovery;
@@ -255,8 +265,66 @@ public class NetworkManager : MonoBehaviour
 
     // ── Helpers ──────────────────────────────────
 
-    private static string GetLocalIPAddress()
+    /// <summary>
+    /// Recompute <see cref="LocalIP"/> using the current <see cref="networkName"/>
+    /// value. Call this if you edit the field at runtime; the server keeps listening
+    /// on all interfaces either way, but any subsequently-generated QR codes will
+    /// embed the refreshed IP.
+    /// </summary>
+    public void RefreshLocalIP()
     {
+        LocalIP = GetLocalIPAddress();
+        GameLog.Net($"NetworkManager: LocalIP refreshed → {LocalIP}");
+        UpdateDiscoveryInfo();
+    }
+
+    /// <summary>
+    /// Logs every Up IPv4 adapter to the console so you can see what to type into
+    /// <see cref="networkName"/>. Helpful when the wrong adapter is being picked.
+    /// </summary>
+    [ContextMenu("Log Network Adapters")]
+    public void LogAllAdapters()
+    {
+        try
+        {
+            foreach (var nic in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                if (nic.OperationalStatus != OperationalStatus.Up) continue;
+                var props = nic.GetIPProperties();
+                foreach (var addr in props.UnicastAddresses)
+                {
+                    if (addr.Address.AddressFamily != AddressFamily.InterNetwork) continue;
+                    if (IPAddress.IsLoopback(addr.Address)) continue;
+                    int gateways = props.GatewayAddresses.Count;
+                    GameLog.Net($"  • [{nic.NetworkInterfaceType}] name=\"{nic.Name}\" desc=\"{nic.Description}\" ip={addr.Address} gateways={gateways}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning($"NetworkManager.LogAllAdapters failed: {ex.Message}");
+        }
+    }
+
+    private string GetLocalIPAddress()
+    {
+        // First pass: if networkName is set, look for a matching adapter and return
+        // the first IPv4 unicast address bound to it. This lets the user steer the
+        // host away from VPN/virtual adapters when their PC has multiple NICs.
+        string preferred = TryGetIPFromNamedAdapter(networkName);
+        if (!string.IsNullOrEmpty(preferred)) return preferred;
+
+        if (!string.IsNullOrEmpty(networkName))
+            Debug.LogWarning($"NetworkManager: no Up adapter matching \"{networkName}\" found — falling back to auto-pick. " +
+                             "Use the \"Log Network Adapters\" context menu on this component to list candidates.");
+
+        // Second pass: pick the first Up IPv4 adapter that actually has a default
+        // gateway. This filters out Hyper-V/VPN/WSL virtual adapters that are Up
+        // but unrouted, which are what the old DNS-based pick used to grab.
+        string routable = TryGetFirstRoutableIPv4();
+        if (!string.IsNullOrEmpty(routable)) return routable;
+
+        // Last-resort fallback: legacy DNS-based pick.
         try
         {
             var host = Dns.GetHostEntry(Dns.GetHostName());
@@ -271,5 +339,64 @@ public class NetworkManager : MonoBehaviour
             Debug.LogWarning($"Could not determine local IP: {ex.Message}");
         }
         return "127.0.0.1";
+    }
+
+    private static string TryGetIPFromNamedAdapter(string nameFilter)
+    {
+        if (string.IsNullOrWhiteSpace(nameFilter)) return null;
+
+        try
+        {
+            foreach (var nic in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                if (nic.OperationalStatus != OperationalStatus.Up) continue;
+                bool nameMatch =
+                    nic.Name.IndexOf(nameFilter, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    nic.Description.IndexOf(nameFilter, StringComparison.OrdinalIgnoreCase) >= 0;
+                if (!nameMatch) continue;
+
+                var props = nic.GetIPProperties();
+                foreach (var addr in props.UnicastAddresses)
+                {
+                    if (addr.Address.AddressFamily != AddressFamily.InterNetwork) continue;
+                    if (IPAddress.IsLoopback(addr.Address)) continue;
+                    GameLog.Net($"NetworkManager: matched adapter \"{nic.Name}\" ({nic.Description}) → {addr.Address}");
+                    return addr.Address.ToString();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning($"NetworkManager: adapter lookup for \"{nameFilter}\" failed: {ex.Message}");
+        }
+        return null;
+    }
+
+    private static string TryGetFirstRoutableIPv4()
+    {
+        try
+        {
+            foreach (var nic in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                if (nic.OperationalStatus != OperationalStatus.Up) continue;
+                if (nic.NetworkInterfaceType == NetworkInterfaceType.Loopback) continue;
+
+                var props = nic.GetIPProperties();
+                if (props.GatewayAddresses.Count == 0) continue; // skip unrouted virtual adapters
+
+                foreach (var addr in props.UnicastAddresses)
+                {
+                    if (addr.Address.AddressFamily != AddressFamily.InterNetwork) continue;
+                    if (IPAddress.IsLoopback(addr.Address)) continue;
+                    GameLog.Net($"NetworkManager: auto-picked routable adapter \"{nic.Name}\" ({nic.Description}) → {addr.Address}");
+                    return addr.Address.ToString();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning($"NetworkManager: routable lookup failed: {ex.Message}");
+        }
+        return null;
     }
 }

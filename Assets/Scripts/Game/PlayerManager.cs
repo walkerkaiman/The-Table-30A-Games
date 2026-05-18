@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -12,12 +11,22 @@ public class PlayerManager : MonoBehaviour
     public static PlayerManager Instance { get; private set; }
 
     private readonly Dictionary<string, PlayerData> _players = new Dictionary<string, PlayerData>();
+    private readonly List<string> _joinOrder = new List<string>();
 
     /// <summary> Total players (connected + disconnected). </summary>
     public int PlayerCount => _players.Count;
 
     /// <summary> Only players whose WebSocket is currently connected. </summary>
-    public int ActivePlayerCount => _players.Values.Count(p => p.isConnected);
+    public int ActivePlayerCount
+    {
+        get
+        {
+            int count = 0;
+            foreach (var p in _players.Values)
+                if (p.isConnected) count++;
+            return count;
+        }
+    }
 
     /// <summary> The first player to join is the host. Auto-promotes on host removal. </summary>
     public string HostPlayerId { get; private set; }
@@ -37,6 +46,7 @@ public class PlayerManager : MonoBehaviour
     {
         string id = Guid.NewGuid().ToString("N").Substring(0, 8);
         _players[id] = new PlayerData { id = id, name = name, score = 0, isConnected = true, tableSide = tableSide };
+        _joinOrder.Add(id);
         if (string.IsNullOrEmpty(HostPlayerId))
         {
             HostPlayerId = id;
@@ -56,6 +66,7 @@ public class PlayerManager : MonoBehaviour
     public void RemovePlayer(string playerId)
     {
         _players.Remove(playerId);
+        _joinOrder.Remove(playerId);
         if (HostPlayerId == playerId)
             PromoteNextHost();
     }
@@ -63,9 +74,9 @@ public class PlayerManager : MonoBehaviour
     private void PromoteNextHost()
     {
         HostPlayerId = null;
-        foreach (var p in _players.Values)
+        foreach (string id in _joinOrder)
         {
-            if (p.isConnected)
+            if (_players.TryGetValue(id, out var p) && p.isConnected)
             {
                 HostPlayerId = p.id;
                 GameLog.Player($"\"{p.name}\" promoted to HOST");
@@ -118,9 +129,17 @@ public class PlayerManager : MonoBehaviour
     /// </summary>
     public void CleanupDisconnectedPlayers()
     {
-        var toRemove = _players.Values.Where(p => !p.isConnected).Select(p => p.id).ToList();
+        var toRemove = new List<string>();
+        foreach (var p in _players.Values)
+        {
+            if (!p.isConnected) toRemove.Add(p.id);
+        }
+
         foreach (string id in toRemove)
+        {
             _players.Remove(id);
+            _joinOrder.Remove(id);
+        }
 
         if (HostPlayerId != null && !_players.ContainsKey(HostPlayerId))
             PromoteNextHost();
@@ -169,6 +188,7 @@ public class PlayerManager : MonoBehaviour
     public void ClearAll()
     {
         _players.Clear();
+        _joinOrder.Clear();
         HostPlayerId = null;
     }
 }
